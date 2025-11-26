@@ -1,0 +1,8 @@
+Django~=5.0
+psycopg[binary]~=3.0
+debugpy~=1.0
+django
+psycopg2-binary
+django-sass-processor~=1.0
+libsass
+django-bootstrap5
