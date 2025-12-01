@@ -14,4 +14,9 @@ pip install -r Docker/requirements.txt
 ```bash
 docker-compose up --build -d
 ```
+# How To Create Project And Application
+```bash
+django-admin startproject ems .
+python manage.py startapp event_system
+```
 
