@@ -9,3 +9,9 @@ python -m venv .venv
 ```bash
 pip install -r Docker/requirements.txt
 ```
+
+# How To Launch Environment 
+```bash
+docker-compose up --build -d
+```
+
