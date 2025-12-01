@@ -12,7 +12,7 @@ services:
       - 5678:5678
       - 8000:8000
     volumes:
-      - ./ems/:/home/app/web/
+      - ./:/home/app/web/
 
   ems_db:
     container_name: ems_db
