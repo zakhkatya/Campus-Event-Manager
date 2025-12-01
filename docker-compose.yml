@@ -10,6 +10,7 @@ services:
       - ./.env.db
     ports:
       - 8000:8000
+      - 5678:5678
     volumes:
       - ./ems/:/home/app/web/
 
