@@ -1,0 +1,29 @@
+services:
+  ems_web:
+    container_name: ems_web
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ./.env
+      - ./.env.db
+    ports:
+      - 5678:5678
+      - 8000:8000
+    volumes:
+      - ./ems/:/home/app/web/
+
+  ems_db:
+    container_name: ems_db
+    image: postgres:16
+    restart: unless-stopped
+    env_file:
+      - ./.env.db
+    volumes:
+      - ems_data:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
+
+volumes:
+  ems_data:
