@@ -3,6 +3,9 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+# Node
+node_modules/
+
 # C extensions
 *.so
 
@@ -149,7 +152,6 @@ activemq-data/
 
 # Environments
 .env
-.env.db
 .envrc
 .venv
 env/
@@ -215,3 +217,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Custom ignores
+.venv/
+.env
+.env.db
+__pycache__/
+staticfiles/
