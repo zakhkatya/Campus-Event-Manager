@@ -1,20 +1,17 @@
 {
-    "version": "0.2.0",
-    "configurations": [
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python Debugger: Remote Attach",
+      "type": "debugpy",
+      "request": "attach",
+      "connect": { "host": "localhost", "port": 5678 },
+      "pathMappings": [
         {
-            "name": "Docker: Attach Debugger", // Bu isim, aradığınız isimdir
-            "type": "python",
-            "request": "attach",
-            "port": 5678, 
-            "host": "localhost",
-            "pathMappings": [
-                {
-                    // VS Code'daki yerel Django kodlarının yolu
-                    "localRoot": "${workspaceFolder}/ems", 
-                    // Kapsayıcıdaki çalışma dizini
-                    "remoteRoot": "/home/app/web"
-                }
-            ],
+          "localRoot": "${workspaceFolder}/ems",
+          "remoteRoot": "/home/app/web"
         }
-    ]
+      ]
+    }
+  ]
 }
