@@ -19,4 +19,8 @@ docker-compose up --build -d
 django-admin startproject ems .
 python manage.py startapp event_system
 ```
+# How To Create A Secret Key
 
+```bash
+python -c "from django.core.management.utils import get_random_secret_key as g; print(g())"
+```
