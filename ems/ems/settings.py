@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'sass_processor',
     "django_bootstrap5",
     "event_system",
+    "userauth"
 ]
 
 MIDDLEWARE = [
