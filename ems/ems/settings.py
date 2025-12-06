@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,13 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-bar0v2opvbwkhqdk4x-n)y+td%+!ev#+*#n5l09th+40d_7u0_'
+SECRET_KEY = str(os.getenv("SECRET_KEY", "unsafe-dev-secret"))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.environ.get("DEBUG", 0))
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
 
 # Application definition
 
@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'sass_processor',
+    "django_bootstrap5",
 ]
 
 MIDDLEWARE = [
@@ -54,7 +56,7 @@ ROOT_URLCONF = 'ems.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,10 +76,15 @@ WSGI_APPLICATION = 'ems.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        "ENGINE": os.getenv("POSTGRES_ENGINE", "django.db.backends.postgresql"), 
+        "NAME": os.getenv("POSTGRES_DB", "database"), 
+        "USER": os.getenv("POSTGRES_USER", "user"), 
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "password"), 
+        "HOST": os.getenv("POSTGRES_HOST", "db"), 
+        "PORT": os.getenv("POSTGRES_PORT", "5432"), 
     }
 }
+
 
 
 # Password validation
@@ -116,7 +123,24 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# SASS Processor settings
+SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, "scss")
+
+STATICFILES_DIRS = [ 
+    os.path.join(BASE_DIR, 'node_modules/bootstrap/dist'), 
+    SASS_PROCESSOR_ROOT, 
+] 
+ 
+STATICFILES_FINDERS = [ 
+    "django.contrib.staticfiles.finders.FileSystemFinder", 
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder", 
+    "sass_processor.finders.CssFinder", 
+]
