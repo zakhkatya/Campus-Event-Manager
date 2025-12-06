@@ -3,6 +3,19 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+class UserProfile(models.Model):
+    ROLE_CHOICES = [
+        ('student', 'Student'),
+        ('organizer', 'Organizer'),
+        ('admin', 'Admin'),
+    ]
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='student')
+
+    def __str__(self):
+        return f"{self.user.username} ({self.role})"
+
 class Event(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
