@@ -2,6 +2,7 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+from django.conf import settings
 
 
 def main():
@@ -15,6 +16,13 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
+    
+    if settings.DEBUG:
+        if os.environ.get("RUN_MAIN") or os.environ.get("WERKZEUG_RUN_MAIN"):
+            import debugpy
+            debugpy.listen(("0.0.0.0", 5678))
+            print("Attached remote debugger")
+
     execute_from_command_line(sys.argv)
 
 
