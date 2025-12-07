@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.contrib.auth.views import LoginView
 
-def auth_home(request):
-    return render(request, "userauth/auth_home.html")
+class CustomLoginView(LoginView):
+    template_name = "userauth/login.html"
+    redirect_authenticated_user = True
