@@ -11,5 +11,9 @@
  {% block content %}{% endblock %}
  </main>
  {% include "partials/footer.html" %}
+ {% load sass_tags %}
+<link rel="stylesheet" href="{% sass_src 'custom.scss' %}">
+{% load static %}
+<script src="{% static 'js/bootstrap.bundle.js' %}"></script>
  </body>
 </html>
