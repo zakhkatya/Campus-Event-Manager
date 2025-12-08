@@ -16,8 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from event_system.views import HomePageView
+
+app_name = "event_system"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('userauth.urls')),
+    path("", HomePageView.as_view(), name="home")
 ]
