@@ -1,23 +1,22 @@
-{%load static%}
-<header>
-<nav class="navbar bg-transparent">
-    <div class="container-fluid d-flex justify-content-between">
-        <div class="dropdown">
-    <button class="btn border-0 shadow-none" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-        <span class="navbar-toggler-icon"></span>
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'event_system:home' %}">Event Management System</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
     </button>
-    <ul class="dropdown-menu border-0" aria-labelledby="dropdownMenuButton">
-        <li><a class="dropdown-item" href="#">List 1</a></li>
-        <li><a class="dropdown-item" href="#">List 2</a></li>
-        <li><a class="dropdown-item" href="#">List 3</a></li>
-    </ul>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'event_system:home' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Events</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Feedbacks</a>
+        </li>
+      </ul>
     </div>
-    <div class="d-flex flex-column align-items-center">
-        <h3 class="fs-3 fw-bold">Campus Event Manager</span>
-        <h5 class="fs-6 fw-normal">Polytechnic Institute of Braganca</span>
-    </div>    
-
-    <div>
-        <!-- Place for User -->
-    </div>
+  </div>
 </nav>
