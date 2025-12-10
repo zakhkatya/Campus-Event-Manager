@@ -1,23 +1,53 @@
-@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/functions"; 
 
-$primary: #ff5733; 
-$font-size-base: 1.1rem;
+$my-purple: #7550aa; 
+$my-purple-darker: #5e408d; 
+$body-bg: #fff; 
+$body-color: #212529; 
+$font-size-base: 1rem; 
 
-@import "../node_modules/bootstrap/scss/variables";
+
+$primary: $my-purple; 
+$light: #f8f9fa; 
+$dark: #212529; 
+
+
+
+@import "../node_modules/bootstrap/scss/variables"; 
 @import "../node_modules/bootstrap/scss/variables-dark";
-
 @import "../node_modules/bootstrap/scss/maps";
 @import "../node_modules/bootstrap/scss/mixins";
-@import "../node_modules/bootstrap/scss/root";
 
+@import "../node_modules/bootstrap/scss/root";
 @import "../node_modules/bootstrap/scss/utilities";
-@import "../node_modules/bootstrap/scss/reboot";
+@import "../node_modules/bootstrap/scss/reboot"; 
 @import "../node_modules/bootstrap/scss/type";
 @import "../node_modules/bootstrap/scss/images";
 @import "../node_modules/bootstrap/scss/containers";
 @import "../node_modules/bootstrap/scss/grid";
 @import "../node_modules/bootstrap/scss/helpers";
-@import "../node_modules/bootstrap/scss/buttons";
+@import "../node_modules/bootstrap/scss/buttons"; 
 @import "../node_modules/bootstrap/scss/navbar";
-
+@import "../node_modules/bootstrap/scss/card"; 
 @import "../node_modules/bootstrap/scss/utilities/api";
+
+
+.project-header-overlay {
+    color: #fff;
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+.placeholder-card-image {
+    background-color: #e9ecef; 
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+}
+.placeholder-icon {
+    font-size: 2.5rem;
+    color: #ced4da;
+}
