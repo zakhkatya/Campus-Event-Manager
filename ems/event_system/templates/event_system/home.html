@@ -1,7 +1,55 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Home page{% endblock %}
 {% block content %}
- <h2>Welcome to the Event Management System</h2>
- <p>This is a static example page using the global template.</p>
- <a href="#" class="btn btn-primary">Main action</a>
-{% endblock %}
+    <div class="position-relative overflow-hidden mb-3 rounded-3"style="background-image:url('{% static "background.jpg" %}');background-size:cover;background-position:center;height:360px;display:flex;align-items:center;justify-content:center;">
+    <div class="position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(255, 255, 255, 0.408);"></div> 
+    <h2 class="project-header-overlay text-dark" style="z-index: 1;">About The Project</h2>
+</div>
+    <div class="mb-5 text-center p-4 mx-auto rounded-3 shadow-sm" style="max-width: 1300px; background-color: white;"> 
+        <p class="mx-auto text-center"style="max-width: 1250px;">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam placerat purus vitae finibus auctor. Pellentesque ultrices, sem sed congue viverra, ex neque tempus tellus, cursus accumsan est metus ut elit. Aliquam eleifend condimentum purus eu placerat. Nullam ultrices diam vitae lorem sodales faucibus. Nulla vestibulum sem eget lobortis accumsan. Maecenas sodales, augue sit amet euismod ultrices, risus ex auctor sapien, at ultricies ipsum metus quis metus. Nunc semper enim eu justo tristique, et mattis nunc euismod.
+            In non dapibus dolor, a tristique ligula. Suspendisse elementum nisl a urna blandit, sit amet rutrum neque elementum. Curabitur ultrices ultrices nisl. Aliquam congue ligula non felis faucibus, eu consequat augue cursus.
+        </p>
+    </div>
+   <div class="text-center py-5 mb-5 border-top border-bottom join-party-box mx-auto"style="max-width: 600px;">
+    <h2 class="text-dark mb-4 fw-bold">Join The Party!</h2>
+    <a href="#" class="btn btn-primary btn-lg mx-2">
+        <i class="fas fa-user-plus"></i> Register
+    </a>
+    <a href="#" class="btn btn-primary btn-lg mx-2">
+        <i class="fas fa-sign-in-alt"></i> Login
+    </a>
+    </div>
+    <div class="p-4 mb-5 rounded-3 shadow-sm" style="background-color: white;">
+        <h2 class="mt-3 mb-4 text-start text-dark">Upcoming Events</h2> <div class="row">
+            {% for i in "123456"|make_list %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card shadow-sm border-0 event-card-light-bg"> 
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-user header-icon"></i> 
+                            <div class="rounded-circle bg-light me-2"style="width: 30px; height: 30px;"></div>
+                            <div>
+                                <h6 class="mb-0">Header</h6>
+                                <small class="text-muted">Subhead</small>
+                            </div>
+                        </div>
+                        <div class="placeholder-card-image">
+                            <span class="placeholder-icon text-muted">
+                                <i class="far fa-image"></i> 
+                            </span>
+                        </div>
+                        <h5 class="card-title mt-3 mb-2">Event Name</h5>
+                        <div class="d-flex justify-content-end">
+                            <a href="#" class="btn btn-sm btn-primary">
+                                <i class="fas fa-info-circle"></i> About
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div> 
+{% endblock content %}
