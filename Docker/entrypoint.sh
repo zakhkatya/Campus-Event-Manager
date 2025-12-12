@@ -2,6 +2,7 @@
 
 if [ ! -d "node_modules" ]; then
   npm install
+  npm i bootstrap-icons
 fi
 
 python manage.py migrate --noinput
