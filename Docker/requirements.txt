@@ -5,3 +5,4 @@ django-sass-processor~=1.0
 libsass~=0.21
 django-bootstrap5~=25.3
 Pillow~=12.0
+django-bootstrap-icons~=0.9.0
