@@ -16,14 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from event_system.views import HomePageView
-
-event_system_patterns = [
-    path("", HomePageView.as_view(), name="home"), 
-]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('userauth.urls')),
-    path("", include((event_system_patterns, 'event_system'), namespace='event_system')),
+    path("", include('event_system.urls')),
 ]
