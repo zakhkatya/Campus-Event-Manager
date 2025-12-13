@@ -22,3 +22,7 @@ class UpcomingEventsView(View):
          "title":"Upcoming events"
          #events
       })
+
+class NotificationsView(View):
+   def get (self, request):
+      return render(request, 'event_system/notifications.html')
