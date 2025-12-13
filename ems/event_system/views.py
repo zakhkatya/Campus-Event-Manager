@@ -10,15 +10,15 @@ class DashboardView(View):
       return render(request, 'event_system/dashboard.html')
    
 class MyEventsView(View):
-   def get(self, request, title):
+   def get(self, request, *args, **kwargs):
       return render(request, 'event_system/events.html', {
-         "My events":title,
+         "title":"My events"
          # events 
       })
 
 class UpcomingEventsView(View):
-   def get(self, request, title):
+   def get(self, request, *args, **kwargs):
       return render(request, 'event_system/events.html', {
-         "Upcoming events":title,
+         "title":"Upcoming events"
          #events
       })
