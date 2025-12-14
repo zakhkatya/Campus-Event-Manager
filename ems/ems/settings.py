@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'sass_processor',
     "django_bootstrap5",
+    "django_bootstrap_icons",
     "event_system",
     "userauth"
 ]
@@ -138,6 +139,7 @@ SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, "scss")
 
 STATICFILES_DIRS = [ 
     os.path.join(BASE_DIR, 'node_modules/bootstrap/dist'), 
+    os.path.join(BASE_DIR, 'node_modules/bootstrap-icons/font'),
     SASS_PROCESSOR_ROOT, 
 ] 
  

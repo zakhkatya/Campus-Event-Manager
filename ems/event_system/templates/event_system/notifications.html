@@ -1,0 +1,29 @@
+{%extends "base.html"%}
+{%block title%} Notifications {%endblock%}
+{%block content%}
+<div class="container-xxl rounded-4">
+    <h2 class="p-4 pb-2"> <b> Notifications </b> </h2>
+
+    <div class="container">
+        <div class="row d-flex">
+            {% for x in '12345678'|make_list %}
+                <div class="card mb-3 border-1">
+                        <div class="card-body p-1 pb-0">
+                            <div class="row row cols-2">
+                                    <div class="col-1 d-flex align-items-center">
+                                        <i class="bi bi-person-circle fs-1 ms-2 mb-2"></i>
+                                    </div>
+                                    <div class="col-11 pt-1">
+                                        <span class="fs-6 mb-0 fw-bold"> Reminder > Event Name </span>
+                                        <p class="text-muted lh-sm fs-xs mb-2">
+                                            Supporting line text lorem ipsum dolor sit amet, consectetur.
+                                        </p>
+                                    </div>
+                            </div>    
+                        </div>
+                    </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{%endblock%}
