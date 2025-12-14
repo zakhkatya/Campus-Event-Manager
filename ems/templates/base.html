@@ -1,20 +1,18 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{% block title %}Event System{% endblock %}</title>
-        {% load sass_tags %}
-        <link rel="stylesheet" href="{% sass_src 'custom.scss' %}">
-    </head>
-    <body> 
-        {% include "partials/header.html" %}
-        <main class="container py-4">
-            {% block content %} {% endblock %}
-        </main>
-        {% include "partials/footer.html" %}
-
-        {% load static %}
-        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-    </body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Event System{% endblock %}</title>
+    {% load sass_tags %}
+    <link rel="stylesheet" href="{% sass_src 'custom.scss' %}" />
+    {% load static %}
+    <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}" />
+  </head>
+  <body>
+    {% include "partials/header.html" %}
+    <main class="container py-4">{% block content %} {% endblock %}</main>
+    {% include "partials/footer.html" %}
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  </body>
 </html>
