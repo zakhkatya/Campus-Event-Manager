@@ -35,3 +35,20 @@ def create_event(*, user: User, data: dict) -> Event:
     event.full_clean()
     event.save()
     return event
+
+# UPDATE
+def update_event(*, user: User, event: Event, data: dict) -> Event:
+    """
+    Update an existing event.
+    """
+    if not _can_manage_event(user):
+        raise PermissionDenied("You are not allowed to update events.")
+
+    for field, value in data.items():
+        if hasattr(event, field):
+            setattr(event, field, value)
+
+    event.full_clean()
+    event.save()
+    return event
+
