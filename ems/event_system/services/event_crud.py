@@ -5,7 +5,6 @@ from event_system.models import Event, UserProfile
 
 # --------------------
 # HELPERS
-# --------------------
 
 # Check if user is admin
 def _is_admin(user: User) -> bool:
@@ -21,4 +20,18 @@ def _is_organizer(user: User) -> bool:
 def _can_manage_event(user: User) -> bool:
     return _is_admin(user) or _is_organizer(user)
 
+# --------------------
 
+# CREATE
+def create_event(*, user: User, data: dict) -> Event:
+    """
+    Create a new event.
+    Only organizer or admin can create events.
+    """
+    if not _can_manage_event(user):
+        raise PermissionDenied("You are not allowed to create events.")
+
+    event = Event(**data)
+    event.full_clean()
+    event.save()
+    return event
