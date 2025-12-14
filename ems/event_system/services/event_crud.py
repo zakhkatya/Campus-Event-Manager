@@ -52,3 +52,17 @@ def update_event(*, user: User, event: Event, data: dict) -> Event:
     event.save()
     return event
 
+# DELETE
+def delete_event(*, user: User, event: Event) -> None:
+    """
+    Delete an event.
+    """
+    if not _can_manage_event(user):
+        raise PermissionDenied("You are not allowed to delete events.")
+
+    if event.registration_set.exists():
+        raise ValidationError(
+            "Cannot delete event with existing registrations."
+        )
+
+    event.delete()
