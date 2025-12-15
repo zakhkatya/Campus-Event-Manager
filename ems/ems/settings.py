@@ -150,6 +150,9 @@ STATICFILES_FINDERS = [
     "sass_processor.finders.CssFinder", 
 ]
 
+# Authentication settings
 LOGIN_URL = "userauth:login"
-LOGIN_REDIRECT_URL = ""
-LOGOUT_REDIRECT_URL = "userauth:login"     
+
+LOGIN_REDIRECT_URL = "event_system:dashboard"
+
+LOGOUT_REDIRECT_URL = "event_system:home"     
