@@ -33,6 +33,11 @@ $conatiner-bg: #ececec;
 $info: #b6a1ed;
 $secondary: #ad99e1;
 
+.bg-image {
+    background-image: url("../static/background.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
 
 body {
     background-color: $body-bg;
@@ -74,6 +79,14 @@ body {
 
 .container-xxl {
     background-color: $conatiner-bg;
+}
+
+.container-sm {
+    background-color: $body-bg;
+    position: fixed;
+    left: 60%;
+    top:25%;
+    width: 20%;
 }
 
 .fs-xs {

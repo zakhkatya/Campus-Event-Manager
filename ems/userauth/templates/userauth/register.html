@@ -1,0 +1,9 @@
+{% extends "userauth/base_auth.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form layout="vertical" %}
+    {% bootstrap_button "Create account" button_type="submit" button_class="btn-primary" %}
+</form>
+{%endblock%}

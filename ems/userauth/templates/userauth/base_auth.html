@@ -1,0 +1,21 @@
+{% load django_bootstrap5 %}
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>{% block title %} {{title}} {% endblock %}</title>
+            {% load sass_tags %}
+            <link rel="stylesheet" href="{% sass_src 'custom.scss' %}">
+            {%load static%}
+            <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}">
+        </head>
+    <body class="bg-image">
+        <div class="container-sm bg-light rounded p-3 shadow-md">
+            {%block content%}
+            {%endblock%}
+        </div>
+
+        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    </body>
+</html>
