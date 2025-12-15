@@ -1,6 +1,7 @@
 {% load static %}
 <nav
-  class="p-3 text-center text-dark d-flex flex-row align-items-center justify-content-between w-100">
+  class="p-3 text-center text-dark d-flex flex-row align-items-center justify-content-between w-100"
+>
   <div>
     <i class="bi bi-list" style="font-size: 2rem"></i>
   </div>
@@ -11,9 +12,15 @@
   </div>
 
   <div>
+    {% if user.is_authenticated %}
     <form method="post" action="{% url 'userauth:logout' %}" class="d-inline">
       {% csrf_token %}
       <button type="submit" class="btn btn-outline-danger">Logout</button>
     </form>
+    {% else %}
+    <a href="{% url 'userauth:login' %}" class="btn btn btn-outline-primary"
+      >Login</a
+    >
+    {% endif %}
   </div>
 </nav>
