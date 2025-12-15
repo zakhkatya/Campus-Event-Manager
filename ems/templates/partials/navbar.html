@@ -1,5 +1,19 @@
 {% load static %}
-<nav class="pt-4 text-center"> 
-    <h1 class="fs-3 mb-0 test-dark fw-bold">Campus Event Manager</h1> 
-    <p class="fs-5 mb-0 text-dark">Polytechnic Institute of Bragança</p>
+<nav
+  class="p-3 text-center text-dark d-flex flex-row align-items-center justify-content-between w-100">
+  <div>
+    <i class="bi bi-list" style="font-size: 2rem"></i>
+  </div>
+
+  <div>
+    <h1 class="fs-3 mb-0 fw-bold">Campus Event Manager</h1>
+    <p class="fs-5 mb-0">Polytechnic Institute of Bragança</p>
+  </div>
+
+  <div>
+    <form method="post" action="{% url 'userauth:logout' %}" class="d-inline">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-outline-danger">Logout</button>
+    </form>
+  </div>
 </nav>
