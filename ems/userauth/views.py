@@ -1,7 +1,7 @@
 from django.contrib.auth.views import LoginView
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
-# from .forms import CustomRegistrationForm
+from .forms import CustomRegistrationForm
 
 class CustomLoginView(LoginView):
     template_name = "userauth/login.html"
@@ -9,5 +9,5 @@ class CustomLoginView(LoginView):
 
 class RegisterView(CreateView):
     template_name = "userauth/register.html"
-    # form_class = CustomRegistrationForm
+    form_class = CustomRegistrationForm
     success_url = reverse_lazy("userauth:login")
