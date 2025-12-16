@@ -85,11 +85,14 @@
                                         <p class = "mb-0 fs-xs"> <i class="bi bi-clock"></i> 10:00 - 12:00 </p>
                                         <div class = "badge p-2 rounded-pill"> Event Category </div>
                                         </div>    
-                                    <div class="col d-flex justify-content-end align-items-end">
-                                        <a href="#" class="btn btn-sm px-3 py-2 btn-secondary rounded-pill d-flex gap-2">
-                                            <i class="bi bi-arrow-return-left"></i> About
-                                        </a>   
-                                    </div>        
+                                        <div class="col d-flex justify-content-end align-items-end">
+                                            <form action="{% url 'event_system:register_event' event_id=x %}" method="post">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm px-3 py-2 btn-success rounded-pill d-flex gap-2 event-register-btn">
+                                            <i class="bi bi-person-plus-fill"></i> Register
+                                        </button> 
+                                        </form>
+                                     </div>       
                                 </div>
                             </div>
                         </div>
