@@ -1,5 +1,6 @@
 from django.urls import path
 from event_system.views import HomePageView, DashboardView, MyEventsView, UpcomingEventsView, NotificationsView
+from . import views
 
 app_name = 'event_system'
 urlpatterns = [
@@ -8,4 +9,5 @@ urlpatterns = [
     path("my-events", MyEventsView.as_view(), name="my-events" ),
     path("upcoming-events", UpcomingEventsView.as_view(), name="upcoming-events"),
     path("notifications", NotificationsView.as_view(), name="notifications"),
+    path("register/<int:event_id>/", views.register_for_event, name='register_event'),
 ]
