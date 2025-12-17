@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import View
+from .models import Event
 
 class HomePageView(View):
    def get(self, request):
@@ -17,11 +18,22 @@ class MyEventsView(View):
       })
 
 class UpcomingEventsView(View):
-   def get(self, request, *args, **kwargs):
-      return render(request, 'event_system/events.html', {
-         "title":"Upcoming events"
-         #events
-      })
+    def get(self, request, *args, **kwargs):
+        events = (
+            Event.objects
+            .filter(approved=True, is_private=False)
+            .order_by("date")
+        )
+
+        return render(
+            request,
+            'event_system/events.html',
+            {
+                "title": "Upcoming events",
+                "events": events,
+            }
+        )
+
 
 class NotificationsView(View):
    def get (self, request):
