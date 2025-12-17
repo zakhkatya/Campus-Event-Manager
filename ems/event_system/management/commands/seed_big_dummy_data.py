@@ -1,22 +1,23 @@
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.utils import timezone
 from datetime import timedelta
 import random
 
-from event_system.models import UserProfile, Event, Registration, Feedback
+from event_system.models import Event, Registration, Feedback
 
+
+User = get_user_model()
 
 # =========================
-# KONFIGURACE
+# CONFIGURATION
 # =========================
 ORGANIZER_COUNT = 10
 STUDENT_COUNT = 100
 EVENT_COUNT = 300
 
 REGISTRATIONS_PER_EVENT = (10, 30)  # min / max
-FEEDBACK_RATE = 0.4  # 40 % registrovaných zanechá feedback
-
+FEEDBACK_RATE = 0.4  # 40% of registered users leave feedback
 
 class Command(BaseCommand):
     help = "Seed database with a large interconnected dataset"
@@ -27,23 +28,35 @@ class Command(BaseCommand):
         # -------------------------
         # ADMIN
         # -------------------------
-        admin, _ = User.objects.get_or_create(
-            username="admin",
-            defaults={"is_staff": True, "is_superuser": True},
+        admin, created = User.objects.get_or_create(
+            email="admin@example.com",
+            defaults={
+                "username": "admin",
+                "is_staff": True, 
+                "is_superuser": True,
+                "role": "admin"
+            },
         )
-        admin.set_password("admin123")
-        admin.save()
-        UserProfile.objects.get_or_create(user=admin, role="admin")
+        if created:
+            admin.set_password("admin123")
+            admin.save()
+            self.stdout.write("Admin created.")
 
         # -------------------------
         # ORGANIZERS
         # -------------------------
         organizers = []
         for i in range(1, ORGANIZER_COUNT + 1):
-            user, _ = User.objects.get_or_create(username=f"organizer{i}")
-            user.set_password("password123")
-            user.save()
-            UserProfile.objects.get_or_create(user=user, role="organizer")
+            user, created = User.objects.get_or_create(
+                email=f"organizer{i}@example.com",
+                defaults={
+                    "username": f"organizer{i}",
+                    "role": "organizer"
+                }
+            )
+            if created:
+                user.set_password("password123")
+                user.save()
             organizers.append(user)
 
         # -------------------------
@@ -51,28 +64,26 @@ class Command(BaseCommand):
         # -------------------------
         students = []
         for i in range(1, STUDENT_COUNT + 1):
-            user, _ = User.objects.get_or_create(username=f"student{i}")
-            user.set_password("password123")
-            user.save()
-            UserProfile.objects.get_or_create(user=user, role="student")
+            user, created = User.objects.get_or_create(
+                email=f"student{i}@example.com",
+                defaults={
+                    "username": f"student{i}",
+                    "role": "student"
+                }
+            )
+            if created:
+                user.set_password("password123")
+                user.save()
             students.append(user)
 
         # -------------------------
         # EVENTS
         # -------------------------
-        categories = [
-            "Workshop",
-            "Lecture",
-            "Party",
-            "Sports",
-            "Conference",
-            "Meetup",
-        ]
+        categories = ["Workshop", "Lecture", "Party", "Sports", "Conference", "Meetup"]
 
         events = []
         for i in range(1, EVENT_COUNT + 1):
             organizer = random.choice(organizers)
-
             event = Event.objects.create(
                 title=f"Event #{i}",
                 description="Automatically generated test event.",
@@ -89,13 +100,8 @@ class Command(BaseCommand):
         # -------------------------
         registrations = []
         for event in events:
-            reg_count = random.randint(
-                REGISTRATIONS_PER_EVENT[0],
-                REGISTRATIONS_PER_EVENT[1],
-            )
-            selected_students = random.sample(
-                students, k=min(reg_count, len(students))
-            )
+            reg_count = random.randint(REGISTRATIONS_PER_EVENT[0], REGISTRATIONS_PER_EVENT[1])
+            selected_students = random.sample(students, k=min(reg_count, len(students)))
 
             for student in selected_students:
                 registration, _ = Registration.objects.get_or_create(
@@ -114,15 +120,10 @@ class Command(BaseCommand):
                     user=registration.user,
                     event=registration.event,
                     rating=random.randint(1, 5),
-                    comment=random.choice(
-                        [
-                            "Great event!",
-                            "Very useful.",
-                            "Could be better.",
-                            "Loved it!",
-                            "Not bad.",
-                        ]
-                    ),
+                    comment=random.choice([
+                        "Great event!", "Very useful.", "Could be better.", 
+                        "Loved it!", "Not bad."
+                    ]),
                 )
                 feedback_count += 1
 
