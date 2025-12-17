@@ -100,3 +100,55 @@ body {
 .m {
     height: 510px;
 }
+
+.home-header-image {
+    background-size: cover;
+    background-position: center;
+    height: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.home-header-overlay {
+    background-color: rgba(255, 255, 255, 0.408);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.project-header-overlay {
+    z-index: 1;
+}
+
+.home-content-box {
+    max-width: 1300px; 
+    background-color: white;
+}
+
+.join-party-box {
+    max-width: 600px;
+}
+
+.auth-container {
+    background-color: #f8f9fa; 
+    position: fixed;
+    left: 60%;
+    top: 20%;
+    width: 25%;
+}
+.home-text-max-width {
+    max-width: 1250px;
+}
+
+.icon-placeholder-circle {
+    width: 30px;
+    height: 30px;
+}
+.bg-white {
+    background-color: white !important;
+}
+.event-register-btn {
+    transform: translateY(-35px); 
+}

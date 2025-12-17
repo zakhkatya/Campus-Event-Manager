@@ -153,4 +153,6 @@ STATICFILES_FINDERS = [
 LOGIN_URL = "userauth:login"
 LOGIN_REDIRECT_URL = "event_system:dashboard"
 LOGOUT_REDIRECT_URL = "event_system:home"
+
+AUTH_USER_MODEL = "userauth.CustomUser"
    
