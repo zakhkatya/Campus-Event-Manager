@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.contrib.auth.decorators import user_passes_test
+from .models import Event
 
 # Helper: Check if user is Admin
 def is_admin(user):
