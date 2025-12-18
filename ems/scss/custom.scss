@@ -32,7 +32,6 @@ $card-body-bg: #fef7ff;
 $conatiner-bg: #ececec;
 $info: #b6a1ed;
 $secondary: #ad99e1;
-$secondary-dark: #6750a4;
 
 .bg-image {
     background-image: url("../static/background.jpg");
@@ -49,20 +48,30 @@ body {
     border: 0;
 }
 
+.btn-primary:hover {
+    background-color: $secondary;
+}
+
+.btn-primary:active,
+.btn-primary:focus {
+    background-color: $secondary !important;
+    box-shadow: 0.0.0.0.25rem $primary;
+}
+
 .btn-secondary {
     background-color: $secondary;
     border: 0;
-    color: $secondary-dark;
+    color: $primary;
 }
 
 .btn-secondary:hover {
-    background-color: $secondary-dark;
+    background-color: $primary;
     color: $secondary;
 }
 
 .btn-secondary:active,
 .btn-secondary:focus {
-    background-color: $secondary-dark !important ;
+    background-color: $primary !important ;
     color: $secondary !important ;
     box-shadow: 0.0.0.0.25rem $secondary;
 }
@@ -115,6 +124,19 @@ body {
     height: 510px;
 }
 
-.bi {
+.bi-arrow-return-left,
+.bi-search {
     -webkit-text-stroke: 1px;
+}
+
+.dropdown-item.badge {
+    width: 100px;
+}
+
+.dropdown-menu.show {
+    min-width: 100px;
+}
+
+.dropdown-item.badge:hover {
+    background-color: $primary;
 }
