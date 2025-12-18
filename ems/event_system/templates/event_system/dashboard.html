@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-<div class="container-fluid row row-cols-1">
+<div class="align-items-center row-cols-1">
 
 <div class="container-xxl rounded-4 m"> 
     <h2 class="p-4 pb-2"> <b> My events <i class="bi bi-caret-right-fill fs-5"></i> </b> </h2>
@@ -49,7 +49,7 @@
     </div>
 </div>
 
-<div class="container-fluid mt-5 p-0">
+<div class="container-xxl bg-transparent mt-5 p-0">
     <div class="row">
         <div class="col-8">
 
@@ -111,7 +111,7 @@
 
             <div class="container-xxl rounded-4 p-2 n">
                 <div class="text-center">
-                    <h4 class="p-4 pb-1"> <b> Notifications <i class="bi bi-caret-right-fill fs-5"></i> </b> </h4>
+                    <h4 class="p-3 pb-1"> <b> Notifications <i class="bi bi-caret-right-fill fs-5"></i> </b> </h4>
                 </div>
                 <div class = "row-cols-1 p-2 pb-0">
                     {% for x in '123456789'|make_list %}
@@ -123,7 +123,7 @@
                                     </div>
                                     <div class="col-9">
                                         <span class="fs-6 mb-0 fw-bold"> Reminder > Event Name </span>
-                                        <p class="text-muted lh-sm fs-xs mb-2">
+                                        <p class="text-muted lh-sm fs-xs mb-1">
                                             Supporting line text lorem ipsum dolor sit amet, consectetur.
                                         </p>
                                     </div>
