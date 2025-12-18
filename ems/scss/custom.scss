@@ -17,6 +17,7 @@
 @import "../node_modules/bootstrap/scss/navbar";
 @import "../node_modules/bootstrap/scss/dropdown";
 @import "../node_modules/bootstrap/scss/forms";
+@import "../node_modules/bootstrap/scss/modal";
 
 @import "../node_modules/bootstrap/scss/helpers";
 
@@ -82,7 +83,8 @@ body {
     font-weight: 400;
 }
 
-.card {
+.card,
+.modal-content {
     background-color: $card-body-bg;
 }
 
@@ -102,6 +104,10 @@ body {
 
 .container-xxl {
     background-color: $conatiner-bg;
+}
+
+.container-xl {
+    height: 350px !important;
 }
 
 .container-sm {
@@ -125,7 +131,10 @@ body {
 }
 
 .bi-arrow-return-left,
-.bi-search {
+.bi-search,
+.bi-chevron-compact-down,
+.bi-person,
+.bi-box-arrow-in-right {
     -webkit-text-stroke: 1px;
 }
 
@@ -139,4 +148,27 @@ body {
 
 .dropdown-item.badge:hover {
     background-color: $primary;
+}
+
+.link-primary,
+.bi-x-circle-fill {
+    color: $primary !important;
+}
+
+
+.link-underline-primary {
+    text-decoration-color: $primary !important;
+
+}
+
+.link-primary:hover,
+.link-primary:active,
+.bi-x-circle-fill:hover,
+.bi-x-circle-fill:active {
+    color: $secondary !important;
+}
+
+.link-underline-primary:hover,
+.link-underline-primary:active {
+    text-decoration-color: $secondary !important;
 }

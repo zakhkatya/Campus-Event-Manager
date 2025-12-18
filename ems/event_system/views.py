@@ -15,8 +15,21 @@ def is_management(user):
     return user.role in ['admin', 'organizer']
 
 class HomePageView(View):
-   def get(self, request):
-      return render(request, 'event_system/home.html')
+   def get(self, request, *args, **kwargs):
+        events = (
+            Event.objects
+            .filter(approved=True, is_private=False)
+            .order_by("date")[:6]
+        )
+
+        return render(request,
+            'event_system/home.html',
+            {
+                "title": "Upcoming events",
+                "events": events,
+            }        
+                    
+            )
 
 class DashboardView(View):
    def get(self, request):
