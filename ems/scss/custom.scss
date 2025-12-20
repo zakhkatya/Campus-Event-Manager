@@ -34,19 +34,24 @@ $conatiner-bg: #ececec;
 $info: #b6a1ed;
 $secondary: #ad99e1;
 
-.bg-image {
-    background-image: url("../static/background.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
+html {
+  scroll-behavior: smooth;
 }
 
 body {
     background-color: $body-bg;
 }
 
+.bg-image {
+    background-image: url("../static/background.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
 .btn-primary {
     background-color: $primary;
     border: 0;
+    transition: 0.2s;
 }
 
 .btn-primary:hover {
@@ -84,16 +89,15 @@ body {
 }
 
 .card,
-.modal-content {
-    background-color: $card-body-bg;
-}
-
-.card-header {
+.modal-content,
+.card-header,
+.card-footer,
+.dropdown-menu,
+.btn-light {
     background-color: $card-body-bg;
 }
 
 .card-footer {
-    background-color: $card-body-bg;
     height: 110px;
 }
 
@@ -133,16 +137,19 @@ body {
 .bi-arrow-return-left,
 .bi-search,
 .bi-chevron-compact-down,
+.bi-person-plus,
 .bi-person,
-.bi-box-arrow-in-right {
+.bi-box-arrow-in-right,
+.bi-box-arrow-right {
     -webkit-text-stroke: 1px;
 }
 
 .dropdown-item.badge {
     width: 100px;
+    transition: 0.2s;
 }
 
-.dropdown-menu.show {
+.dropdown-menu.show.category {
     min-width: 100px;
 }
 
@@ -151,12 +158,20 @@ body {
 }
 
 .link-primary,
-.bi-x-circle-fill {
+.bi-x-circle-fill,
+.bi-box-arrow-right:hover,
+.bi-box-arrow-right:active,
+.bi-box-arrow-right:focus,
+.bi-person:hover,
+.bi-person:active,
+.bi-person:focus {
     color: $primary !important;
+    transition: 0.2s;
 }
 
 
 .link-underline-primary {
+    transition: 0.2s;
     text-decoration-color: $primary !important;
 
 }
@@ -164,11 +179,31 @@ body {
 .link-primary:hover,
 .link-primary:active,
 .bi-x-circle-fill:hover,
-.bi-x-circle-fill:active {
+.bi-x-circle-fill:active,
+.bi-box-arrow-right,
+.bi-person {
     color: $secondary !important;
 }
 
 .link-underline-primary:hover,
 .link-underline-primary:active {
     text-decoration-color: $secondary !important;
+}
+
+.user {
+    transition: 0.2s;
+    height: 50px;
+    outline: none;
+}
+
+.user:active,
+.user:focus,
+.user:hover,
+.dropdown-menu {
+    background-color: $card-body-bg !important;
+}
+
+.dropdown-menu {
+    min-width: auto !important;
+    margin-left: 15% !important;
 }
