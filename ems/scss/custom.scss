@@ -65,6 +65,7 @@ body {
 }
 
 .btn-secondary {
+    transition: 0.2s;
     background-color: $secondary;
     border: 0;
     color: $primary;
@@ -140,7 +141,14 @@ body {
 .bi-person-plus,
 .bi-person,
 .bi-box-arrow-in-right,
-.bi-box-arrow-right {
+.bi-box-arrow-right,
+.bi-person,
+.bi-calendar,
+.bi-chat-left,
+.bi-check2-circle,
+.bi-plus,
+.bi-wrench,
+.bi-layers {
     -webkit-text-stroke: 1px;
 }
 
@@ -191,19 +199,29 @@ body {
 }
 
 .user {
-    transition: 0.2s;
     height: 50px;
+}
+
+.user,
+.menu {
+    transition: 0.2s;
     outline: none;
 }
 
 .user:active,
 .user:focus,
 .user:hover,
+.menu:active,
+.menu:focus,
+.menu:hover,
 .dropdown-menu {
     background-color: $card-body-bg !important;
 }
 
 .dropdown-menu {
     min-width: auto !important;
+}
+
+.duser {
     margin-left: 15% !important;
 }

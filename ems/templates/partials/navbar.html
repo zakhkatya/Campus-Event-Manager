@@ -1,6 +1,54 @@
 {% load static %}
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid flex-column">
+        <div class="position-absolute top-0 start-0">
+        {%if user.is_authenticated%}
+            <div class="dropdown mt-4 ms-4">
+                <button class="border-0 bg-transparent rounded-4 menu p-2 py-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                    <i class="bi bi-list fs-1 m-0"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-start shadow-sm rounded-4 border-0 mt-2 text-start m-0 p-2">
+                <li class="mb-2">
+                    <a class="dropdown-item bg-transparent p-0 ps-1" href="#">
+                        <i class="bi bi-calendar fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1" type="button"></i> Past Events
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a class="dropdown-item bg-transparent p-0 ps-1" href="#">
+                        <i class="bi bi-chat-left fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1" type="button"></i> My Feedbacks
+                    </a>
+                </li>
+
+                {% if user.role == 'admin' %}
+                <li class="mb-2">
+                    <a class="dropdown-item bg-transparent p-0 ps-1" href="#">
+                        <i class="bi bi-check2-circle fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1" type="button"></i> Approve Events
+                    </a>
+                </li>
+                {%endif%}
+                {% if user.role == 'admin' or user.role == 'organizer'%}
+                <li class="mb-2">
+                    <a class="dropdown-item bg-transparent p-0 ps-1" href="#">
+                        <i class="bi bi-plus fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1" type="button"></i> Create Event
+                    </a>
+                </li>
+
+                <li class="mb-2">
+                    <a class="dropdown-item bg-transparent p-0 ps-1" href="#">
+                        <i class="bi bi-wrench fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1" type="button"></i> Manage Events
+                    </a>
+                </li>
+
+                <li class="mb-0">
+                    <a class="dropdown-item bg-transparent p-0 ps-1 d-inline-flex" href="#">
+                        <i class="bi bi-layers fs-5 btn-secondary rounded-3 ms-0 p-2 pt-1 me-1 pb-0" type="button"></i> <div class="lh-sm ms-1"> Received <p class="pb-0 mb-0"> Feedbacks </p> </div>
+                    </a>
+                </li>
+                {%endif%}
+
+            </div>
+        {%endif%}
+        </div>
 
         <div class="pt-2 text-center w-100">
             <a class="navbar-brand text-dark" href="{% url 'event_system:home' %}">
@@ -12,7 +60,7 @@
         <div class="position-absolute top-0 end-0">
             
             {% if user.is_authenticated %}
-            <div class="dropdown my-4 me-5 p-0">
+            <div class="dropdown my-4 me-4 p-0">
             <button class="row row-cols-2 user rounded-4 border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
                 <div class="col-2 p-0 ps-1">
                     <i class="bi bi-person-circle fs-2 text-muted"></i>
@@ -24,7 +72,7 @@
                 </div>
             </button>
 
-            <ul class="dropdown-menu dropdown-menu-start shadow-sm rounded-4 border-0 mt-2 text-end m-0 p-2">
+            <ul class="dropdown-menu dropdown-menu-start shadow-sm rounded-4 border-0 mt-2 text-end p-2 duser">
                 <li class="mb-2">
                     <a class="dropdown-item bg-transparent p-0 ps-1" href="#">
                         Edit profile <i class="bi bi-person fs-5 btn-primary rounded-3 ms-1 p-2 py-1" type="button"></i>
