@@ -20,10 +20,10 @@
         {% if not user.is_authenticated %}
             <h2 class="text-dark mb-4 display-3 fw-bold">Join The Party!</h2>
             <a href="{% url 'userauth:register' %}" class="btn btn-primary btn-lg mx-2 p-3 px-4 fw-semibold">
-                <i class="bi bi-person"></i> Register
+                <i class="bi bi-person-plus me-1"></i> Register
             </a>
             <a href="{% url 'userauth:login' %}" class="btn btn-primary btn-lg mx-2 p-3 px-4 fw-semibold">
-                <i class="bi bi-box-arrow-in-right"></i> Login
+                <i class="bi bi-box-arrow-in-right me-1"></i> Login
             </a>
         {% else %}
             <h2 class="text-dark mb-4 fw-bold">Welcome, <a class="link-primary link-offset-1 link-underline-primary" href=""> {{ user.email }}</a>! </h2>
@@ -122,10 +122,10 @@
               </div>
               <div class="modal-footer ">
                 <a href="{% url 'userauth:register' %}" class="btn btn-primary btn-md me-2 p-2 fw-semibold">
-                  <i class="bi bi-person"></i> Register
+                  <i class="bi bi-person-plus me-1"></i> Register
                 </a>
                 <a href="{% url 'userauth:login' %}" class="btn btn-primary btn-md mx-2 p-2 fw-semibold">
-                  <i class="bi bi-box-arrow-in-right"></i> Login
+                  <i class="bi bi-box-arrow-in-right me-1"></i> Login
                 </a>
               </div>
             </div>
