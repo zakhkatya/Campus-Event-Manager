@@ -1,9 +1,11 @@
 {% extends "userauth/base_auth.html" %}
 {% load django_bootstrap5 %}
 {% block content %}
+<div class="container-sm rounded p-3 shadow-md position-fixed w-25 login">
 <form method="post">
     {% csrf_token %}
     {% bootstrap_form form %}
     {% bootstrap_button "Sing in" button_type="submit" %}
 </form>
+</div>
 {%endblock%}

@@ -35,7 +35,7 @@ $info: #b6a1ed;
 $secondary: #ad99e1;
 
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 
 body {
@@ -117,10 +117,6 @@ body {
 
 .container-sm {
     background-color: $body-bg;
-    position: fixed;
-    left: 60%;
-    top:20%;
-    width: 25%;
 }
 
 .fs-xs {
@@ -224,4 +220,33 @@ body {
 
 .duser {
     margin-left: 15% !important;
+}
+
+.register {
+    top:15%;
+    left:60%;
+}
+
+.login {
+    top:30%;
+    left:60%;
+}
+
+.form-control {
+    background-color: $card-body-bg;
+}
+
+.form-control:hover,
+.form-control:active,
+.form-control:focus {
+    background-color: $card-body-bg;
+    box-shadow: 0.0.0.0.25rem $secondary;
+}
+
+.form-control:focus {
+    border: 1px $primary solid;
+}
+
+label {
+    font-weight: 500;
 }
