@@ -17,6 +17,7 @@
 @import "../node_modules/bootstrap/scss/navbar";
 @import "../node_modules/bootstrap/scss/dropdown";
 @import "../node_modules/bootstrap/scss/forms";
+@import "../node_modules/bootstrap/scss/modal";
 
 @import "../node_modules/bootstrap/scss/helpers";
 
@@ -33,24 +34,53 @@ $conatiner-bg: #ececec;
 $info: #b6a1ed;
 $secondary: #ad99e1;
 
-.bg-image {
-    background-image: url("../static/background.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
+html {
+    scroll-behavior: smooth;
 }
 
 body {
     background-color: $body-bg;
 }
 
+.bg-image {
+    background-image: url("../static/background.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
 .btn-primary {
     background-color: $primary;
     border: 0;
+    transition: 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: $secondary;
+}
+
+.btn-primary:active,
+.btn-primary:focus {
+    background-color: $secondary !important;
+    box-shadow: 0.0.0.0.25rem $primary;
 }
 
 .btn-secondary {
+    transition: 0.2s;
     background-color: $secondary;
     border: 0;
+    color: $primary;
+}
+
+.btn-secondary:hover {
+    background-color: $primary;
+    color: $secondary;
+}
+
+.btn-secondary:active,
+.btn-secondary:focus {
+    background-color: $primary !important ;
+    color: $secondary !important ;
+    box-shadow: 0.0.0.0.25rem $secondary;
 }
 
 .badge {
@@ -59,16 +89,16 @@ body {
     font-weight: 400;
 }
 
-.card {
-    background-color: $card-body-bg;
-}
-
-.card-header {
+.card,
+.modal-content,
+.card-header,
+.card-footer,
+.dropdown-menu,
+.btn-light {
     background-color: $card-body-bg;
 }
 
 .card-footer {
-    background-color: $card-body-bg;
     height: 110px;
 }
 
@@ -81,12 +111,12 @@ body {
     background-color: $conatiner-bg;
 }
 
+.container-xl {
+    height: 350px !important;
+}
+
 .container-sm {
     background-color: $body-bg;
-    position: fixed;
-    left: 60%;
-    top:20%;
-    width: 25%;
 }
 
 .fs-xs {
@@ -101,54 +131,130 @@ body {
     height: 510px;
 }
 
-.home-header-image {
-    background-size: cover;
-    background-position: center;
-    height: 360px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.home-header-overlay {
-    background-color: rgba(255, 255, 255, 0.408);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-.project-header-overlay {
-    z-index: 1;
+.bi-arrow-return-left,
+.bi-search,
+.bi-chevron-compact-down,
+.bi-person-plus,
+.bi-person,
+.bi-box-arrow-in-right,
+.bi-box-arrow-right,
+.bi-person,
+.bi-calendar,
+.bi-chat-left,
+.bi-check2-circle,
+.bi-plus,
+.bi-wrench,
+.bi-layers {
+    -webkit-text-stroke: 1px;
 }
 
-.home-content-box {
-    max-width: 1300px; 
-    background-color: white;
+.dropdown-item.badge {
+    width: 100px;
+    transition: 0.2s;
 }
 
-.join-party-box {
-    max-width: 600px;
+.dropdown-menu.show.category {
+    min-width: 100px;
 }
 
-.auth-container {
-    background-color: #f8f9fa; 
-    position: fixed;
-    left: 60%;
-    top: 20%;
-    width: 25%;
-}
-.home-text-max-width {
-    max-width: 1250px;
+.dropdown-item.badge:hover {
+    background-color: $primary;
 }
 
-.icon-placeholder-circle {
-    width: 30px;
-    height: 30px;
+.link-primary,
+.bi-x-circle-fill,
+.bi-box-arrow-right:hover,
+.bi-box-arrow-right:active,
+.bi-box-arrow-right:focus,
+.bi-person:hover,
+.bi-person:active,
+.bi-person:focus {
+    color: $primary !important;
+    transition: 0.2s;
 }
-.bg-white {
-    background-color: white !important;
+
+
+.link-underline-primary {
+    transition: 0.2s;
+    text-decoration-color: $primary !important;
+
 }
-.event-register-btn {
-    transform: translateY(-35px); 
+
+.link-primary:hover,
+.link-primary:active,
+.bi-x-circle-fill:hover,
+.bi-x-circle-fill:active,
+.bi-box-arrow-right,
+.bi-person {
+    color: $secondary !important;
+}
+
+.link-underline-primary:hover,
+.link-underline-primary:active {
+    text-decoration-color: $secondary !important;
+}
+
+.user {
+    height: 50px;
+}
+
+.user,
+.menu {
+    transition: 0.2s;
+    outline: none;
+}
+
+.user:active,
+.user:focus,
+.user:hover,
+.menu:active,
+.menu:focus,
+.menu:hover,
+.dropdown-menu {
+    background-color: $card-body-bg !important;
+}
+
+.dropdown-menu {
+    min-width: auto !important;
+}
+
+.duser {
+    margin-left: 15% !important;
+}
+
+.register {
+    top:15%;
+    left:60%;
+}
+
+.login {
+    top:30%;
+    left:60%;
+}
+
+.form-control {
+    background-color: $card-body-bg;
+}
+
+.form-control:hover,
+.form-control:active,
+.form-control:focus {
+    background-color: $card-body-bg;
+    box-shadow: 0.0.0.0.25rem $secondary;
+}
+
+.form-control:focus {
+    border: 1px $primary solid;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #f5e6ff inset;
+}
+
+label {
+    font-weight: 500;
 }
