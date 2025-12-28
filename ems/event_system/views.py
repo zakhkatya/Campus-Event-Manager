@@ -3,6 +3,7 @@ from django.views.generic import View
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse
 from .models import Event, Registration
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Helper: Check if user is Admin
 def is_admin(user):
@@ -126,16 +127,14 @@ def manage_status(request, event_id, status):
         return redirect(reverse('event_system:dashboard'))
     return redirect(reverse('event_system:dashboard'))
 
-class EventDetailView(View):
+class EventDetailView(LoginRequiredMixin, View):
     def get(self, request, event_id):
         event = get_object_or_404(Event, id=event_id)
 
-        is_registered = False
-        if request.user.is_authenticated:
-            is_registered = Registration.objects.filter(
-                user=request.user,
-                event=event
-            ).exists()
+        is_registered = Registration.objects.filter(
+            user=request.user,
+            event=event
+        ).exists()
 
         return render(
             request,
@@ -143,9 +142,12 @@ class EventDetailView(View):
             {
                 "event": event,
                 "is_registered": is_registered,
-                "registration": Registration.objects.filter(
-                    user=request.user,
-                    event=event
-                ).first() if is_registered else None,
+                "registration": (
+                    Registration.objects.filter(
+                        user=request.user,
+                        event=event
+                    ).first()
+                    if is_registered else None
+                ),
             }
         )
