@@ -9,16 +9,26 @@ from .forms import CustomRegistrationForm
 
 class CustomLoginView(LoginView):
     template_name = "userauth/login.html"
-    redirect_authenticated_user = True 
+    redirect_authenticated_user = True
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "User Login"
+        return context
+
 
 class RegisterView(CreateView):
     template_name = "userauth/register.html"
     form_class = CustomRegistrationForm
     success_url = reverse_lazy("userauth:login")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "User Registration"
+        return context
+
     def form_valid(self, form):
         self.object = form.save()
         if self.request.user.is_authenticated:
-            logout(self.request) 
-
+            logout(self.request)
         return HttpResponseRedirect(self.get_success_url())
