@@ -1,10 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
-from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse
-from django.contrib.auth.decorators import user_passes_test
-from .models import Event
+from .models import Event, Registration
 
 # Helper: Check if user is Admin
 def is_admin(user):
@@ -32,8 +30,32 @@ class HomePageView(View):
             )
 
 class DashboardView(View):
-   def get(self, request):
-      return render(request, 'event_system/dashboard.html')
+    def get(self, request):
+        my_events = []
+
+        if request.user.is_authenticated:
+            my_events = (
+                Registration.objects
+                .filter(user=request.user)
+                .select_related("event")
+                .order_by("event__date")[:3]
+            )
+
+            upcoming_events = (
+                Event.objects
+                .filter(approved=True, is_private=False)
+                .order_by("date")[:6]
+            )
+
+        return render(
+            request,
+            "event_system/dashboard.html",
+            {
+                "title": "Dashboard",
+                "my_events": my_events,
+                "upcoming_events": upcoming_events,
+            }
+        )
    
 class MyEventsView(View):
    def get(self, request, *args, **kwargs):
@@ -74,6 +96,7 @@ def register_for_event(request, event_id):
         # Logic to join event goes here
         return redirect(reverse('event_system:dashboard'))
     return redirect(reverse('event_system:dashboard'))
+
 @login_required
 def unregister_from_event(request, event_id):
     if request.method == 'POST':
@@ -94,6 +117,7 @@ def add_event(request):
         # Logic to create event
         return redirect(reverse('event_system:dashboard'))
     return render(request, 'add_event.html')
+
 @user_passes_test(is_admin)
 def manage_status(request, event_id, status):
     if request.method == 'POST':
@@ -102,3 +126,26 @@ def manage_status(request, event_id, status):
         return redirect(reverse('event_system:dashboard'))
     return redirect(reverse('event_system:dashboard'))
 
+class EventDetailView(View):
+    def get(self, request, event_id):
+        event = get_object_or_404(Event, id=event_id)
+
+        is_registered = False
+        if request.user.is_authenticated:
+            is_registered = Registration.objects.filter(
+                user=request.user,
+                event=event
+            ).exists()
+
+        return render(
+            request,
+            "event_system/event_detail.html",
+            {
+                "event": event,
+                "is_registered": is_registered,
+                "registration": Registration.objects.filter(
+                    user=request.user,
+                    event=event
+                ).first() if is_registered else None,
+            }
+        )
