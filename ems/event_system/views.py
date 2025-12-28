@@ -23,7 +23,7 @@ class HomePageView(View):
         return render(request,
             'event_system/home.html',
             {
-                "title": "Upcoming events",
+                "title": "Campus Event Manager",
                 "events": events,
             }        
                     
