@@ -51,7 +51,14 @@
         </div>
 
         <div class="pt-2 text-center w-100">
-            <a class="navbar-brand text-dark" href="{% url 'event_system:home' %}">
+            <a class="navbar-brand text-dark"
+            href="
+            {% if user.is_authenticated %}
+                {% url 'event_system:dashboard' %}
+            {% else %}
+                {% url 'event_system:home' %}
+            {% endif %}
+            ">
                 <h1 class="fs-3 mb-0 fw-bold">Campus Event Manager</h1> 
                 <p class="fs-5 mb-0">Polytechnic Institute of Bragança</p>
             </a>
