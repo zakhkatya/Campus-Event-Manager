@@ -1,143 +1,77 @@
-{% extends "base.html" %}
-{% block title %}Dashboard{% endblock %}
+{% extends "base.html" %} {%block title%} {{title}} {%endblock%} 
 {% block content %}
 <div class="align-items-center row-cols-1">
-
-<div class="container-xxl rounded-4 m"> 
-    <h2 class="p-4 pb-2"> <b> My events <i class="bi bi-caret-right-fill fs-5"></i> </b> </h2>
+  <div class="container-xxl rounded-4">
+    <h2 class="p-4 pb-2 fw-bold">
+      <a href="{% url 'event_system:my-events' %}">
+        My events <i class="bi bi-caret-right-fill fs-5"></i>
+      </a>
+    </h2>
 
     <div class="container">
-        <div class="row d-flex">
-            {% for x in '123'|make_list %}
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card border-1">
-                        <div class="card-header border-0 pb-0">
-                            <div class="d-flex align-items-center mb-2">
-                                <i class="bi bi-person-circle fs-2 me-2"></i>
-                                <div>
-                                    <h6 class="fs-6 mb-0">Header</h6>
-                                    <small class="text-muted">Subhead</small>
-                                </div>
-                            </div>
+      <div class="row d-flex">
+        {% for registration in my_events %} 
+        {% include "event_system/components/event_card.html" with event=registration.event %} 
+        
+        {% empty %}
+        <p>No events yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="placeholder-card-image d-flex justify-content-center align-items-center rounded">
-                                <i class="bi bi-image fs-1 text-muted"></i>
-                            </div>
-                        </div>
-                        <div class="card-footer border-0 pt-0 pb-3 px-1">
-                            <div class="container-fluid h-100">
-                                <div class="row h-100">   
-                                    <div class="col">
-                                    <h6 class="card-title mt-2 mb-0"> <b> Event Name </b> </h6>
-                                    <p class = "mb-0"> <i class="bi bi-clock"></i> 9:00 - 10:00 </p>
-                                    <div class = "badge p-2 rounded-pill"> Event Category </div>
-                                    </div>    
-                                    <div class="col d-flex justify-content-end align-items-end">
-                                        <a href="#" class="btn btn-sm px-3 py-2 btn-secondary rounded-pill d-flex gap-2 fw-bolder d-flex align-items-center">
-                                            <i class="bi bi-arrow-return-left"></i> About
-                                        </a>   
-                                    </div>        
-                            </div>
-                        </div>
-                    </div>
+  <div class="container-xxl bg-transparent mt-5 p-0">
+    <div class="row">
+      <div class="col-8">
+        <div class="container-xxl rounded-4">
+          <h2 class="p-4 pb-2 fw-bold">
+            <a href="{% url 'event_system:upcoming-events' %}">
+              Upcoming Events <i class="bi bi-caret-right-fill fs-5"></i>
+            </a>
+          </h2>
+          <div class="row row-cols-3 p-2 pb-0">
+            {% for event in upcoming_events %}
+            {% include "event_system/components/event_card.html" with event=event %}
+
+            {% empty %}
+            <p class="fs-4 text-muted ms-4 mt-2">No events available.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-4">
+        <div class="container-xxl rounded-4 p-2 n">
+          <div class="text-center">
+            <h4 class="p-3 pb-1">
+              <b> Notifications <i class="bi bi-caret-right-fill fs-5"></i> </b>
+            </h4>
+          </div>
+          <div class="row-cols-1 p-2 pb-0">
+            {% for x in '123456789'|make_list %}
+            <div class="card mb-3 border-1">
+              <div class="card-body p-1 pb-0">
+                <div class="row row cols2">
+                  <div class="col-2">
+                    <i class="bi bi-person-circle fs-1 ms-2"></i>
+                  </div>
+                  <div class="col-9">
+                    <span class="fs-6 mb-0 fw-bold">
+                      Reminder > Event Name
+                    </span>
+                    <p class="text-muted lh-sm fs-xs mb-1">
+                      Supporting line text lorem ipsum dolor sit amet,
+                      consectetur.
+                    </p>
+                  </div>
                 </div>
+              </div>
             </div>
             {% endfor %}
+          </div>
         </div>
+      </div>
     </div>
-</div>
-
-<div class="container-xxl bg-transparent mt-5 p-0">
-    <div class="row">
-        <div class="col-8">
-
-            <div class="container-xxl rounded-4 n">
-                <div class="text-center">
-                    <h4 class="p-4 pb-2"> <b> Upcoming Events <i class="bi bi-caret-right-fill fs-5"></i> </b> </h4>
-                </div>
-                <div class="row row-cols-3 p-2 pb-0">
-                    
-                {% for x in '123456'|make_list %}
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="card border-1">
-                            <div class="card-header border-0 pb-0">
-                                <div class="d-flex align-items-center mb-2">
-                                    <i class="bi bi-person-circle fs-2 me-2"></i>
-                                    <div>
-                                        <h6 class="fs-6 mb-0">Header</h6>
-                                        <small class="text-muted">Subhead</small>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="card-body p-0">
-                                <div class="placeholder-card-image d-flex justify-content-center align-items-center rounded">
-                                    <i class="bi bi-image fs-1 text-muted"></i>
-                                </div>
-                            </div>
-                            <div class="card-footer border-0 pt-0 pb-3 px-1">
-                                <div class="container-fluid h-100">
-                                    <div class="row h-100">   
-                                        <div class="col">
-                                        <p class="card-title mt-2 mb-0 fs-6 fw-bolder"> Event Name </p>
-                                        <p class = "mb-0 fs-xs"> <i class="bi bi-clock"></i> 10:00 - 12:00 </p>
-                                        <div class = "badge p-2 rounded-pill"> Event Category </div>
-                                        </div>    
-                                        <div class="col d-flex justify-content-end align-items-end">
-                                            <form action="{% url 'event_system:register_event' event_id=x %}" method="post">
-                                            {% csrf_token %}
-                                            <div class="col d-flex justify-content-end align-items-end">
-                                                <a href="#" class="btn btn-sm px-3 py-2 btn-secondary rounded-pill d-flex gap-2 fw-bolder">
-                                                    <i class="bi bi-arrow-return-left"></i> About
-                                                </a>   
-                                            </div>
-                                        </form>
-                                     </div>       
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-
-                </div>
-                
-            </div>
-        </div>
-
-        <div class="col-4">
-
-            <div class="container-xxl rounded-4 p-2 n">
-                <div class="text-center">
-                    <h4 class="p-3 pb-1"> <b> Notifications <i class="bi bi-caret-right-fill fs-5"></i> </b> </h4>
-                </div>
-                <div class = "row-cols-1 p-2 pb-0">
-                    {% for x in '123456789'|make_list %}
-                    <div class="card mb-3 border-1">
-                        <div class="card-body p-1 pb-0">
-                            <div class="row row cols2">
-                                    <div class="col-2">
-                                        <i class="bi bi-person-circle fs-1 ms-2"></i>
-                                    </div>
-                                    <div class="col-9">
-                                        <span class="fs-6 mb-0 fw-bold"> Reminder > Event Name </span>
-                                        <p class="text-muted lh-sm fs-xs mb-1">
-                                            Supporting line text lorem ipsum dolor sit amet, consectetur.
-                                        </p>
-                                    </div>
-                            </div>    
-                        </div>
-                    </div>
-                    {% endfor %}      
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-</div>
-
+  </div>
 </div>
 {% endblock %}

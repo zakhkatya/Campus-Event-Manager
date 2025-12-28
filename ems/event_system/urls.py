@@ -1,5 +1,5 @@
 from django.urls import path
-from event_system.views import HomePageView, DashboardView, MyEventsView, UpcomingEventsView, NotificationsView
+from event_system.views import HomePageView, DashboardView, MyEventsView, UpcomingEventsView, NotificationsView, EventDetailView
 from . import views
 
 app_name = 'event_system'
@@ -14,4 +14,5 @@ urlpatterns = [
     path('delete/<int:event_id>/', views.delete_event, name='delete_event'),
     path('manage/<int:event_id>/<str:status>/', views.manage_status, name='manage_event'),
     path('add/', views.add_event, name='add_event'),
+    path("event/<int:event_id>/", EventDetailView.as_view(), name="event_detail")
 ]
