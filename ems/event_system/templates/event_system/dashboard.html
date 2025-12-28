@@ -1,7 +1,7 @@
 {% extends "base.html" %} {%block title%} {{title}} {%endblock%} 
 {% block content %}
 <div class="align-items-center row-cols-1">
-  <div class="container-xxl rounded-4 m">
+  <div class="container-xxl rounded-4">
     <h2 class="p-4 pb-2 fw-bold">
       <a href="{% url 'event_system:my-events' %}">
         My events <i class="bi bi-caret-right-fill fs-5"></i>
@@ -10,77 +10,11 @@
 
     <div class="container">
       <div class="row d-flex">
-        {% for registration in my_events %}
-        <div class="col-lg-4 col-md-6 mb-4">
-          <div class="card border-1">
-            <!-- HEADER -->
-            <div class="card-header border-0 pb-0">
-              <div class="d-flex align-items-center mb-2">
-                <i class="bi bi-person-circle fs-2 me-2"></i>
-                <div>
-                  <h6 class="fs-6 mb-0">{{ registration.event.category }}</h6>
-                  <small class="text-muted">
-                    {{ registration.event.location }}
-                  </small>
-                </div>
-              </div>
-            </div>
-
-            <!-- IMAGE -->
-            <div class="card-body p-0">
-              <div
-                class="placeholder-card-image d-flex justify-content-center align-items-center rounded"
-              >
-                {% if registration.event.banner %}
-                <img
-                  src="{{ registration.event.banner.url }}"
-                  class="img-fluid rounded"
-                />
-                {% else %}
-                <i class="bi bi-image fs-1 text-muted"></i>
-                {% endif %}
-              </div>
-            </div>
-
-            <!-- FOOTER -->
-            <div class="card-footer border-0 pt-0 pb-3 px-1">
-              <div class="container-fluid h-100">
-                <div class="row h-100">
-                  <div class="col">
-                    <h6 class="card-title mt-2 mb-0">
-                      <b>{{ registration.event.title }}</b>
-                    </h6>
-
-                    <p class="mb-0">
-                      <i class="bi bi-calendar-event"></i>
-                      {{ registration.event.date|date:"d.m.Y H:i" }}
-                    </p>
-
-                    <div class="badge p-2 rounded-pill">
-                      {{ registration.event.category }}
-                    </div>
-
-                    {% if registration.event.is_private %}
-                    <span class="badge bg-warning py-2">Private</span>
-                    {% endif %} {% if registration.event.approved %}
-                    <span class="badge bg-success py-2">Approved</span>
-                    {% endif %}
-                  </div>
-
-                  <div class="col d-flex justify-content-end align-items-end">
-                    <a
-                      class="btn btn-sm px-3 py-2 btn-secondary rounded-pill d-flex gap-2 fw-bolder"
-                    >
-                      <i class="bi bi-arrow-return-left"></i> About
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {% for registration in my_events %} 
+        {% include "event_system/components/event_card.html" with event=registration.event %} 
+        
         {% empty %}
-        <p class="fs-4 text-muted ms-4 mt-2">No events available.</p>
+        <p>No events yet.</p>
         {% endfor %}
       </div>
     </div>
@@ -89,7 +23,7 @@
   <div class="container-xxl bg-transparent mt-5 p-0">
     <div class="row">
       <div class="col-8">
-        <div class="container-xxl rounded-4 n">
+        <div class="container-xxl rounded-4">
           <h2 class="p-4 pb-2 fw-bold">
             <a href="{% url 'event_system:upcoming-events' %}">
               Upcoming Events <i class="bi bi-caret-right-fill fs-5"></i>
@@ -97,72 +31,8 @@
           </h2>
           <div class="row row-cols-3 p-2 pb-0">
             {% for event in upcoming_events %}
-            <div class="col-lg-4 col-md-6 mb-4">
-              <div class="card border-1">
-                <!-- HEADER -->
-                <div class="card-header border-0 pb-0">
-                  <div class="d-flex align-items-center mb-2">
-                    <i class="bi bi-person-circle fs-2 me-2"></i>
-                    <div>
-                      <h6 class="fs-6 mb-0">{{ event.category }}</h6>
-                      <small class="text-muted"> {{ event.location }} </small>
-                    </div>
-                  </div>
-                </div>
+            {% include "event_system/components/event_card.html" with event=event %}
 
-                <!-- IMAGE -->
-                <div class="card-body p-0">
-                  <div
-                    class="placeholder-card-image d-flex justify-content-center align-items-center rounded"
-                  >
-                    {% if event.banner %}
-                    <img
-                      src="{{ event.banner.url }}"
-                      class="img-fluid rounded"
-                    />
-                    {% else %}
-                    <i class="bi bi-image fs-1 text-muted"></i>
-                    {% endif %}
-                  </div>
-                </div>
-
-                <!-- FOOTER -->
-                <div class="card-footer border-0 pt-0 pb-3 px-1">
-                  <div class="container-fluid h-100">
-                    <div class="row h-100">
-                      <div class="col">
-                        <h6 class="card-title mt-2 mb-0">
-                          <b>{{ event.title }}</b>
-                        </h6>
-
-                        <p class="mb-0">
-                          <i class="bi bi-calendar-event"></i>
-                          {{ event.date|date:"d.m.Y H:i" }}
-                        </p>
-
-                        <div class="badge p-2 rounded-pill">
-                          {{ event.category }}
-                        </div>
-
-                        {% if event.approved %}
-                        <span class="badge bg-success py-2">Approved</span>
-                        {% endif %}
-                      </div>
-
-                      <div
-                        class="col d-flex justify-content-end align-items-end"
-                      >
-                        <a
-                          class="btn btn-sm px-3 py-2 btn-secondary rounded-pill d-flex gap-2 fw-bolder"
-                        >
-                          <i class="bi bi-arrow-return-left"></i> About
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
             {% empty %}
             <p class="fs-4 text-muted ms-4 mt-2">No events available.</p>
             {% endfor %}
