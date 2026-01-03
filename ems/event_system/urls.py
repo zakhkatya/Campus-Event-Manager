@@ -16,4 +16,6 @@ urlpatterns = [
     path('add/', views.add_event, name='add_event'),
     path("event/<int:event_id>/", EventDetailView.as_view(), name="event_detail"),
     path('approve-events/', views.ApproveEventsListView.as_view(), name='approve-events-list'),
+    path("my-feedbacks", views.MyFeedbacksView.as_view(), name="my-feedbacks"), 
+    path("received-feedbacks", views.ReceivedFeedbacksView.as_view(), name="received-feedbacks"),
 ]
