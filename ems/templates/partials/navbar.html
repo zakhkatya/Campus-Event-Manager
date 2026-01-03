@@ -8,44 +8,51 @@
                     <i class="bi bi-list fs-1 m-0"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-start shadow-sm rounded-4 border-0 mt-2 text-start m-0 p-2">
-                    <li class="mb-2">
-                        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:my-events' %}">
-                            <i class="bi bi-calendar fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Past Events
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:notifications' %}">
-                            <i class="bi bi-chat-left fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> My Feedbacks
-                        </a>
+                 <li class="mb-2">
+                 <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:notifications' %}">
+                     <i class="bi bi-bell fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Notifications
+                     </a>
                     </li>
 
-                    {% if user.role == 'admin' %}
-                    <li class="my-2">
-                        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:approve-events-list' %}">
-                            <i class="bi bi-check2-circle fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Approve Events
-                        </a>
-                    </li>
-                    {% endif %}
+    <li class="mb-2">
+        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:my-events' %}">
+            <i class="bi bi-calendar fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Past Events
+        </a>
+    </li>
 
-                    {% if user.role == 'admin' or user.role == 'organizer' %}
-                    <li class="mb-2">
-                        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:add_event' %}">
-                            <i class="bi bi-plus fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Create Event
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a class="dropdown-item bg-transparent p-0 ps-1" href="#">
-                            <i class="bi bi-wrench fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Manage Events
-                        </a>
-                    </li>
-                    <li class="mb-0">
-                        <a class="dropdown-item bg-transparent p-0 ps-1 d-inline-flex" href="#">
-                            <i class="bi bi-layers fs-5 btn-secondary rounded-3 ms-0 p-2 pt-1 me-1 pb-0"></i> 
-                            <div class="lh-sm ms-1"> Received <p class="pb-0 mb-0"> Feedbacks </p> </div>
-                        </a>
-                    </li>
-                    {% endif %}
-                </ul>
+    <li class="mb-2">
+        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:my-feedbacks' %}">
+            <i class="bi bi-chat-left fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> My Feedbacks
+        </a>
+    </li>
+
+    {% if user.role == 'admin' %}
+    <li class="my-2">
+        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:approve-events-list' %}">
+            <i class="bi bi-check2-circle fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Approve Events
+        </a>
+    </li>
+    {% endif %}
+
+    {% if user.role == 'admin' or user.role == 'organizer' %}
+    <li class="mb-2">
+        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:add_event' %}">
+            <i class="bi bi-plus fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Create Event
+        </a>
+    </li>
+    <li class="mb-2">
+        <a class="dropdown-item bg-transparent p-0 ps-1" href="#">
+            <i class="bi bi-wrench fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Manage Events
+        </a>
+    </li>
+    <li class="mb-0">
+        <a class="dropdown-item bg-transparent p-0 ps-1 d-inline-flex" href="{% url 'event_system:received-feedbacks' %}">
+            <i class="bi bi-layers fs-5 btn-secondary rounded-3 ms-0 p-2 pt-1 me-1 pb-0"></i> 
+            <div class="lh-sm ms-1"> Received <p class="pb-0 mb-0"> Feedbacks </p> </div>
+        </a>
+    </li>
+    {% endif %}
+</ul>
             </div>
         {% endif %}
         </div>
