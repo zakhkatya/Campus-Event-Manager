@@ -1,29 +1,29 @@
-{%extends "base.html"%}
-{%block title%} Notifications {%endblock%}
-{%block content%}
-<div class="container-xxl rounded-4">
-    <h2 class="p-4 pb-2"> <b> Notifications </b> </h2>
+{% extends "base.html" %}
+{% block title %} {{ title }} {% endblock %}
 
-    <div class="container">
-        <div class="row d-flex">
-            {% for x in '12345678'|make_list %}
-                <div class="card mb-3 border-1">
-                        <div class="card-body p-1 pb-0">
-                            <div class="row row cols-2">
-                                    <div class="col-1 d-flex align-items-center">
-                                        <i class="bi bi-person-circle fs-1 ms-2 mb-2"></i>
-                                    </div>
-                                    <div class="col-11 pt-1">
-                                        <span class="fs-6 mb-0 fw-bold"> Reminder > Event Name </span>
-                                        <p class="text-muted lh-sm fs-xs mb-2">
-                                            Supporting line text lorem ipsum dolor sit amet, consectetur.
-                                        </p>
-                                    </div>
-                            </div>    
-                        </div>
+{% block content %}
+<div class="container-xxl rounded-4 p-4 min-vh-100">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="d-flex align-items-center mb-4 ps-2">
+                <i class="bi bi-chat-left-text fs-3 link-primary me-3"></i>
+                <h2 class="fw-bold text-dark mb-0">Notifications</h2>
+                <span class="badge ms-3 px-3 py-2 text-primary">
+                    {{ notifications_list.count }} Total
+                </span>
+            </div>
+
+            <div class="notifications-wrapper px-2">
+                {% for notification in notifications_list %}
+                    {% include "event_system/components/notification_item.html" with notification=notification %}
+                {% empty %}
+                    <div class="container-xxl rounded-4 p-5 text-center shadow-sm">
+                        <i class="bi bi-bell-slash fs-1 opacity-25 text-dark"></i>
+                        <h5 class="mt-3 text-muted">All caught up!</h5>
                     </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>
-{%endblock%}
+{% endblock %}
