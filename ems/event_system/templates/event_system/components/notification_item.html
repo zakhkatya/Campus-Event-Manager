@@ -1,0 +1,30 @@
+<div class="card mb-3 border-0 rounded-4 shadow-sm notification-card">
+    <div class="card-body p-3">
+        <div class="row align-items-center">
+            <div class="col-auto">
+                <div class="notification-icon-circle">
+                    <i class="bi bi-bell-fill"></i>
+                </div>
+            </div>
+            
+            <div class="col ps-2">
+                <div class="d-flex justify-content-between align-items-start">
+                    <h6 class="fw-bold mb-1 text-dark fs-xs">
+                        {{ notification.message }}
+                    </h6>
+                    <small class="text-muted fs-xs opacity-75">{{ notification.created_at|timesince }} ago</small>
+                </div>
+                
+                <p class="text-muted mb-0 fs-xs lh-sm">
+                    New update regarding your campus events.
+                </p>
+                
+                {% if "feedback" in notification.message|lower %}
+                <div class="mt-2">
+                    <button class="btn-feedback">Give Feedback</button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
