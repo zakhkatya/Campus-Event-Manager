@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 from .models import Event, Registration, Notification, Feedback
 from django.db import transaction
 from django.views.generic import ListView
+from django.contrib import messages
 
 User = get_user_model()
 
@@ -144,11 +145,14 @@ def manage_status(request, event_id, status):
     if request.method == 'POST':
         with transaction.atomic():
             event = get_object_or_404(Event, id=event_id)
+            
             if status == 'approve':
                 event.is_private = False
                 event.approved = True
                 event.approved_at = timezone.now()
                 event.save()
+
+                messages.success(request, f"Success! Event #{event.id} has been approved and is now public.")
 
                 Notification.objects.create(
                     user=request.user,
@@ -156,12 +160,24 @@ def manage_status(request, event_id, status):
                 )
                 other_users = User.objects.exclude(id=request.user.id)
                 new_notifs = [
-                    Notification(user=u, message=f"New event added: #{event.id} {event.title}") 
+                    Notification(user=u, message=f"New event added: {event.title}") 
                     for u in other_users
                 ]
                 Notification.objects.bulk_create(new_notifs)
 
-        return redirect('event_system:dashboard')
+            elif status == 'reject':
+              
+                event_id_temp = event.id 
+                event.delete()
+
+                messages.warning(request, f"Event #{event_id_temp} has been rejected and deleted.")
+
+                Notification.objects.create(
+                    user=request.user,
+                    message=f"Event #{event_id_temp} was rejected by you."
+                )
+        return redirect(request.META.get('HTTP_REFERER', 'event_system:dashboard'))
+    
     return redirect('event_system:dashboard')
 
 class EventDetailView(LoginRequiredMixin, View):
