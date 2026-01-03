@@ -263,3 +263,62 @@ select:-webkit-autofill {
 label {
     font-weight: 500;
 }
+
+.event-img-box {
+    width: 80px;
+    height: 80px;
+}
+
+.action-btn-circle {
+    width: 40px;
+    height: 40px;
+}
+
+.btn-secondary.action-btn-circle {
+    background-color: #e0d7f7; 
+    color: $primary;
+}
+.dashboard-events-scroll {
+    max-height: 750px; 
+    overflow-x: hidden; 
+}
+
+.dashboard-events-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+.dashboard-events-scroll::-webkit-scrollbar-thumb {
+    background: $secondary;
+    border-radius: 10px;
+}
+.dashboard-events-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+.dashboard-events-scroll {
+    max-height: 750px; 
+    overflow-x: hidden;
+}
+.notification-icon-circle {
+    width: 45px;
+    height: 45px;
+    background-color: $card-image;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: $primary;
+}
+
+.notification-card {
+    transition: transform 0.2s, background-color 0.2s;
+    &:hover {
+        background-color: darken($card-body-bg, 2%) !important;
+        transform: translateX(5px);
+    }
+}
+
+.btn-feedback {
+    @extend .btn-secondary;
+    font-size: 0.75rem;
+    padding: 0.25rem 1rem;
+    border-radius: 50px;
+}

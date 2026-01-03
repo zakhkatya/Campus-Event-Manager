@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-xxl rounded-4 p-4">
+    <h2 class="fw-bold mb-4 text-dark">Approve Events</h2>
+    <div class="row row-cols-1 g-3">
+        {% for event in pending_events %}
+        <div class="col">
+            <div class="card border-0 shadow-sm p-3">
+                <div class="row align-items-center">
+                    <div class="col-md-1 text-center">
+                        <div class="rounded-3 bg-secondary-subtle d-flex align-items-center justify-content-center event-img-box">
+                            <i class="bi bi-image text-muted fs-2"></i>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8 ps-4">
+                        <h5 class="fw-bold mb-1">{{ event.title }}</h5>
+                        <div class="fs-xs text-muted mb-2">
+                            <i class="bi bi-clock me-1"></i> {{ event.date|date:"H:i" }} - 10:00 <br>
+                            <span class="badge text-white mt-1">{{ event.category }}</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-person-circle fs-5 me-2 text-dark opacity-50"></i>
+                            <span class="fs-xs fw-bold">{{ event.organizer_name|default:"Organizer Name" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 text-end d-flex justify-content-end align-items-center gap-2">
+                        <a href="{% url 'event_system:event_detail' event.id %}" class="btn btn-secondary btn-sm px-3 rounded-pill fs-xs">
+                            <i class="bi bi-arrow-left-right me-1"></i> About
+                        </a>
+                        
+                        <form action="{% url 'event_system:manage_event' event.id 'approve' %}" method="POST" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary rounded-circle action-btn-circle d-flex align-items-center justify-content-center">
+                                <i class="bi bi-check-lg"></i>
+                            </button>
+                        </form>
+
+                        <form action="{% url 'event_system:manage_event' event.id 'reject' %}" method="POST" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-secondary rounded-circle action-btn-circle d-flex align-items-center justify-content-center">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-5">
+            <i class="bi bi-check2-all fs-1 text-success"></i>
+            <p class="text-muted mt-2">No pending events to approve!</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

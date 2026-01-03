@@ -1,7 +1,5 @@
 <div class="col-lg-4 col-md-6 mb-4">
-  <div class="card border-1 d-flex flex-column">
-
-    <!-- HEADER -->
+  <div class="card border-1 d-flex flex-column h-100 shadow-sm">
     <div class="card-header border-0 pb-2">
       <div class="d-flex align-items-center gap-2">
         <i class="bi bi-person-circle fs-2 text-secondary"></i>
@@ -12,11 +10,8 @@
       </div>
     </div>
 
-    <!-- IMAGE -->
     <div class="card-body p-0">
-      <div
-        class="placeholder-card-image d-flex justify-content-center align-items-center"
-      >
+      <div class="placeholder-card-image d-flex justify-content-center align-items-center">
         {% if event.banner %}
           <img
             src="{{ event.banner.url }}"
@@ -29,15 +24,13 @@
       </div>
     </div>
 
-    <!-- CONTENT -->
     <div class="card-body py-3">
-
       <h6 class="card-title mb-1 text-truncate">
         <b>{{ event.title }}</b>
       </h6>
 
       <p class="mb-2 text-muted small">
-        <i class="bi bi-calendar-event"></i>&nbsp;{{ event.date|date:"j.n.Y H:i" }}
+        <i class="bi bi-calendar-event"></i> {{ event.date|date:"j.n.Y H:i" }}
       </p>
 
       <div class="d-flex flex-wrap gap-2">
@@ -51,16 +44,14 @@
           </span>
         {% endif %}
 
-        {% if user.is_staff and event.is_approved %}
+        {% if event.approved %}
           <span class="badge rounded-pill bg-success">
             Approved
           </span>
         {% endif %}
       </div>
-
     </div>
 
-    <!-- FOOTER -->
     <div class="card-body border-0 bg-transparent pt-0 mt-auto">
       <div class="d-flex justify-content-end">
         <a
@@ -72,6 +63,5 @@
         </a>
       </div>
     </div>
-
   </div>
 </div>
