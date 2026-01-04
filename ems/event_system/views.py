@@ -152,7 +152,7 @@ def manage_status(request, event_id, status):
                 event.approved_at = timezone.now()
                 event.save()
 
-                messages.success(request, f"Success! Event #{event.id} has been approved and is now public.")
+                messages.success(request, f"Confirmed! Event #{event.id} is now live and visible to everyone.")
 
                 Notification.objects.create(
                     user=request.user,
@@ -170,7 +170,7 @@ def manage_status(request, event_id, status):
                 event_id_temp = event.id 
                 event.delete()
 
-                messages.warning(request, f"Event #{event_id_temp} has been rejected and deleted.")
+                messages.warning(request, f"Notice: Event #{event_id_temp} has been removed from the queue.")
 
                 Notification.objects.create(
                     user=request.user,
