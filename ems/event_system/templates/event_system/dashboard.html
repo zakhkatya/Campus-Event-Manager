@@ -82,20 +82,21 @@
 
       <div class="col-lg-4">
     <div class="container-xxl rounded-4 p-3 shadow-sm h-100">
-        <h4 class="p-3 pb-2 fw-bold text-dark d-flex align-items-center">
-            <i class="bi bi-bell fs-4 me-2 link-primary"></i> Notifications
-            <a href="{% url 'event_system:notifications' %}" class="ms-auto">
+        <h2 class="p-3 pb-2 fw-bold text-dark d-flex align-items-center">
+            Notifications 
+            <a href="{% url 'event_system:notifications' %}" class="ms-2">
                 <i class="bi bi-caret-right-fill fs-5 link-primary"></i>
             </a>
-        </h4>
+        </h2>
+        
         <div class="p-2 dashboard-events-scroll">
             {% for notification in notifications_list %}
                 {% include "event_system/components/notification_item.html" with notification=notification %}
             {% empty %}
                 <p class="text-center text-muted py-5 fs-xs">No notifications yet.</p>
             {% endfor %}
-            </div>
-        </div>
+                </div>
+          </div>
       </div>
     </div>
   </div>
