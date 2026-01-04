@@ -6,8 +6,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth import get_user_model
-from .models import Event, Registration, Notification
+from .models import Event, Registration, Notification, Feedback
 from django.db import transaction
+from django.views.generic import ListView
+from django.contrib import messages
 
 User = get_user_model()
 
@@ -143,24 +145,39 @@ def manage_status(request, event_id, status):
     if request.method == 'POST':
         with transaction.atomic():
             event = get_object_or_404(Event, id=event_id)
+            
             if status == 'approve':
                 event.is_private = False
                 event.approved = True
-                event.approved_at = timezone.now() 
+                event.approved_at = timezone.now()
                 event.save()
+
+                messages.success(request, f"Confirmed! Event #{event.id} is now live and visible to everyone.")
+
                 Notification.objects.create(
                     user=request.user,
                     message=f"Event #{event.id} approved."
                 )
-
                 other_users = User.objects.exclude(id=request.user.id)
                 new_notifs = [
-                    Notification(user=u, message=f"Event #{event.id} added.") 
+                    Notification(user=u, message=f"New event added: {event.title}") 
                     for u in other_users
                 ]
                 Notification.objects.bulk_create(new_notifs)
 
-        return redirect('event_system:dashboard') 
+            elif status == 'reject':
+              
+                event_id_temp = event.id 
+                event.delete()
+
+                messages.warning(request, f"Notice: Event #{event_id_temp} has been removed from the queue.")
+
+                Notification.objects.create(
+                    user=request.user,
+                    message=f"Event #{event_id_temp} was rejected by you."
+                )
+        return redirect(request.META.get('HTTP_REFERER', 'event_system:dashboard'))
+    
     return redirect('event_system:dashboard')
 
 class EventDetailView(LoginRequiredMixin, View):
@@ -187,3 +204,45 @@ class EventDetailView(LoginRequiredMixin, View):
                 ),
             }
         )
+    
+class MyFeedbacksView(LoginRequiredMixin, ListView):
+    model = Feedback
+    template_name = 'event_system/my_feedbacks.html'
+    context_object_name = 'feedbacks'
+
+    def get_queryset(self):
+        return Feedback.objects.filter(user=self.request.user).select_related('event').order_by("-created_at")
+
+class ReceivedFeedbacksView(UserPassesTestMixin, ListView):
+    model = Feedback
+    template_name = 'event_system/received_feedbacks.html'
+    context_object_name = 'received_feedbacks'
+
+    def test_func(self):
+        return self.request.user.role in ['admin', 'organizer']
+
+    def get_queryset(self):
+        return Feedback.objects.all().select_related('event', 'user').order_by("-created_at")
+    
+@login_required
+def submit_feedback(request, event_id):
+    if request.method == 'POST':
+        event = get_object_or_404(Event, id=event_id)
+        comment = request.POST.get('comment')
+        rating = request.POST.get('rating', 5)
+
+        Feedback.objects.create(
+            user=request.user,
+            event=event,
+            comment=comment,
+            rating=int(rating)
+        )
+        staff_users = User.objects.filter(role__in=['admin', 'organizer'])
+        feedback_notifs = [
+            Notification(user=u, message=f"New feedback received for '{event.title}'") 
+            for u in staff_users
+        ]
+        Notification.objects.bulk_create(feedback_notifs)
+        
+        return redirect('event_system:my-feedbacks')
+    return redirect('event_system:dashboard')

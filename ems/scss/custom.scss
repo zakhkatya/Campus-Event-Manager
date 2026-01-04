@@ -40,6 +40,8 @@ html {
 
 body {
     background-color: $body-bg;
+    overflow-x: hidden; 
+    height: 100vh;
 }
 
 a {
@@ -294,8 +296,10 @@ label {
     background: transparent;
 }
 .dashboard-events-scroll {
-    max-height: 750px; 
+    max-height: 60vh; 
+    overflow-y: auto;
     overflow-x: hidden;
+    padding-right: 5px; 
 }
 .notification-icon-circle {
     width: 45px;
@@ -321,4 +325,60 @@ label {
     font-size: 0.75rem;
     padding: 0.25rem 1rem;
     border-radius: 50px;
+}
+.bg-light {
+    background-color: $conatiner-bg !important;
+}
+.custom-alert {
+    background-color: $card-body-bg; 
+    border-left: 5px solid $primary !important; 
+    transition: 0.3s;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 1rem rgba($primary, 0.15) !important;
+    }
+
+    &.alert-warning {
+        border-left-color: $info !important; 
+    }
+
+    .btn-close {
+        font-size: 0.8rem;
+        opacity: 0.5;
+        &:hover { opacity: 1; }
+    }
+}
+.no-scroll-page {
+    overflow: hidden !important;
+    height: 100vh !important;
+    position: fixed; 
+    width: 100%;
+
+    body {
+        overflow: hidden !important;
+        height: 100vh !important;
+        margin: 0;
+        padding: 0;
+    }
+    .container-xxl {
+        height: calc(100vh - 120px) !important; 
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+    .dashboard-events-scroll {
+        flex: 1;
+        max-height: 100% !important; 
+        overflow-y: auto !important;
+        overflow-x: hidden;
+        padding-right: 5px;
+        
+        &::-webkit-scrollbar { width: 4px; }
+        &::-webkit-scrollbar-thumb { background: $secondary; border-radius: 10px; }
+    }
+}
+.hover-primary:hover {
+    color: #6750A4 !important; 
+    transition: 0.2s;
 }

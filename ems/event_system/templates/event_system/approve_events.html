@@ -2,6 +2,25 @@
 {% block content %}
 <div class="container-xxl rounded-4 p-4">
     <h2 class="fw-bold mb-4 text-dark">Approve Events</h2>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="custom-alert alert-{{ message.tags }} d-flex align-items-center shadow-sm border-0 rounded-4 p-3 mb-4 animate__animated animate__fadeIn">
+        {% if message.tags == 'success' %}
+        <i class="bi bi-check-circle-fill fs-4 me-3 text-primary"></i>
+        {% else %}
+        <i class="bi bi-exclamation-triangle-fill fs-4 me-3 text-warning"></i>
+        {% endif %}
+    
+         <div class="fw-medium text-dark flex-grow-1">
+        {{ message }}
+            </div>
+    
+      <button type="button" class="btn border-0 p-0 ms-2" onclick="this.parentElement.remove();" aria-label="Close">
+            <i class="bi bi-x-lg fs-5 text-muted hover-primary"></i>
+        </button>
+    </div>
+        {% endfor %}
+    {% endif %}
     <div class="row row-cols-1 g-3">
         {% for event in pending_events %}
         <div class="col">
