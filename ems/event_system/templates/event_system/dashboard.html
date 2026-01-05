@@ -5,9 +5,9 @@
 <div class="align-items-center row-cols-1 navbar-spacing-dashboard">
   
   {% if request.user.role == 'admin' %}
-  <div class="container-xxl p-4 mb-4">
+  <div class="container-xxl p-4 mb-4 rounded-4 container-dashboard">
     <div class="row align-items-center text-dark text-center text-md-start">
-      <div class="col-md-4 d-flex align-items-center justify-content-center justify-content-md-start border-end border-secondary border-opacity-25">
+      <div class="col-md-4 d-flex align-items-center justify-content-center justify-content-md-start">
         <i class="bi bi-calendar3 fs-1 me-3 link-primary"></i>
         <div>
           <h4 class="fw-bold mb-0">Events</h4>
@@ -18,7 +18,7 @@
         </div>
       </div>
 
-      <div class="col-md-4 d-flex align-items-center justify-content-center justify-content-md-start border-end border-secondary border-opacity-25 ps-md-5">
+      <div class="col-md-4 d-flex align-items-center justify-content-center justify-content-md-start ps-md-5">
         <i class="bi bi-people fs-1 me-3 link-primary"></i>
         <div>
           <h4 class="fw-bold mb-0">Students</h4>
@@ -43,7 +43,7 @@
   </div>
   {% endif %}
 
-  <div class="container-xxl rounded-4">
+  <div class="container-xxl rounded-4 container-dashboard">
     <h2 class="p-4 pb-2 fw-bold text-dark">
     <a href="{% url 'event_system:my-events' %}" class="text-dark link-secondary link-underline link-underline-secondary link-offset-1 link-underline-opacity-0 link-underline-opacity-100-hover">
         My events <i class="bi bi-caret-right-fill fs-5"></i>
