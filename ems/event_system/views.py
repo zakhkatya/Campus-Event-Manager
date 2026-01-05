@@ -206,11 +206,17 @@ class EventDetailView(LoginRequiredMixin, View):
     def post(self, request, event_id):
         event = get_object_or_404(Event, id=event_id)
 
-        # ochrana proti dvojité registraci
-        Registration.objects.get_or_create(
-            user=request.user,
-            event=event,
-        )
+        if "register" in request.POST:
+            Registration.objects.get_or_create(
+                user=request.user,
+                event=event,
+            )
+
+        elif "unregister" in request.POST:
+            Registration.objects.filter(
+                user=request.user,
+                event=event,
+            ).delete()
 
         return redirect("event_system:event_detail", event_id=event.id)
     
