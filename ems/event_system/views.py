@@ -10,6 +10,9 @@ from .models import Event, Registration, Notification, Feedback
 from django.db import transaction
 from django.views.generic import ListView
 from django.contrib import messages
+import qrcode
+from io import BytesIO
+from django.http import HttpResponse
 
 User = get_user_model()
 
@@ -181,29 +184,52 @@ def manage_status(request, event_id, status):
     return redirect('event_system:dashboard')
 
 class EventDetailView(LoginRequiredMixin, View):
+
     def get(self, request, event_id):
         event = get_object_or_404(Event, id=event_id)
 
-        is_registered = Registration.objects.filter(
+        registration = Registration.objects.filter(
             user=request.user,
             event=event
-        ).exists()
+        ).first()
 
         return render(
             request,
             "event_system/event_detail.html",
             {
                 "event": event,
-                "is_registered": is_registered,
-                "registration": (
-                    Registration.objects.filter(
-                        user=request.user,
-                        event=event
-                    ).first()
-                    if is_registered else None
-                ),
+                "is_registered": bool(registration),
+                "registration": registration,
             }
         )
+
+    def post(self, request, event_id):
+        event = get_object_or_404(Event, id=event_id)
+
+        # ochrana proti dvojité registraci
+        Registration.objects.get_or_create(
+            user=request.user,
+            event=event,
+        )
+
+        return redirect("event_system:event_detail", event_id=event.id)
+    
+@login_required
+def registration_qr_view(request, registration_id):
+    registration = get_object_or_404(
+        Registration,
+        id=registration_id,
+        user=request.user,
+    )
+
+    qr = qrcode.make(str(registration.uuid))
+    buffer = BytesIO()
+    qr.save(buffer, format="PNG")
+
+    return HttpResponse(
+        buffer.getvalue(),
+        content_type="image/png"
+    )
     
 class MyFeedbacksView(LoginRequiredMixin, ListView):
     model = Feedback
