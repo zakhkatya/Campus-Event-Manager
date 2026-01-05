@@ -9,6 +9,9 @@
         <p class="text-muted mb-0">
           <i class="bi bi-geo-alt"></i> {{ event.location }}
         </p>
+        <p class="text-muted mb-0">
+          <i class="bi bi-person-circle"></i> Organized by: {{ event.organizer.username }}
+        </p>
       </div>
 
       <div class="d-flex gap-2 fw-semibold">
@@ -36,7 +39,13 @@
     <!-- IMAGE -->
 
     {% if event.banner %}
-    <img src="{{ event.banner.url }}" class="img-fluid rounded w-100" />
+    <div class="ratio ratio-16x9 rounded overflow-hidden" style="height: 300px;">
+      <img
+        src="{{ event.banner.url }}"
+        class="w-100 h-100 object-fit-cover"
+        alt="{{ event.title }}"
+      />
+    </div>
     {% else %}
     <div
       class="bg-light rounded d-flex justify-content-center align-items-center"
