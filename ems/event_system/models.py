@@ -34,7 +34,7 @@ class Event(models.Model):
 
 class Registration(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='registrations')
     registered_at = models.DateTimeField(auto_now_add=True)
 
     uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
