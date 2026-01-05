@@ -70,7 +70,7 @@
     <h4 class="mb-3">Your pass</h4>
     <!-- Date of registration -->
     <p class="text-muted">
-      Registered on: {{ registration.registered_at|date:"d.m.Y H:i" }}
+      Registered on: {{ registration.registered_at|date:"j.n.Y H:i" }}
     </p>
     <img
       src="{% url 'event_system:registration_qr' registration.id %}"
