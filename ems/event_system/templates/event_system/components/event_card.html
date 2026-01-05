@@ -1,8 +1,8 @@
 <div class="col-lg-4 col-md-6 mb-4">
-  <div class="card border-1 d-flex flex-column h-100 shadow-sm">
+  <div class="card border-1 d-flex flex-column h-100">
     <div class="card-header border-0 pb-2">
       <div class="d-flex align-items-center gap-2">
-        <i class="bi bi-person-circle fs-2 text-secondary"></i>
+        <i class="bi bi-person-circle fs-2"></i>
         <div class="min-w-0">
           <h6 class="fs-6 mb-0 text-truncate">{{ event.category }}</h6>
           <small class="text-muted text-truncate">{{ event.location }}</small>
@@ -54,12 +54,9 @@
 
     <div class="card-body border-0 bg-transparent pt-0 mt-auto">
       <div class="d-flex justify-content-end">
-        <a
-          href="{% url 'event_system:event_detail' event.id %}"
-          class="btn btn-sm btn-outline-secondary rounded-pill d-flex align-items-center gap-2"
-        >
-          <i class="bi bi-arrow-return-left"></i>
-          <span class="d-none d-sm-inline">About</span>
+        <a href="{% url 'event_system:event_detail' event.id %}" class="btn btn-sm btn-secondary rounded-pill d-flex align-items-center gap-2">
+          <i class="bi bi-arrow-return-left pt-1"></i>
+          <span class="d-none d-sm-inline fw-semibold">About</span>
         </a>
       </div>
     </div>
