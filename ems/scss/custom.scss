@@ -40,7 +40,6 @@ html {
 
 body {
     background-color: $body-bg;
-    overflow-x: hidden; 
     height: 100vh;
 }
 
@@ -376,4 +375,57 @@ label {
 .hover-primary:hover {
     color: #6750A4 !important; 
     transition: 0.2s;
+}
+
+@media (max-width: 776px) {
+    .dashboard-events-scroll {
+        max-height: 52vh; 
+    }
+    .navbar-brand {
+        visibility: hidden;
+    }
+    nav {
+        background-color: $secondary !important;
+        width: 100% !important;
+        height: 9vh !important;
+        padding-bottom: 2vh !important;
+        position: fixed !important;
+        top:0 !important;
+        z-index: 1020;
+        margin: 0 !important;
+    }
+    .dropdown {
+        margin-top: 1vh !important;
+    }
+    .navbar-spacing {
+        margin-top: 12vh !important;
+    }
+    .navbar-spacing-dashboard {
+        padding-top: 12vh !important;
+    }
+    .notification-margin-top {
+        margin-top: 3vh !important;
+    }
+
+    .container-xxl {
+        width: 95% !important;
+    }
+
+    .container-xxl.bg-transparent {
+        width: 100% !important;
+    }
+
+    .placeholder-card-image {
+        height: 25vh !important;
+    }
+
+    .card-body {
+        height: auto !important;
+    }
+
+    .card-footer {
+        height: auto !important;
+        margin-top: -5vh !important;
+        padding-bottom: 2vh !important;
+    }
 }
