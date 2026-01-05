@@ -61,7 +61,7 @@ class DashboardView(UserPassesTestMixin, View):
         notifications = Notification.objects.filter(user=request.user).order_by("-created_at")[:8]
 
         return render(request, "event_system/dashboard.html", {
-            "title": "Admin Management Dashboard",
+            "title": "Dashboard",
             "my_events": my_events,
             "upcoming_events": upcoming_events,
             "stats": stats,

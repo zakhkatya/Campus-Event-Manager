@@ -5,7 +5,7 @@
 <div class="align-items-center row-cols-1">
   
   {% if request.user.role == 'admin' %}
-  <div class="container-xxl rounded-4 p-4 mb-4 shadow-sm">
+  <div class="container-xxl rounded-4 p-4 mb-4">
     <div class="row align-items-center text-dark text-center text-md-start">
       <div class="col-md-4 d-flex align-items-center justify-content-center justify-content-md-start border-end border-secondary border-opacity-25">
         <i class="bi bi-calendar3 fs-1 me-3 link-primary"></i>
@@ -43,10 +43,10 @@
   </div>
   {% endif %}
 
-  <div class="container-xxl rounded-4 mb-5">
+  <div class="container-xxl rounded-4">
     <h2 class="p-4 pb-2 fw-bold text-dark">
-    <a href="{% url 'event_system:my-events' %}" class="text-decoration-none text-dark">
-        My events <i class="bi bi-caret-right-fill fs-5 link-primary"></i>
+    <a href="{% url 'event_system:my-events' %}" class="text-dark link-secondary link-underline link-underline-secondary link-offset-1 link-underline-opacity-0 link-underline-opacity-100-hover">
+        My events <i class="bi bi-caret-right-fill fs-5"></i>
     </a>
     </h2>
     <div class="container">
@@ -54,19 +54,19 @@
         {% for registration in my_events %} 
           {% include "event_system/components/event_card.html" with event=registration.event %} 
         {% empty %}
-          <div class="col-12"><p class="text-muted py-3 fs-xs">No events yet.</p></div>
+          <p class="text-muted py-3 fs-m ps-4">No events yet.</p>
         {% endfor %}
       </div>
     </div>
   </div>
 
-  <div class="container-xxl bg-transparent mt-5 p-0">
+  <div class="container-xxl bg-transparent mt-4 p-0">
     <div class="row">
       <div class="col-lg-8">
-        <div class="container-xxl rounded-4 shadow-sm p-3">
+        <div class="container-xxl rounded-4 p-3">
           <h2 class="p-3 pb-2 fw-bold text-dark">
-          <a href="{% url 'event_system:upcoming-events' %}" class="text-decoration-none text-dark">
-        Upcoming Events <i class="bi bi-caret-right-fill fs-5 link-primary"></i>
+          <a href="{% url 'event_system:upcoming-events' %}" class="text-dark link-secondary link-underline link-underline-secondary link-offset-1 link-underline-opacity-0 link-underline-opacity-100-hover">
+        Upcoming Events <i class="bi bi-caret-right-fill fs-5 "></i>
           </a>
           </h2>
           
@@ -81,11 +81,11 @@
       </div>
 
       <div class="col-lg-4">
-    <div class="container-xxl rounded-4 p-3 shadow-sm h-100">
-        <h2 class="p-3 pb-2 fw-bold text-dark d-flex align-items-center">
-            Notifications 
-            <a href="{% url 'event_system:notifications' %}" class="ms-2">
-                <i class="bi bi-caret-right-fill fs-5 link-primary"></i>
+    <div class="container-xxl rounded-4 p-3 h-100">
+        <h2 class="fw-bold text-dark p-3 pb-2"> 
+            <a href="{% url 'event_system:notifications' %}" class="text-dark link-secondary link-underline link-underline-secondary link-offset-1 link-underline-opacity-0 link-underline-opacity-100-hover">
+              Notifications  
+              <i class="bi bi-caret-right-fill fs-5"></i>
             </a>
         </h2>
         
