@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings 
+import uuid
 
 class UserProfile(models.Model):
     ROLE_CHOICES = [
@@ -22,6 +23,7 @@ class Event(models.Model):
     location = models.CharField(max_length=255)
     category = models.CharField(max_length=100)
     banner = models.ImageField(upload_to='banners/', null=True, blank=True)
+    organizer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='organized_events', default=None)
 
     is_private = models.BooleanField(default=False)    
     approved = models.BooleanField(default=False)
@@ -31,13 +33,19 @@ class Event(models.Model):
         return self.title
 
 class Registration(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     registered_at = models.DateTimeField(auto_now_add=True)
+
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
 
     def __str__(self):
         return f"{self.user.username} → {self.event.title}"
     
+    class Meta:
+        unique_together = ("user", "event")
+
+ 
 class Feedback(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
