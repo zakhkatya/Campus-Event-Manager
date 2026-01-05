@@ -92,6 +92,7 @@ class Command(BaseCommand):
                 category=random.choice(categories),
                 is_private=random.choice([True, False]),
                 approved=random.choice([True, False]),
+                organizer=organizer,
             )
             events.append(event)
 
