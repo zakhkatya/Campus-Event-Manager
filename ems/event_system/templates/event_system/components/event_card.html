@@ -4,8 +4,15 @@
       <div class="d-flex align-items-center gap-2">
         <i class="bi bi-person-circle fs-2 text-secondary"></i>
         <div class="min-w-0">
-          <h6 class="fs-6 mb-0 text-truncate">{{ event.category }}</h6>
-          <small class="text-muted text-truncate">{{ event.location }}</small>
+          <h6 class="fs-6 mb-0 text-truncate">{{ event.organizer.username }}</h6>
+          <small class="text-muted text-truncate">Organizer</small>
+        </div>
+        <!-- Participants count -->
+        <div class="ms-auto d-flex align-items-center gap-1">
+          <i class="bi bi-people-fill text-secondary"></i>
+          <span class="small text-muted">
+            {{ event.registrations.count }}
+          </span>
         </div>
       </div>
     </div>
@@ -15,7 +22,7 @@
         {% if event.banner %}
           <img
             src="{{ event.banner.url }}"
-            class="img-fluid w-100 h-100 object-fit-cover rounded"
+            class="img-fluid w-100 h-100 object-fit-cover"
             alt="{{ event.title }}"
           />
         {% else %}
@@ -29,6 +36,11 @@
         <b>{{ event.title }}</b>
       </h6>
 
+      <!-- Location -->
+      <p class="mb-1 text-muted small">
+        <i class="bi bi-geo-alt"></i> {{ event.location }}
+      </p>
+
       <p class="mb-2 text-muted small">
         <i class="bi bi-calendar-event"></i> {{ event.date|date:"j.n.Y H:i" }}
       </p>
@@ -37,12 +49,6 @@
         <span class="badge rounded-pill">
           {{ event.category }}
         </span>
-
-        {% if event.is_private %}
-          <span class="badge rounded-pill bg-warning">
-            Private
-          </span>
-        {% endif %}
 
         {% if event.approved %}
           <span class="badge rounded-pill bg-success">
@@ -53,7 +59,13 @@
     </div>
 
     <div class="card-body border-0 bg-transparent pt-0 mt-auto">
-      <div class="d-flex justify-content-end">
+      <div class="d-flex justify-content-end align-items-center">
+        {% if event.is_private %}
+          <i
+            class="bi bi-lock-fill ms-1 text-secondary me-auto"
+            title="This is a private event"
+          > Private event</i>
+        {% endif %}
         <a
           href="{% url 'event_system:event_detail' event.id %}"
           class="btn btn-sm btn-outline-secondary rounded-pill d-flex align-items-center gap-2"
