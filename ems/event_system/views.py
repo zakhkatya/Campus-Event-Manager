@@ -59,7 +59,7 @@ class DashboardView(UserPassesTestMixin, View):
             approved=True, 
             is_private=False,
             date__gte=now 
-        ).order_by("-id")
+        ).order_by("date")
 
         notifications = Notification.objects.filter(user=request.user).order_by("-created_at")[:8]
 
@@ -83,11 +83,15 @@ class UpcomingEventsView(View):
         events = (
             Event.objects
             .filter(approved=True, is_private=False)
-            .order_by("-id")
+            .order_by("date")
         )
+
+        categories = Event.objects.values_list('category', flat=True).distinct()
+
         return render(request, 'event_system/events.html', {
             "title": "Upcoming events",
             "events": events,
+            "categories": categories,
         })
 class ApproveEventsListView(UserPassesTestMixin, View):
     def test_func(self):
