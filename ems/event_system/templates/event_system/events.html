@@ -2,10 +2,12 @@
 <div class="container-xxl rounded-4">
   <div class="row row-cols-2">
     <div class="col">
-      <h2 class="p-4 pb-2"><b> {{title}} </b></h2>
+      <h2 class="p-4 pb-2"><b>{{title}}</b>
+        {% if events_count %}
+        <span class="fs-5 text-muted">{{ events_count }}</span>
+        {% endif %}
+      </h2>
     </div>
-
-    {% if title == "Upcoming events"%}
 
     <div class="dropdown d-flex justify-content-end">
       <button
@@ -22,19 +24,19 @@
       >
         {% for category in categories %}
         <li>
-          <a class="dropdown-item my-2" href="?category={{ category }}">{{ category }}</a>
+          <a class="dropdown-item my-2" href="?category={{ category }}"
+            >{{ category }}</a
+          >
         </li>
         {% endfor %}
       </ul>
     </div>
-
-    {%endif%}
   </div>
 
   <div class="container">
     <div class="row d-flex">
-      {% for event in events %} 
-      {% include "event_system/components/event_card.html" with event=event %} 
+      {% for event in events %}
+      {% include "event_system/components/event_card.html" with event=event %}
       {% endfor %}
     </div>
   </div>
