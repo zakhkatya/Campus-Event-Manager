@@ -125,14 +125,6 @@ body {
     font-size: 0.85rem;
 }
 
-.n {
-    height: 930px;
-}
-
-.m {
-    height: 510px;
-}
-
 .bi-arrow-return-left,
 .bi-search,
 .bi-chevron-compact-down,
@@ -378,6 +370,12 @@ label {
     transition: 0.2s;
 }
 
+@media screen {
+    .card-footer {
+        height: 55px;
+    }
+}
+
 @media (max-width:1520px) {
     .container-xxl.bg-transparent {
         width: 95% !important;
@@ -386,26 +384,33 @@ label {
     .container-dashboard{
         width: 95% !important;
     }
-
-    .placeholder-card-image {
-        height: 25vh !important;
-    }
-
     .card-body {
         height: auto !important;
     }
-
     .card-footer {
         height: auto !important;
-        margin-top: -5vh !important;
+        margin-top: 1vh !important;
         padding-bottom: 2vh !important;
     }
 }
 
 @media (max-width: 990px) {
+    span.fw-semibold {
+        font-size: auto !important;
+    }
     .notification-margin-top {
         margin-top: 3vh !important;
         height: auto !important;
+    }
+    .container-xxl,
+    .container-xl{
+        width: 95% !important;
+    }
+    .container-xxl.bg-transparent {
+        width: 100% !important;
+    }
+    .card-footer {
+        margin-top: 0 !important;
     }
 }
 
@@ -413,11 +418,17 @@ label {
     .dashboard-events-scroll {
         max-height: 52vh; 
     }
-    .navbar-brand {
-        visibility: hidden;
+    
+    h1.fs-3 {
+        font-size: 1.2rem !important;
     }
+    p.fs-5 {
+        font-size: 0.8rem !important;
+    }
+
     nav {
         background-color: $secondary !important;
+        opacity: 0.90 !important;
         width: 100% !important;
         height: 9vh !important;
         padding-bottom: 2vh !important;
@@ -427,8 +438,16 @@ label {
         margin: 0 !important;
         left: 0 !important;
     }
+    .container-xl,
+    .container-fluid.bg-white{
+        width: 100% !important;
+        border-radius: 0 !important;
+    }
     .dropdown {
         margin-top: 1vh !important;
+    }
+    .menu{
+        margin-left: -1vh !important;
     }
     .navbar-spacing {
         margin-top: 12vh !important;
@@ -439,6 +458,7 @@ label {
     .filter{
         visibility: hidden;
         margin-left: 0%;
+        font-size: 0%;
     }
 
     .user-info {
@@ -448,9 +468,17 @@ label {
         padding: 0;
         margin: 0;
     }
-    .bi-person-circle,
-    .bi-list {
+    .bi-person-circle{
         font-size: 1.9rem !important;
         color: $text-color !important;
+    }
+    .bi-list {
+        font-size: 2rem !important;
+    }
+    .bi-calendar3,
+    .bi-people,
+    .bi-person-badge {
+        visibility: hidden;
+        font-size: 0% !important;
     }
 }

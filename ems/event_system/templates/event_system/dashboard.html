@@ -7,7 +7,7 @@
   {% if request.user.role == 'admin' %}
   <div class="container-xxl p-4 mb-4 rounded-4 container-dashboard">
     <div class="row align-items-center text-dark text-center text-md-start">
-      <div class="col-md-4 d-flex align-items-center justify-content-center justify-content-md-start">
+      <div class="col d-flex align-items-center justify-content-center justify-content-md-start">
         <i class="bi bi-calendar3 fs-1 me-3 link-primary"></i>
         <div>
           <h4 class="fw-bold mb-0">Events</h4>
@@ -18,7 +18,7 @@
         </div>
       </div>
 
-      <div class="col-md-4 d-flex align-items-center justify-content-center justify-content-md-start ps-md-5">
+      <div class="col-4 d-flex align-items-center justify-content-center justify-content-md-start ps-md-5">
         <i class="bi bi-people fs-1 me-3 link-primary"></i>
         <div>
           <h4 class="fw-bold mb-0">Students</h4>
@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <div class="col-md-4 d-flex align-items-center justify-content-center justify-content-md-start ps-md-5">
+      <div class="col d-flex align-items-center justify-content-center justify-content-md-start ps-md-5">
         <i class="bi bi-person-badge fs-1 me-3 link-primary"></i>
         <div>
           <h4 class="fw-bold mb-0">Organizers</h4>
@@ -71,7 +71,7 @@
           </h2>
           
           <div class="p-2 overflow-y-auto dashboard-events-scroll">
-            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3">
               {% for event in upcoming_events %}
                 {% include "event_system/components/event_card.html" with event=event %}
               {% endfor %}
