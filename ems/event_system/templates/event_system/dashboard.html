@@ -43,7 +43,7 @@
   </div>
   {% endif %}
 
-  <div class="container-xxl rounded-4 container-dashboard">
+  <div class="container-xxl rounded-4 container-dashboard p-2">
     <h2 class="p-4 pb-2 fw-bold text-dark">
     <a href="{% url 'event_system:my-events' %}" class="text-dark link-secondary link-underline link-underline-secondary link-offset-1 link-underline-opacity-0 link-underline-opacity-100-hover">
         My events <i class="bi bi-caret-right-fill fs-5"></i>
@@ -54,7 +54,7 @@
         {% for registration in my_events %} 
           {% include "event_system/components/event_card.html" with event=registration.event %} 
         {% empty %}
-          <p class="text-muted py-3 fs-m ps-4">No events yet.</p>
+          <p class="text-muted text-center py-5">No events yet.</p>
         {% endfor %}
       </div>
     </div>
@@ -93,7 +93,7 @@
             {% for notification in notifications_list %}
                 {% include "event_system/components/notification_item.html" with notification=notification %}
             {% empty %}
-                <p class="text-center text-muted py-5 fs-xs">No notifications yet.</p>
+                <p class="text-center text-muted py-5">No notifications yet.</p>
             {% endfor %}
                 </div>
           </div>

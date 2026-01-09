@@ -377,10 +377,12 @@ label {
 }
 
 @media (max-width:1520px) {
-    .container-xxl.bg-transparent {
-        width: 95% !important;
+    .container-xxl{
+        width: 95%;
     }
-
+    .container-xxl.bg-transparent {
+        width: 100% !important;
+    }
     .container-dashboard{
         width: 95% !important;
     }
@@ -395,6 +397,9 @@ label {
 }
 
 @media (max-width: 990px) {
+    .dashboard-events-scroll {
+        max-height: 62vh !important; 
+    }
     span.fw-semibold {
         font-size: auto !important;
     }
@@ -402,23 +407,12 @@ label {
         margin-top: 3vh !important;
         height: auto !important;
     }
-    .container-xxl,
-    .container-xl{
-        width: 95% !important;
-    }
-    .container-xxl.bg-transparent {
-        width: 100% !important;
-    }
     .card-footer {
         margin-top: 0 !important;
     }
 }
 
 @media (max-width: 765px) {
-    .dashboard-events-scroll {
-        max-height: 52vh; 
-    }
-    
     h1.fs-3 {
         font-size: 1.2rem !important;
     }
@@ -427,8 +421,7 @@ label {
     }
 
     nav {
-        background-color: $secondary !important;
-        opacity: 0.90 !important;
+        background-color: rgba(173, 153, 225, 0.90) !important;
         width: 100% !important;
         height: 9vh !important;
         padding-bottom: 2vh !important;
@@ -445,6 +438,13 @@ label {
     }
     .dropdown {
         margin-top: 1vh !important;
+    }
+    .dropdown-menu{
+        margin-left: -1vh !important;
+    }
+
+    .dropdown-menu-start.duser {
+        margin-left: -13.5vh !important;
     }
     .menu{
         margin-left: -1vh !important;
