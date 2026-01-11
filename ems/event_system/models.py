@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings 
+import uuid
 
 class UserProfile(models.Model):
     ROLE_CHOICES = [
@@ -16,12 +17,14 @@ class UserProfile(models.Model):
         return f"{self.user.username} ({self.role})"
 
 class Event(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    date = models.DateTimeField()
-    location = models.CharField(max_length=255)
-    category = models.CharField(max_length=100)
+    title = models.CharField(max_length=200, null=False, blank=False)
+    description = models.TextField(null=False, blank=False)
+    date_start = models.DateTimeField(null=False, blank=False)
+    date_end = models.DateTimeField(null=False, blank=False)
+    location = models.CharField(max_length=255, null=False, blank=False)
+    category = models.CharField(max_length=100, null=False, blank=False)
     banner = models.ImageField(upload_to='banners/', null=True, blank=True)
+    organizer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='organized_events', default=None)
 
     is_private = models.BooleanField(default=False)    
     approved = models.BooleanField(default=False)
@@ -31,13 +34,19 @@ class Event(models.Model):
         return self.title
 
 class Registration(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='registrations')
     registered_at = models.DateTimeField(auto_now_add=True)
+
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
 
     def __str__(self):
         return f"{self.user.username} → {self.event.title}"
     
+    class Meta:
+        unique_together = ("user", "event")
+
+ 
 class Feedback(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 
     event = models.ForeignKey(Event, on_delete=models.CASCADE)

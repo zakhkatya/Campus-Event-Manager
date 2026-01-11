@@ -1,100 +1,66 @@
-{%extends "base.html"%} 
-{%block title%} {{title}} {%endblock%} 
-{%block content%}
+{%extends "base.html"%} {%block title%} {{title}} {%endblock%} {%block content%}
 <div class="container-xxl rounded-4">
   <div class="row row-cols-2">
     <div class="col">
-      <h2 class="p-4 pb-2"><b> {{title}} </b></h2>
+      <h2 class="p-4 pb-2"><b>{{title}}</b>
+        {% if events_count %}
+        <span class="fs-5 text-muted">{{ events_count }}</span>
+        {% endif %}
+      </h2>
     </div>
-
-    {% if title == "Upcoming events"%}
 
     <div class="dropdown d-flex justify-content-end">
-      <button class="btn btn-light filter-btn dropdown-toggle d-flex align-items-center justify-content-between m-3 rounded-4" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <span class="me-2">Filter:</span>
-        <div class="badge p-2 rounded-pill mt-1">Event Category</div>
+      <button
+        class="btn btn-light filter-btn dropdown-toggle d-flex align-items-center justify-content-between m-3 rounded-4"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+      
+        <span class="me-2">
+          {% if selected_category %}
+            {{ selected_category }}
+          {% else %}
+            All
+          {% endif %}
+        </span>
+        <i class="bi bi-funnel-fill"></i>
       </button>
 
-      <ul class="dropdown-menu category p-2 pb-0 border-0 shadow-sm dropdown-menu-end me-3 rounded-4">
-        {%for x in 1234|make_list%}
-          <li><div class="dropdown-item badge p-2 rounded-pill mb-2 text-white text-center">Event Category</div></li>
-        {%endfor%}
+      <ul
+        class="dropdown-menu category p-2 pb-0 border-0 shadow-sm dropdown-menu-end me-3 rounded-4"
+      >
+        <li>
+          <a
+            class="dropdown-item my-2 {% if not selected_category %}active{% endif %}"
+            href="?"
+          >
+            All
+          </a>
+        </li> 
+        {% for category in categories %}
+          <li>
+            <a
+              class="dropdown-item my-2 {% if category == selected_category %}active{% endif %}"
+              href="?category={{ category }}"
+            >
+              {{ category }}
+            </a>
+          </li>
+        {% endfor %}
       </ul>
     </div>
-
-    {%endif%}
   </div>
 
   <div class="container">
     <div class="row d-flex">
       {% for event in events %}
-      <div class="col-lg-4 col-md-6 mb-4">
-        <div class="card border-1">
-          <!-- HEADER -->
-          <div class="card-header border-0 pb-0">
-            <div class="d-flex align-items-center mb-2">
-              <i class="bi bi-person-circle fs-2 me-2"></i>
-              <div>
-                <h6 class="fs-6 mb-0">{{ event.category }}</h6>
-                <small class="text-muted"> {{ event.location }} </small>
-              </div>
-            </div>
-          </div>
+      {% include "event_system/components/event_card.html" with event=event %}
 
-          <!-- IMAGE -->
-          <div class="card-body p-0">
-            <div
-              class="placeholder-card-image d-flex justify-content-center align-items-center rounded"
-            >
-              {% if event.banner %}
-              <img src="{{ event.banner.url }}" class="img-fluid rounded" />
-              {% else %}
-              <i class="bi bi-image fs-1 text-muted"></i>
-              {% endif %}
-            </div>
-          </div>
-
-          <!-- FOOTER -->
-          <div class="card-footer border-0 pt-0 pb-3 px-1">
-            <div class="container-fluid h-100">
-              <div class="row h-100">
-                <div class="col">
-                  <h6 class="card-title mt-2 mb-0">
-                    <b>{{ event.title }}</b>
-                  </h6>
-
-                  <p class="mb-0">
-                    <i class="bi bi-calendar-event"></i>
-                    {{ event.date|date:"d.m.Y H:i" }}
-                  </p>
-
-                  <div class="badge p-2 rounded-pill">{{ event.category }}</div>
-
-                  {% if event.is_private %}
-                  <span class="badge bg-warning py-2">Private</span>
-                  {% endif %} {% if event.approved %}
-                  <span class="badge bg-success py-2">Approved</span>
-                  {% endif %}
-                </div>
-
-                <div class="col d-flex justify-content-end align-items-end">
-                  <a 
-                      href="{% url 'event_system:event_detail' event.id %}" 
-                      class="btn btn-sm px-3 py-2 btn-secondary rounded-pill d-flex gap-2 fw-bolder"
-                    >
-                  <i class="bi bi-arrow-return-left"></i> About
-                  </a>
-                    </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       {% empty %}
-      <p class="fs-4 text-muted ms-3 mt-2">No events available.</p>
-        {% if title == "My events" %}
-          <a class="btn btn-primary btn-lg ms-4 w-25 mb-3" href="{%url 'event_system:upcoming-events'%}"> <i class="bi bi-search me-1"></i> Find new events! </a>
-        {%endif%}
+      <div class="d-flex justify-content-center align-items-center p-5">
+        <h4 class="text-muted">No events found</h4>
+      </div>
       {% endfor %}
     </div>
   </div>

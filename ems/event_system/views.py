@@ -10,7 +10,11 @@ from .models import Event, Registration, Notification, Feedback
 from django.db import transaction
 from django.views.generic import ListView
 from django.contrib import messages
+import qrcode
+from io import BytesIO
+from django.http import HttpResponse
 
+# Get the User model
 User = get_user_model()
 
 # Helper: Check if user is Admin
@@ -26,7 +30,7 @@ class HomePageView(View):
         events = (
             Event.objects
             .filter(approved=True, is_private=False)
-            .order_by("date")[:6]
+            .order_by("date_start")[:6]
         )
         return render(request, 'event_system/home.html', {
             "title": "Campus Event Manager",
@@ -38,12 +42,15 @@ class DashboardView(UserPassesTestMixin, View):
         return self.request.user.is_authenticated
 
     def get(self, request):
+        # Current time
         now = timezone.now()
-        one_week_later = now + timedelta(days=7)
+        
+        # Initialize stats
         stats = {}
+        
         if request.user.role in ['admin', 'organizer']:
             stats = {
-                'events_this_week': Event.objects.filter(date__range=[now, one_week_later], approved=True).count(),
+                'events_this_week': Event.objects.filter(date_start__range=[now, now + timedelta(days=7)], approved=True).count(),
                 'events_total': Event.objects.count(),
                 'students_registered': Registration.objects.values('user').distinct().count(),
                 'students_total': User.objects.filter(role='student').count(),
@@ -51,17 +58,21 @@ class DashboardView(UserPassesTestMixin, View):
                 'organizers_active': User.objects.filter(role='organizer').count(), 
             }
 
-        my_events = Registration.objects.filter(user=request.user).select_related("event")[:3]
+        # Determine tab title based on role
+        tab_title = "Admin Dashboard" if request.user.role == 'admin' else "Organizer Dashboard" if request.user.role == 'organizer' else "Student Dashboard"
+
+        my_events = Registration.objects.filter(user=request.user).select_related('event').order_by("event__date_start")[:3]
+        
+        notifications = Notification.objects.filter(user=request.user).order_by("-created_at")[:8]
+
         upcoming_events = Event.objects.filter(
             approved=True, 
             is_private=False,
-            date__gte=now 
-        ).order_by("-id")
-
-        notifications = Notification.objects.filter(user=request.user).order_by("-created_at")[:8]
+            date_start__gte=now # Only future events
+        ).order_by("date_start")
 
         return render(request, "event_system/dashboard.html", {
-            "title": "Admin Management Dashboard",
+            "title": tab_title,
             "my_events": my_events,
             "upcoming_events": upcoming_events,
             "stats": stats,
@@ -69,23 +80,72 @@ class DashboardView(UserPassesTestMixin, View):
         })
    
 class MyEventsView(View):
-   def get(self, request, *args, **kwargs):
-      return render(request, 'event_system/events.html', {
-         "title":"My events"
-         # events 
-      })
+    def get(self, request, *args, **kwargs):
+
+        category = request.GET.get("category")
+
+        my_events = (
+            Registration.objects
+            .filter(user=request.user)
+            .select_related('event')
+            .order_by("event__date_start")
+        )
+
+        if category:
+            my_events = my_events.filter(event__category=category)
+
+        # Categories only from user's events
+        categories = (
+            Event.objects
+            .filter(registrations__user=request.user)
+            .values_list('category', flat=True)
+            .distinct()
+        )
+
+        # Count my events (po filtru)
+        my_events_count = my_events.count()
+
+        return render(request, 'event_system/events.html', {
+            "title": "My events",
+            "categories": categories,
+            "events": [e.event for e in my_events],
+            "events_count": my_events_count,
+            "selected_category": category,
+        })
 
 class UpcomingEventsView(View):
     def get(self, request, *args, **kwargs):
+
+        category = request.GET.get("category")
+
         events = (
             Event.objects
             .filter(approved=True, is_private=False)
-            .order_by("-id")
         )
+
+        if category:
+            events = events.filter(category=category)
+
+        events = events.order_by("date_start")
+
+        # Count upcoming events (po filtru)
+        events_count = events.count()
+
+        categories = (
+            Event.objects
+            .filter(approved=True, is_private=False)
+            .values_list('category', flat=True)
+            .distinct()
+        )
+
         return render(request, 'event_system/events.html', {
             "title": "Upcoming events",
             "events": events,
+            "categories": categories,
+            "events_count": events_count,
+            "selected_category": category,
         })
+
 class ApproveEventsListView(UserPassesTestMixin, View):
     def test_func(self):
         return self.request.user.role == 'admin'
@@ -97,7 +157,6 @@ class ApproveEventsListView(UserPassesTestMixin, View):
             "title": "Approve Events",
             "pending_events": pending_events,
         })
-
 
 class NotificationsView(View):
    def get(self, request):
@@ -181,29 +240,59 @@ def manage_status(request, event_id, status):
     return redirect('event_system:dashboard')
 
 class EventDetailView(LoginRequiredMixin, View):
+
     def get(self, request, event_id):
         event = get_object_or_404(Event, id=event_id)
 
-        is_registered = Registration.objects.filter(
+        registration = Registration.objects.filter(
             user=request.user,
             event=event
-        ).exists()
+        ).first()
 
         return render(
             request,
             "event_system/event_detail.html",
             {
                 "event": event,
-                "is_registered": is_registered,
-                "registration": (
-                    Registration.objects.filter(
-                        user=request.user,
-                        event=event
-                    ).first()
-                    if is_registered else None
-                ),
+                "is_registered": bool(registration),
+                "registration": registration,
+                "title": event.title,
             }
         )
+
+    def post(self, request, event_id):
+        event = get_object_or_404(Event, id=event_id)
+
+        if "register" in request.POST:
+            Registration.objects.get_or_create(
+                user=request.user,
+                event=event,
+            )
+
+        elif "unregister" in request.POST:
+            Registration.objects.filter(
+                user=request.user,
+                event=event,
+            ).delete()
+
+        return redirect("event_system:event_detail", event_id=event.id)
+    
+@login_required
+def registration_qr_view(request, registration_id):
+    registration = get_object_or_404(
+        Registration,
+        id=registration_id,
+        user=request.user,
+    )
+
+    qr = qrcode.make(str(registration.uuid))
+    buffer = BytesIO()
+    qr.save(buffer, format="PNG")
+
+    return HttpResponse(
+        buffer.getvalue(),
+        content_type="image/png"
+    )
     
 class MyFeedbacksView(LoginRequiredMixin, ListView):
     model = Feedback
