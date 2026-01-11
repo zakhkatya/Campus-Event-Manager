@@ -9,9 +9,6 @@
         <p class="text-muted mb-0">
           <i class="bi bi-geo-alt"></i> {{ event.location }}
         </p>
-        <p class="text-muted mb-0">
-          <i class="bi bi-person-circle"></i> Organized by: {{ event.organizer.username }}
-        </p>
       </div>
 
       <div class="d-flex gap-2 fw-semibold">
@@ -39,7 +36,7 @@
     <!-- IMAGE -->
 
     {% if event.banner %}
-    <div class="ratio ratio-16x9 rounded overflow-hidden" style="height: 300px;">
+    <div class="ratio ratio-16x9 rounded overflow-hidden" style="height: 300px">
       <img
         src="{{ event.banner.url }}"
         class="w-100 h-100 object-fit-cover"
@@ -59,17 +56,31 @@
   <!-- INFO CARD -->
   <div class="container-xxl rounded-4 p-4 my-4">
     <div class="card-body">
-      <h5 class="card-title">Event Organization</h5>
+      <h5 class="card-title mb-1">Event Organization</h5>
 
       <p class="mb-1">
         <i class="bi bi-clock"></i>
-        {{ event.date|date:"H:i" }}
+        {{ event.date_start|date:"j.n.Y H:i" }} - {{ event.date_end|date:"H:i" }}
       </p>
 
       <span class="badge bg-success mb-3"> {{ event.category }} </span>
 
       <h6><i class="bi bi-card-text"></i> Description</h6>
       <p class="text-muted">{{ event.description }}</p>
+
+      <p class="text-muted mb-0 d-flex align-items-center gap-1">
+        <!-- profile image -->
+        {% if event.organizer.avatar %}
+        <img
+          src="{{ event.organizer.avatar.url }}"
+          alt="Organizer Avatar"
+          class="rounded-circle"
+          style="width: 30px; height: 30px; object-fit: cover"
+        />
+        {% else %}
+        <i class="bi bi-person-circle"></i>
+        {% endif %} Organized by: {{ event.organizer.first_name }} {{ event.organizer.last_name }}
+      </p>
     </div>
   </div>
 
