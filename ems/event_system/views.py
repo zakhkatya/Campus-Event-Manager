@@ -30,7 +30,7 @@ class HomePageView(View):
         events = (
             Event.objects
             .filter(approved=True, is_private=False)
-            .order_by("date")[:6]
+            .order_by("date_start")[:6]
         )
         return render(request, 'event_system/home.html', {
             "title": "Campus Event Manager",
@@ -50,7 +50,7 @@ class DashboardView(UserPassesTestMixin, View):
         
         if request.user.role in ['admin', 'organizer']:
             stats = {
-                'events_this_week': Event.objects.filter(date__range=[now, now + timedelta(days=7)], approved=True).count(),
+                'events_this_week': Event.objects.filter(date_start__range=[now, now + timedelta(days=7)], approved=True).count(),
                 'events_total': Event.objects.count(),
                 'students_registered': Registration.objects.values('user').distinct().count(),
                 'students_total': User.objects.filter(role='student').count(),
@@ -61,15 +61,15 @@ class DashboardView(UserPassesTestMixin, View):
         # Determine tab title based on role
         tab_title = "Admin Dashboard" if request.user.role == 'admin' else "Organizer Dashboard" if request.user.role == 'organizer' else "Student Dashboard"
 
-        my_events = Registration.objects.filter(user=request.user).select_related('event').order_by("event__date")[:3]
+        my_events = Registration.objects.filter(user=request.user).select_related('event').order_by("event__date_start")[:3]
         
         notifications = Notification.objects.filter(user=request.user).order_by("-created_at")[:8]
 
         upcoming_events = Event.objects.filter(
             approved=True, 
             is_private=False,
-            date__gte=now # Only future events
-        ).order_by("date")
+            date_start__gte=now # Only future events
+        ).order_by("date_start")
 
         return render(request, "event_system/dashboard.html", {
             "title": tab_title,
@@ -88,7 +88,7 @@ class MyEventsView(View):
             Registration.objects
             .filter(user=request.user)
             .select_related('event')
-            .order_by("event__date")
+            .order_by("event__date_start")
         )
 
         if category:
@@ -126,7 +126,7 @@ class UpcomingEventsView(View):
         if category:
             events = events.filter(category=category)
 
-        events = events.order_by("date")
+        events = events.order_by("date_start")
 
         # Count upcoming events (po filtru)
         events_count = events.count()
