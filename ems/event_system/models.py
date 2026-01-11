@@ -19,7 +19,8 @@ class UserProfile(models.Model):
 class Event(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
-    date = models.DateTimeField()
+    date_start = models.DateTimeField()
+    date_end = models.DateTimeField()
     location = models.CharField(max_length=255)
     category = models.CharField(max_length=100)
     banner = models.ImageField(upload_to='banners/', null=True, blank=True)
