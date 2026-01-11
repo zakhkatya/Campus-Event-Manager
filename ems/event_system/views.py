@@ -13,6 +13,7 @@ from django.contrib import messages
 import qrcode
 from io import BytesIO
 from django.http import HttpResponse
+from userauth.forms import ProfileUpdateForm
 
 # Get the User model
 User = get_user_model()
@@ -335,3 +336,16 @@ def submit_feedback(request, event_id):
         
         return redirect('event_system:my-feedbacks')
     return redirect('event_system:dashboard')
+
+
+@login_required
+def edit_profile_view(request):
+    if request.method == "POST":
+        form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect("userauth:edit-profile")
+    else:
+        form = ProfileUpdateForm(instance=request.user)
+    
+    return render(request, "userauth/edit_profile.html", {"form": form})
