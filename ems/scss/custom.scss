@@ -49,6 +49,12 @@ a {
     color: inherit;
 }
 
+#profile-image {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+
 .bg-image {
     background-image: url("../static/background.jpg");
     background-size: cover;
