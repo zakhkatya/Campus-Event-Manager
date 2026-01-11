@@ -17,12 +17,12 @@ class UserProfile(models.Model):
         return f"{self.user.username} ({self.role})"
 
 class Event(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    date_start = models.DateTimeField()
-    date_end = models.DateTimeField()
-    location = models.CharField(max_length=255)
-    category = models.CharField(max_length=100)
+    title = models.CharField(max_length=200, null=False, blank=False)
+    description = models.TextField(null=False, blank=False)
+    date_start = models.DateTimeField(null=False, blank=False)
+    date_end = models.DateTimeField(null=False, blank=False)
+    location = models.CharField(max_length=255, null=False, blank=False)
+    category = models.CharField(max_length=100, null=False, blank=False)
     banner = models.ImageField(upload_to='banners/', null=True, blank=True)
     organizer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='organized_events', default=None)
 
