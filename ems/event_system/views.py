@@ -14,6 +14,7 @@ import qrcode
 from io import BytesIO
 from django.http import HttpResponse
 
+# Get the User model
 User = get_user_model()
 
 # Helper: Check if user is Admin
@@ -41,12 +42,15 @@ class DashboardView(UserPassesTestMixin, View):
         return self.request.user.is_authenticated
 
     def get(self, request):
+        # Current time
         now = timezone.now()
-        one_week_later = now + timedelta(days=7)
+        
+        # Initialize stats
         stats = {}
+        
         if request.user.role in ['admin', 'organizer']:
             stats = {
-                'events_this_week': Event.objects.filter(date__range=[now, one_week_later], approved=True).count(),
+                'events_this_week': Event.objects.filter(date__range=[now, now + timedelta(days=7)], approved=True).count(),
                 'events_total': Event.objects.count(),
                 'students_registered': Registration.objects.values('user').distinct().count(),
                 'students_total': User.objects.filter(role='student').count(),
@@ -54,17 +58,21 @@ class DashboardView(UserPassesTestMixin, View):
                 'organizers_active': User.objects.filter(role='organizer').count(), 
             }
 
-        my_events = Registration.objects.filter(user=request.user).select_related("event")[:3]
+        # Determine tab title based on role
+        tab_title = "Admin Dashboard" if request.user.role == 'admin' else "Organizer Dashboard" if request.user.role == 'organizer' else "Student Dashboard"
+
+        my_events = Registration.objects.filter(user=request.user).select_related('event').order_by("event__date")[:3]
+        
+        notifications = Notification.objects.filter(user=request.user).order_by("-created_at")[:8]
+
         upcoming_events = Event.objects.filter(
             approved=True, 
             is_private=False,
-            date__gte=now 
+            date__gte=now # Only future events
         ).order_by("date")
 
-        notifications = Notification.objects.filter(user=request.user).order_by("-created_at")[:8]
-
         return render(request, "event_system/dashboard.html", {
-            "title": "Admin Management Dashboard",
+            "title": tab_title,
             "my_events": my_events,
             "upcoming_events": upcoming_events,
             "stats": stats,
@@ -72,27 +80,72 @@ class DashboardView(UserPassesTestMixin, View):
         })
    
 class MyEventsView(View):
-   def get(self, request, *args, **kwargs):
-      return render(request, 'event_system/events.html', {
-         "title":"My events"
-         # events 
-      })
+    def get(self, request, *args, **kwargs):
+
+        category = request.GET.get("category")
+
+        my_events = (
+            Registration.objects
+            .filter(user=request.user)
+            .select_related('event')
+            .order_by("event__date")
+        )
+
+        if category:
+            my_events = my_events.filter(event__category=category)
+
+        # Categories only from user's events
+        categories = (
+            Event.objects
+            .filter(registrations__user=request.user)
+            .values_list('category', flat=True)
+            .distinct()
+        )
+
+        # Count my events (po filtru)
+        my_events_count = my_events.count()
+
+        return render(request, 'event_system/events.html', {
+            "title": "My events",
+            "categories": categories,
+            "events": [e.event for e in my_events],
+            "events_count": my_events_count,
+            "selected_category": category,
+        })
 
 class UpcomingEventsView(View):
     def get(self, request, *args, **kwargs):
+
+        category = request.GET.get("category")
+
         events = (
             Event.objects
             .filter(approved=True, is_private=False)
-            .order_by("date")
         )
 
-        categories = Event.objects.values_list('category', flat=True).distinct()
+        if category:
+            events = events.filter(category=category)
+
+        events = events.order_by("date")
+
+        # Count upcoming events (po filtru)
+        events_count = events.count()
+
+        categories = (
+            Event.objects
+            .filter(approved=True, is_private=False)
+            .values_list('category', flat=True)
+            .distinct()
+        )
 
         return render(request, 'event_system/events.html', {
             "title": "Upcoming events",
             "events": events,
             "categories": categories,
+            "events_count": events_count,
+            "selected_category": category,
         })
+
 class ApproveEventsListView(UserPassesTestMixin, View):
     def test_func(self):
         return self.request.user.role == 'admin'
@@ -104,7 +157,6 @@ class ApproveEventsListView(UserPassesTestMixin, View):
             "title": "Approve Events",
             "pending_events": pending_events,
         })
-
 
 class NotificationsView(View):
    def get(self, request):
@@ -204,6 +256,7 @@ class EventDetailView(LoginRequiredMixin, View):
                 "event": event,
                 "is_registered": bool(registration),
                 "registration": registration,
+                "title": event.title,
             }
         )
 
