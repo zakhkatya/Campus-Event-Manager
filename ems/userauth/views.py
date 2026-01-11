@@ -6,6 +6,10 @@ from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect 
 from django.contrib.auth import logout 
 from .forms import CustomRegistrationForm
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from .forms import ProfileUpdateForm
+from django.contrib.auth import update_session_auth_hash
 
 class CustomLoginView(LoginView):
     template_name = "userauth/login.html"
@@ -32,3 +36,23 @@ class RegisterView(CreateView):
         if self.request.user.is_authenticated:
             logout(self.request)
         return HttpResponseRedirect(self.get_success_url())
+    
+@login_required
+def edit_profile_view(request):
+    if request.method == "POST":
+        form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            user = form.save(commit=False)
+            new_pwd = form.cleaned_data.get('new_password')
+            if new_pwd:
+                user.set_password(new_pwd) 
+                user.save()
+                update_session_auth_hash(request, user)
+            else:
+                user.save()
+                
+            return redirect("userauth:edit-profile")
+    else:
+        form = ProfileUpdateForm(instance=request.user)
+    
+    return render(request, "userauth/edit_profile.html", {"form": form})
