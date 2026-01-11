@@ -111,11 +111,13 @@ class Command(BaseCommand):
         events = []
         for i in range(1, EVENT_COUNT + 1):
             organizer = random.choice(organizers)
+            date_start=timezone.now() + timedelta(days=random.randint(1, 180), hours=random.randint(8, 18))
+
             event = Event.objects.create(
                 title=f"Event #{i}",
                 description="Automatically generated test event.",
-                date_start=timezone.now() + timedelta(days=random.randint(1, 180)),
-                date_end=timezone.now() + timedelta(days=random.randint(181, 365)),
+                date_start=date_start,
+                date_end=date_start + timedelta(hours=random.randint(1, 8)),
                 location=f"Building {random.randint(1, 20)}",
                 category=random.choice(categories),
                 is_private=random.choice([True, False]),
