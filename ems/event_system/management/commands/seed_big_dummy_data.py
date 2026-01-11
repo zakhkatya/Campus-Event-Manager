@@ -19,6 +19,18 @@ EVENT_COUNT = 300
 REGISTRATIONS_PER_EVENT = (10, 30)  # min / max
 FEEDBACK_RATE = 0.4  # 40% of registered users leave feedback
 
+NAMES = [
+    "Alice", "Bob", "Charlie", "David", "Eva", "Frank", "Grace", "Hannah",
+    "Ian", "Jack", "Kathy", "Liam", "Mona", "Nina", "Oscar", "Paul", "Quincy",
+    "Rachel", "Sam", "Tina", "Uma", "Vince", "Wendy", "Xander", "Yara", "Zane"
+]
+
+SURNAMES = [
+    "Anderson", "Brown", "Clark", "Davis", "Evans", "Garcia", "Harris",
+    "Johnson", "King", "Lee", "Martinez", "Nelson", "O'Connor", "Perez",
+    "Roberts", "Smith", "Taylor", "Walker", "Young", "Zimmerman"
+]
+
 class Command(BaseCommand):
     help = "Seed database with a large interconnected dataset"
 
@@ -34,7 +46,10 @@ class Command(BaseCommand):
                 "username": "admin",
                 "is_staff": True, 
                 "is_superuser": True,
-                "role": "admin"
+                "role": "admin",
+                "avatar": "/avatars/placeholder.svg",
+                "first_name": "Admin",
+                "last_name": "User",
             },
         )
         if created:
@@ -51,7 +66,10 @@ class Command(BaseCommand):
                 email=f"organizer{i}@example.com",
                 defaults={
                     "username": f"organizer{i}",
-                    "role": "organizer"
+                    "role": "organizer",
+                    "avatar": "/avatars/placeholder.svg",
+                    "first_name": random.choice(NAMES),
+                    "last_name": random.choice(SURNAMES),
                 }
             )
             if created:
@@ -68,7 +86,10 @@ class Command(BaseCommand):
                 email=f"student{i}@example.com",
                 defaults={
                     "username": f"student{i}",
-                    "role": "student"
+                    "role": "student",
+                    "avatar": "/avatars/placeholder.svg",
+                    "first_name": random.choice(NAMES),
+                    "last_name": random.choice(SURNAMES),
                 }
             )
             if created:
@@ -81,18 +102,26 @@ class Command(BaseCommand):
         # -------------------------
         categories = ["Workshop", "Lecture", "Party", "Sports", "Conference", "Meetup"]
 
+        banners = [
+            "/banners/placeholder1.jpg",
+            "/banners/placeholder2.jpg",
+            "/banners/placeholder3.jpg",
+        ]
+
         events = []
         for i in range(1, EVENT_COUNT + 1):
             organizer = random.choice(organizers)
             event = Event.objects.create(
                 title=f"Event #{i}",
                 description="Automatically generated test event.",
-                date=timezone.now() + timedelta(days=random.randint(1, 180)),
+                date_start=timezone.now() + timedelta(days=random.randint(1, 180)),
+                date_end=timezone.now() + timedelta(days=random.randint(181, 365)),
                 location=f"Building {random.randint(1, 20)}",
                 category=random.choice(categories),
                 is_private=random.choice([True, False]),
                 approved=random.choice([True, False]),
                 organizer=organizer,
+                banner=random.choice(banners),
             )
             events.append(event)
 
