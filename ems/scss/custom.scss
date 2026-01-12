@@ -378,12 +378,12 @@ label {
 
 @media (max-width:1520px) {
     .container-xxl{
-        width: 95%;
+        width: 100%;
+    }
+    .container-dashboard {
+        width: 95% !important;
     }
     .container-xxl.bg-transparent {
-        width: 100% !important;
-    }
-    .container-dashboard{
         width: 95% !important;
     }
     .card-body {
@@ -434,7 +434,6 @@ label {
     .container-xl,
     .container-fluid.bg-white{
         width: 100% !important;
-        border-radius: 0 !important;
     }
     .dropdown {
         margin-top: 1vh !important;
