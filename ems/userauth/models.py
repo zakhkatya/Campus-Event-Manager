@@ -11,6 +11,8 @@ class CustomUser(AbstractUser):
     email = models.EmailField(("email address"), unique=True)
     username = models.CharField(max_length=150, unique=False, null=True, blank=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
+
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username'] 
