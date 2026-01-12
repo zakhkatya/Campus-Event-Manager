@@ -487,14 +487,9 @@ label {
     align-items: center !important;
     justify-content: space-between !important;
 
-    &.alert-success {
-        background-color: #e7f3ef !important;
-        color: #198754 !important;
-    }
-    
-    &.alert-info {
-        background-color: #fef7ff !important; 
-        color: $primary !important;
+    &.alert-success, &.alert-info {
+        background-color: #f3f0ff !important; 
+        color: $primary !important; 
         border: 1px solid rgba($primary, 0.1) !important;
     }
     
