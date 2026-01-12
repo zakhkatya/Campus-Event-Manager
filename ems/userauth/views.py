@@ -10,6 +10,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import ProfileUpdateForm
 from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 class CustomLoginView(LoginView):
     template_name = "userauth/login.html"
@@ -44,13 +47,22 @@ def edit_profile_view(request):
         if form.is_valid():
             user = form.save(commit=False)
             new_pwd = form.cleaned_data.get('new_password')
+            
             if new_pwd:
-                user.set_password(new_pwd) 
-                user.save()
-                update_session_auth_hash(request, user)
+                try:
+                    validate_password(new_pwd, user)
+                    user.set_password(new_pwd)
+                    user.save()
+                    update_session_auth_hash(request, user)
+                    messages.success(request, "Your profile and password have been successfully updated.")
+                except ValidationError as e:
+                    for error in e.messages:
+                        messages.error(request, error)
+                    return render(request, "userauth/edit_profile.html", {"form": form})
             else:
                 user.save()
-                
+                messages.info(request, "Profile updated.")
+            
             return redirect("userauth:edit-profile")
     else:
         form = ProfileUpdateForm(instance=request.user)
