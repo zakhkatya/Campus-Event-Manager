@@ -397,7 +397,7 @@ label {
     padding: 0.5rem 1.2rem;
     border: 1px solid #eee !important;
     border-radius: 50px;
-    margin-top: -20px; 
+    margin-top: 10px; 
     position: relative;
     z-index: 5;
     transition: all 0.2s ease;
@@ -470,6 +470,7 @@ label {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 25px !important;
 
     img {
         width: 100%;
@@ -478,26 +479,51 @@ label {
     }
 }
 .alert {
-    font-size: 0.9rem;
-    
+    min-height: auto !important;
+    padding: 0.5rem 1.5rem !important; 
+    margin-bottom: 12px !important;
+    border: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+
     &.alert-success {
         background-color: #e7f3ef !important;
         color: #198754 !important;
     }
     
     &.alert-info {
-        background-color: #fef7ff !important; // $card-body-bg
+        background-color: #fef7ff !important; 
         color: $primary !important;
-        border: 1px solid rgba($primary, 0.2) !important;
+        border: 1px solid rgba($primary, 0.1) !important;
     }
     
     &.alert-error, &.alert-danger {
         background-color: #fff5f5 !important;
         color: #dc3545 !important;
     }
+}
+.alert-dismissible .btn-close {
+    position: static !important; 
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    opacity: 0.5;
+    display: flex !important;
+    align-items: center;
 
-    .btn-close {
-        filter: grayscale(1) opacity(0.5);
-        &:focus { box-shadow: none; }
+    i {
+        font-size: 1.1rem;
+        color: inherit;
+        display: block;
+        line-height: 1;
+    }
+
+    &:hover {
+        opacity: 1;
     }
 }
