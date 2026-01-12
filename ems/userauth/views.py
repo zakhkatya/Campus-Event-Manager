@@ -54,7 +54,7 @@ def edit_profile_view(request):
                     user.set_password(new_pwd)
                     user.save()
                     update_session_auth_hash(request, user)
-                    messages.success(request, "Your profile and password have been successfully updated.")
+                    messages.success(request, "Your password have been successfully updated.")
                 except ValidationError as e:
                     for error in e.messages:
                         messages.error(request, error)
