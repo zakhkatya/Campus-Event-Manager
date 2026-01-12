@@ -1,5 +1,5 @@
 {%extends "base.html"%} {%block title%} {{title}} {%endblock%} {%block content%}
-<div class="container-xxl rounded-4">
+<div class="container-xxl rounded-4 navbar-spacing">
   <div class="row row-cols-2">
     <div class="col">
       <h2 class="p-4 pb-2"><b>{{title}}</b>
@@ -11,37 +11,35 @@
 
     <div class="dropdown d-flex justify-content-end">
       <button
-        class="btn btn-light filter-btn dropdown-toggle d-flex align-items-center justify-content-between m-3 rounded-4"
+        class="btn btn-light filter-btn dropdown-toggle d-flex align-items-center justify-content-between rounded-4 p-2 m-3"
         type="button"
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
       
-        <span class="me-2">
+        <div class="badge p-2 rounded-pill mt-1">
           {% if selected_category %}
             {{ selected_category }}
           {% else %}
             All
           {% endif %}
-        </span>
-        <i class="bi bi-funnel-fill"></i>
+        </div>
+        <i class="bi bi-funnel-fill ms-2"></i>
       </button>
 
-      <ul
-        class="dropdown-menu category p-2 pb-0 border-0 shadow-sm dropdown-menu-end me-3 rounded-4"
-      >
-        <li>
+      <ul class="dropdown-menu p-2 pb-0 border-0 shadow-sm rounded-4 me-3">
+        <li class="dropdown-item badge p-2 rounded-pill mb-2 text-white text-center">
           <a
-            class="dropdown-item my-2 {% if not selected_category %}active{% endif %}"
+            class="text-decoration-none text-white {% if not selected_category %}active{% endif %}"
             href="?"
           >
             All
           </a>
         </li> 
         {% for category in categories %}
-          <li>
+          <li class="dropdown-item badge p-2 rounded-pill mb-2 text-white text-center">
             <a
-              class="dropdown-item my-2 {% if category == selected_category %}active{% endif %}"
+              class="text-decoration-none text-white {% if category == selected_category %}active{% endif %}"
               href="?category={{ category }}"
             >
               {{ category }}

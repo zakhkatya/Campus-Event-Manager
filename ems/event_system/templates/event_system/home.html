@@ -27,13 +27,13 @@
   <h2 class="text-dark mb-4 display-3 fw-bold">Join The Party!</h2>
   <a
     href="{% url 'userauth:register' %}"
-    class="btn btn-primary btn-lg mx-2 p-3 px-4 fw-semibold"
+    class="btn btn-primary btn-lg mx-2 p-3 px-4 fw-semibold w-auto"
   >
     <i class="bi bi-person-plus me-1"></i> Register
   </a>
   <a
     href="{% url 'userauth:login' %}"
-    class="btn btn-primary btn-lg mx-2 p-3 px-4 fw-semibold"
+    class="btn btn-primary btn-lg mx-2 p-3 px-4 fw-semibold w-auto"
   >
     <i class="bi bi-box-arrow-in-right me-1"></i> Login
   </a>
@@ -57,7 +57,7 @@
     {% for event in events %}
     {% include "event_system/components/event_card.html" with event=event %}
     {% empty %}
-    <p class="fs-4 text-muted ms-4 mt-2">No events available.</p>
+    <p class="text-muted my-5 text-center">No events available.</p>
     {% endfor %} {% if events %}
     <div class="text-center col-10 w-100">
       {% if user.is_authenticated %}
