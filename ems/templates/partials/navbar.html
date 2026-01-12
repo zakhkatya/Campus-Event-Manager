@@ -64,10 +64,11 @@
             <div class="dropdown my-4 me-4 p-0">
                 <button class="row row-cols-2 user rounded-4 border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
                     <div class="col-2 p-0 ms-2 me-1 d-flex align-items-center justify-content-center">
-                        {% if user.avatar %}
-                            <img id="profile-image" src="{{ user.avatar.url }}" alt="Profile Image" class="rounded-4 user-img">
-                        {% else %}
-                            <i class="bi bi-person-circle fs-2 text-muted"></i>
+                    {% if user.avatar %}
+                     <img id="navbar-profile-img" src="{{ user.avatar.url }}?t={{ user.last_login.timestamp }}" 
+                        alt="Profile" class="rounded-4 navbar-avatar-img">
+                         {% else %}
+                         <i class="bi bi-person-circle fs-2 text-muted"></i>
                         {% endif %}
                     </div>
                     <div class="col text-start pt-1 lh-sm ms-1 pe-0">
@@ -77,20 +78,20 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-start shadow-sm rounded-4 border-0 mt-2 text-end p-2 duser">
                     <li class="mb-2">
-                        <a class="dropdown-item bg-transparent p-0 ps-1" href="#">
-                            Edit profile <i class="bi bi-person fs-5 btn-primary rounded-3 ms-1 p-2 py-1"></i>
-                        </a>
-                    </li>
+                        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'userauth:edit-profile' %}">
+                          Edit profile <i class="bi bi-person fs-5 btn-primary rounded-3 ms-1 p-2 py-1"></i>
+                      </a>
+                    </li>       
                     <li>
                         <form method="post" action="{% url 'userauth:logout' %}">
                             {% csrf_token %}
                             <button type="submit" class="dropdown-item bg-transparent p-0 text-end w-100">
                                 Logout <i class="bi bi-box-arrow-right fs-5 btn-primary btn-lg rounded-3 ms-1 p-2 py-1"></i>
-                            </button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
+                                </button>
+                           </form>
+                       </li>
+                   </ul>
+             </div>
             {% endif %}
         </div>
     </div>
