@@ -212,11 +212,12 @@ def manage_status(request, event_id, status):
                 event.approved_at = timezone.now()
                 event.save()
 
-                messages.success(request, f"Confirmed! Event #{event.id} is now live and visible to everyone.")
+                messages.success(request, f"Confirmed! {event.title} is now live and visible to everyone.")
+
 
                 Notification.objects.create(
                     user=request.user,
-                    message=f"Event #{event.id} approved."
+                    message=f"{event.title} was approved."
                 )
                 other_users = User.objects.exclude(id=request.user.id)
                 new_notifs = [
@@ -227,14 +228,13 @@ def manage_status(request, event_id, status):
 
             elif status == 'reject':
               
-                event_id_temp = event.id 
                 event.delete()
 
-                messages.warning(request, f"Notice: Event #{event_id_temp} has been removed from the queue.")
+                messages.warning(request, f"Notice: {event.title} has been removed from the queue.")
 
                 Notification.objects.create(
                     user=request.user,
-                    message=f"Event #{event_id_temp} was rejected by you."
+                    message=f"{event.title} was rejected."
                 )
         return redirect(request.META.get('HTTP_REFERER', 'event_system:dashboard'))
     
