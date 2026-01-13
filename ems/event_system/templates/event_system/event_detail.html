@@ -1,6 +1,6 @@
 {%extends "base.html"%} {%block title%} {{title}} {%endblock%} {%block content%}
 
-<div class="container mt-4">
+<div class="container navbar-spacing">
   <div class="container-xxl rounded-4 p-4 mb-4">
     <!-- HEADER -->
     <div class="d-flex justify-content-between align-items-start mb-3">
@@ -16,17 +16,24 @@
 
         {% if user.is_staff %}
         <a href="#" class="btn btn-primary btn-lg">
-          <i class="bi bi-pencil"></i> Edit
+          <i class="bi bi-pencil me-1"></i> Edit
         </a>
         {% endif %} {% if is_registered %}
-        <a href="#pass" class="btn btn-primary btn-lg">
-          <i class="bi bi-ticket-perforated"></i> View Pass
+        <a href="#pass" class="btn btn-secondary btn-lg">
+          <i class="bi bi-ticket-perforated me-1"></i> View Pass
         </a>
         <!-- Unregister -->
         <form method="post" class="d-inline">
           {% csrf_token %}
-          <button class="btn btn-outline-danger btn-lg" name="unregister">
-            <i class="bi bi-x-circle"></i> Unregister
+          <button class="btn btn-outline-secondary btn-lg border-2" name="unregister">
+            <i class="bi bi-x-circle me-1"></i> Unregister
+          </button>
+        </form>
+        {% else %}
+        <form method="post">
+          {% csrf_token %}
+          <button class="btn btn-primary btn-lg" name="register">
+            <i class="bi bi-calendar me-1"> </i> Register
           </button>
         </form>
         {% endif %}
@@ -58,12 +65,12 @@
     <div class="card-body">
       <h5 class="card-title mb-1">Event Organization</h5>
 
-      <p class="mb-1">
-        <i class="bi bi-clock"></i>
+      <p class="mb-1 text-muted">
+        <i class="bi bi-calendar-event"></i>
         {{ event.date_start|date:"j.n.Y H:i" }} - {{ event.date_end|date:"H:i" }}
       </p>
 
-      <span class="badge bg-success mb-3"> {{ event.category }} </span>
+      <span class="badge mb-3"> {{ event.category }} </span>
 
       <h6><i class="bi bi-card-text"></i> Description</h6>
       <p class="text-muted">{{ event.description }}</p>
@@ -79,14 +86,14 @@
         />
         {% else %}
         <i class="bi bi-person-circle"></i>
-        {% endif %} Organized by: {{ event.organizer.first_name }} {{ event.organizer.last_name }}
+        {% endif %} Organized by: <b>{{ event.organizer.first_name }} {{ event.organizer.last_name }}</b>
       </p>
     </div>
   </div>
 
   <!-- REGISTRATION / PASS -->
+   {% if is_registered %}
   <div class="container-xxl rounded-4 p-4 text-center" id="pass">
-    {% if is_registered %}
     <h4 class="mb-3">Your pass</h4>
     <!-- Date of registration -->
     <p class="text-muted">
@@ -99,13 +106,7 @@
       style="max-width: 200px"
     />
     <p class="text-muted mt-2">Please show this QR-code to enter the event!</p>
-    {% else %}
-    <h4 class="mb-3">Join this event</h4>
-    <form method="post">
-      {% csrf_token %}
-      <button class="btn btn-primary px-4" name="register">Register</button>
-    </form>
-    {% endif %}
   </div>
+  {% endif %}
 </div>
 {%endblock%}

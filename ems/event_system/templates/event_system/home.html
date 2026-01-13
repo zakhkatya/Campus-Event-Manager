@@ -1,9 +1,7 @@
 {% extends "base.html" %} {% load static %} {% block title %} {{ title }} 
 {% endblock %} {% block navbar_hide_auth %}true{% endblock %} {% block content %}
-<div class="container-xl mb-3 rounded-4 bg-image p-0">
-  <div
-    class="container-fluid h-100 bg-white bg-opacity-50 d-flex justify-content-center align-items-center rounded-4"
-  >
+<div class="container-xl w-100 mb-3 rounded-4 bg-image p-0 navbar-spacing">
+  <div class="container-fluid h-100 bg-white bg-opacity-50 d-flex justify-content-center align-items-center rounded-4">
     <h2 class="display-1 fw-bold">About The Project</h2>
   </div>
 </div>
@@ -24,24 +22,24 @@
   </p>
 </div>
 
-<div class="container-xxl w-50 rounded-4 text-center py-5 mb-5">
+<div class="container-xxl w-50 rounded-4 text-center py-5 mb-5 welcome">
   {% if not user.is_authenticated %}
   <h2 class="text-dark mb-4 display-3 fw-bold">Join The Party!</h2>
   <a
     href="{% url 'userauth:register' %}"
-    class="btn btn-primary btn-lg mx-2 p-3 px-4 fw-semibold"
+    class="btn btn-primary btn-lg mx-2 p-3 px-4 fw-semibold w-auto"
   >
     <i class="bi bi-person-plus me-1"></i> Register
   </a>
   <a
     href="{% url 'userauth:login' %}"
-    class="btn btn-primary btn-lg mx-2 p-3 px-4 fw-semibold"
+    class="btn btn-primary btn-lg mx-2 p-3 px-4 fw-semibold w-auto"
   >
     <i class="bi bi-box-arrow-in-right me-1"></i> Login
   </a>
   {% else %}
   <h2 class="text-dark mb-4 fw-bold">
-    Welcome, {{ user.first_name }} {{ user.last_name }}!
+    Welcome, <a href="{% url 'userauth:edit-profile'%}" class="link-primary link-offset-1 link-underline-primary"> {{ user.first_name }} {{ user.last_name }}</a>!
   </h2>
   <p class="mb-4">Go to your Dashboard to manage your events.</p>
   <a
@@ -55,11 +53,11 @@
 
 <div class="container-xxl rounded-4 p-4">
   <h2 class="ps-3 pb-2"><b> Upcoming events </b></h2>
-  <div class="row row-cols-3">
+  <div class="row ">
     {% for event in events %}
     {% include "event_system/components/event_card.html" with event=event %}
     {% empty %}
-    <p class="fs-4 text-muted ms-4 mt-2">No events available.</p>
+    <p class="text-muted my-5 text-center">No events available.</p>
     {% endfor %} {% if events %}
     <div class="text-center col-10 w-100">
       {% if user.is_authenticated %}

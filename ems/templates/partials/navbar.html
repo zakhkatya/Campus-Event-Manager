@@ -1,58 +1,60 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-xxl">
     <div class="container-fluid flex-column">
         <div class="position-absolute top-0 start-0">
+        
+        <!-- Dropdown Menu -->
         {% if user.is_authenticated %}
             <div class="dropdown mt-4 ms-4">
                 <button class="border-0 bg-transparent rounded-4 menu p-2 py-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
                     <i class="bi bi-list fs-1 m-0"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-start shadow-sm rounded-4 border-0 mt-2 text-start m-0 p-2">
-                    <li class="mb-2">
-                        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:notifications' %}">
-                            <i class="bi bi-bell fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Notifications
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:my-events' %}">
-                            <i class="bi bi-calendar fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Past Events
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:my-feedbacks' %}">
-                            <i class="bi bi-chat-left fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> My Feedbacks
-                        </a>
-                    </li>
-                    {% if user.role == 'admin' %}
-                    <li class="my-2">
-                        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:approve-events-list' %}">
-                            <i class="bi bi-check2-circle fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Approve Events
-                        </a>
-                    </li>
-                    {% endif %}
-                    {% if user.role == 'admin' or user.role == 'organizer' %}
-                    <li class="mb-2">
-                        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:add_event' %}">
-                            <i class="bi bi-plus fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Create Event
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a class="dropdown-item bg-transparent p-0 ps-1" href="#">
-                            <i class="bi bi-wrench fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Manage Events
-                        </a>
-                    </li>
-                    <li class="mb-0">
-                        <a class="dropdown-item bg-transparent p-0 ps-1 d-inline-flex" href="{% url 'event_system:received-feedbacks' %}">
-                            <i class="bi bi-layers fs-5 btn-secondary rounded-3 ms-0 p-2 pt-1 me-1 pb-0"></i> 
-                            <div class="lh-sm ms-1"> Received <p class="pb-0 mb-0"> Feedbacks </p> </div>
-                        </a>
-                    </li>
-                    {% endif %}
-                </ul>
+
+    <li class="mb-2">
+        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:my-events' %}">
+            <i class="bi bi-calendar fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Past Events
+        </a>
+    </li>
+
+    <li class="mb-2">
+        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:my-feedbacks' %}">
+            <i class="bi bi-chat-left fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> My Feedback
+        </a>
+    </li>
+
+    {% if user.role == 'admin' %}
+    <li class="my-2">
+        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:approve-events-list' %}">
+            <i class="bi bi-check2-circle fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Approve Events
+        </a>
+    </li>
+    {% endif %}
+
+    {% if user.role == 'admin' or user.role == 'organizer' %}
+    <li class="mb-2">
+        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:add_event' %}">
+            <i class="bi bi-plus fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Create Event
+        </a>
+    </li>
+    <li class="mb-2">
+        <a class="dropdown-item bg-transparent p-0 ps-1" href="#">
+            <i class="bi bi-wrench fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Manage Events
+        </a>
+    </li>
+    <li class="mb-0">
+        <a class="dropdown-item bg-transparent p-0 ps-1 d-inline-flex" href="{% url 'event_system:received-feedbacks' %}">
+            <i class="bi bi-layers fs-5 btn-secondary rounded-3 ms-0 p-2 pt-1 me-1 pb-0"></i> 
+            <div class="lh-sm ms-1"> Received <p class="pb-0 mb-0"> Feedback </p> </div>
+        </a>
+    </li>
+    {% endif %}
+</ul>
             </div>
         {% endif %}
         </div>
 
+        <!-- Navbar text -->
         <div class="pt-2 text-center w-100">
             <a class="navbar-brand text-dark" href="{% if user.is_authenticated %}{% url 'event_system:dashboard' %}{% else %}{% url 'event_system:home' %}{% endif %}">
                 <h1 class="fs-3 mb-0 fw-bold">Campus Event Manager</h1> 
@@ -60,11 +62,13 @@
             </a>
         </div>
 
+
+        <!-- User -->
         <div class="position-absolute top-0 end-0">
             {% if user.is_authenticated %}
             <div class="dropdown my-4 me-4 p-0">
-                <button class="row row-cols-2 user rounded-4 border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
-                    <div class="col-2 p-0 ms-2 me-1 d-flex align-items-center justify-content-center">
+                <button class="row row-cols-2 user rounded-4 border-0 bg-transparent d-flex align-items-start justify-content-start" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                    <div class="col-2 d-flex align-items-center justify-content-center pt-1 ms-2">
                     {% if user.avatar %}
                      <img id="navbar-profile-img" src="{{ user.avatar.url }}?t={{ user.last_login.timestamp }}" 
                         alt="Profile" class="rounded-4 navbar-avatar-img">
@@ -72,8 +76,8 @@
                          <i class="bi bi-person-circle fs-2 text-muted"></i>
                         {% endif %}
                     </div>
-                    <div class="col text-start pt-1 lh-sm ms-1 pe-0">
-                        <span class="text-muted fs-6 fw-bolder">{{ user.first_name }}&nbsp;{{ user.last_name }}</span>
+                    <div class="col text-start pt-1 lh-sm ms-1 pe-0 user-info">
+                        <span class="text-muted fs-6 fw-bolder d-inline-block text-truncate">{{ user.first_name }}&nbsp;{{ user.last_name }}</span>
                         <p class="text-muted fs-6 mb-0 text-capitalize">{{ user.role }}</p>
                     </div>
                 </button>
