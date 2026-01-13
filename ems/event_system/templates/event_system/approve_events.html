@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container-xxl rounded-4 p-4">
+<div class="container-xxl rounded-4 p-4 navbar-spacing">
     <h2 class="fw-bold mb-4 text-dark">Approve Events</h2>
     {% if messages %}
         {% for message in messages %}
-            <div class="custom-alert alert-{{ message.tags }} d-flex align-items-center shadow-sm border-0 rounded-4 p-3 mb-4 animate__animated animate__fadeIn">
+            <div class="custom-alert alert-{{ message.tags }} d-flex align-items-center border-0 rounded-4 p-3 mb-4">
         {% if message.tags == 'success' %}
         <i class="bi bi-check-circle-fill fs-4 me-3 text-primary"></i>
         {% else %}
@@ -16,7 +16,7 @@
             </div>
     
       <button type="button" class="btn border-0 p-0 ms-2" onclick="this.parentElement.remove();" aria-label="Close">
-            <i class="bi bi-x-lg fs-5 text-muted hover-primary"></i>
+            <i class="bi bi-x-lg fs-5 hover-primary"></i>
         </button>
     </div>
         {% endfor %}
@@ -24,29 +24,44 @@
     <div class="row row-cols-1 g-3">
         {% for event in pending_events %}
         <div class="col">
-            <div class="card border-0 shadow-sm p-3">
+            <div class="card rounded-4 border-0 p-3">
                 <div class="row align-items-center">
-                    <div class="col-md-1 text-center">
-                        <div class="rounded-3 bg-secondary-subtle d-flex align-items-center justify-content-center event-img-box">
-                            <i class="bi bi-image text-muted fs-2"></i>
+                    <div class="col-1 text-center">
+                        <div class="rounded-4 placeholder-card-image event-card-img d-flex align-items-center justify-content-center">
+                            {% if event.banner %}
+                                <img
+                                    src="{{ event.banner.url }}"
+                                    class="img-fluid w-100 h-100 object-fit-cover"
+                                    alt="{{ event.title }}"
+                                />
+                            {% else %}
+                                <i class="bi bi-image fs-3 text-muted"></i>
+                            {% endif %}
                         </div>
                     </div>
 
-                    <div class="col-md-8 ps-4">
+                    <div class="col-8 ms-4 approve-events-info">
                         <h5 class="fw-bold mb-1">{{ event.title }}</h5>
                         <div class="fs-xs text-muted mb-2">
-                            <i class="bi bi-clock me-1"></i> {{ event.date|date:"H:i" }} - 10:00 <br>
-                            <span class="badge text-white mt-1">{{ event.category }}</span>
+                            <i class="bi bi-calendar-event"></i> {{ event.date_start|date:"j.n.Y H:i" }} - {{ event.date_end|date:"H:i" }} <br>
+                            <span class="badge mt-1">{{ event.category }}</span>
                         </div>
                         <div class="d-flex align-items-center">
-                            <i class="bi bi-person-circle fs-5 me-2 text-dark opacity-50"></i>
-                            <span class="fs-xs fw-bold">{{ event.organizer_name|default:"Organizer Name" }}</span>
+                            <img
+                                src="{{ event.organizer.avatar.url }}"
+                                alt="{{ event.organizer.first_name }} {{ event.organizer.last_name }}"
+                                class="rounded-circle me-2"
+                                width="20"
+                                height="20"
+                            />
+                            <span class="fs-s fw-bold text-muted">{{ event.organizer.first_name }} {{ event.organizer.last_name }}</span>
                         </div>
                     </div>
 
-                    <div class="col-md-3 text-end d-flex justify-content-end align-items-center gap-2">
-                        <a href="{% url 'event_system:event_detail' event.id %}" class="btn btn-secondary btn-sm px-3 rounded-pill fs-xs">
-                            <i class="bi bi-arrow-left-right me-1"></i> About
+                    <div class="col text-end d-flex justify-content-end align-items-center gap-2">
+                        <a href="{% url 'event_system:event_detail' event.id %}" class="btn btn-primary rounded-pill d-flex align-items-center gap-2">
+                            <i class="bi bi-arrow-return-left"></i>
+                            <span class="d-none d-sm-inline">About</span>
                         </a>
                         
                         <form action="{% url 'event_system:manage_event' event.id 'approve' %}" method="POST" class="d-inline">
@@ -58,8 +73,8 @@
 
                         <form action="{% url 'event_system:manage_event' event.id 'reject' %}" method="POST" class="d-inline">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-secondary rounded-circle action-btn-circle d-flex align-items-center justify-content-center">
-                                <i class="bi bi-x-lg"></i>
+                            <button type="submit" class="btn btn-secondary rounded-circle d-flex align-items-center justify-content-center">
+                                <i class="bi bi-x fs-5"></i>
                             </button>
                         </form>
                     </div>
@@ -67,10 +82,7 @@
             </div>
         </div>
         {% empty %}
-        <div class="text-center py-5">
-            <i class="bi bi-check2-all fs-1 text-success"></i>
-            <p class="text-muted mt-2">No pending events to approve!</p>
-        </div>
+            <p class="text-muted m-5">No pending events to approve!</p>
         {% endfor %}
     </div>
 </div>

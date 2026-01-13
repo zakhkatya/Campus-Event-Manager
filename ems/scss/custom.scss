@@ -135,6 +135,11 @@ body {
     }
 }
 
+.event-card-img {
+    width: 15vh;
+    height: 15vh;
+}
+
 .container-xxl {
     background-color: $conatiner-bg;
 }
@@ -311,11 +316,6 @@ select:-webkit-autofill {
 
 label {
     font-weight: 500;
-}
-
-.event-img-box {
-    width: 80px;
-    height: 80px;
 }
 
 .action-btn-circle {
@@ -495,6 +495,9 @@ label {
     .user {
         width: 23vh;
     }
+    .approve-events-info {
+        margin-left: 5% !important;
+    }
 }
 
 @media (max-width: 990px) {
@@ -515,6 +518,9 @@ label {
     .btn-lg {
         width: 75% !important;
         margin-top: 2% !important;
+    }
+    .approve-events-info {
+        margin-left: 10% !important;
     }
 }
 
@@ -594,5 +600,8 @@ label {
     .bi-person-badge {
         visibility: hidden;
         font-size: 0% !important;
+    }
+    .approve-events-info {
+        margin-left: 25% !important;
     }
 }
