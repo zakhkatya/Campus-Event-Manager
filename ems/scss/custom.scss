@@ -108,16 +108,14 @@ body {
     font-weight: 400;
     color:white;
 }
-.badge.text-white {
-    width: 14vh;
-}
 
 .card,
 .modal-content,
 .card-header,
 .card-footer,
 .dropdown-menu,
-.btn-light {
+.btn-light,
+.feedback-text {
     background-color: $card-body-bg;
 }
 
@@ -140,6 +138,10 @@ body {
     height: 15vh;
 }
 
+.feedback-card-img {
+    width: 10vh;
+    height: 10vh;
+}
 .container-xxl {
     background-color: $conatiner-bg;
 }
@@ -178,12 +180,7 @@ body {
 }
 
 .dropdown-item.badge {
-    width: 100px;
     transition: 0.2s;
-}
-
-.dropdown-menu.show.category {
-    min-width: 100px;
 }
 
 .dropdown-item.badge:hover {
@@ -475,7 +472,6 @@ label {
 }
 
 // Responsive design
-
 @media (max-width:1520px) {
     .container-xxl{
         width: 95%;
@@ -497,6 +493,9 @@ label {
     }
     .approve-events-info {
         margin-left: 5% !important;
+    }
+    .fb-user {
+        margin-left: 2vh !important;
     }
 }
 
@@ -521,6 +520,12 @@ label {
     }
     .approve-events-info {
         margin-left: 10% !important;
+    }
+    .welcome {
+        width: 75% !important;
+    }
+    .fb-user {
+        margin-left: 3.5vh !important;
     }
 }
 
@@ -603,5 +608,9 @@ label {
     }
     .approve-events-info {
         margin-left: 25% !important;
+    }
+
+    .welcome {
+        width: 95% !important;
     }
 }
