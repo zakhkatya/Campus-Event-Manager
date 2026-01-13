@@ -4,6 +4,7 @@
 {% block content %}
 <div class="align-items-center row-cols-1 navbar-spacing-dashboard">
   
+  <!-- Admin Dashboard data-->
   {% if request.user.role == 'admin' %}
   <div class="container-xxl p-4 mb-4 rounded-4 container-dashboard">
     <div class="row align-items-center text-dark text-center text-md-start">
@@ -49,8 +50,8 @@
         My events <i class="bi bi-caret-right-fill fs-5"></i>
     </a>
     </h2>
-    <div class="container">
-      <div class="row d-flex">
+    <div class="container align-items-start">
+      <div class="row d-flex align-items-start">
         {% for registration in my_events %} 
           {% include "event_system/components/event_card.html" with event=registration.event %} 
         {% empty %}

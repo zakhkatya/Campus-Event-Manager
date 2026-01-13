@@ -30,8 +30,7 @@
     <form method="post" enctype="multipart/form-data" class="col-lg-8 mx-auto">
         {% csrf_token %}
         
-        <div class="mb-4">
-            <div class="d-flex justify-content-center">
+        <div class="d-flex flex-column justify-content-center align-items-center mb-4">
                 <div class="avatar border border-5 border-white rounded-circle mb-3"> 
                     {% if user.avatar %}
                         <img src="{{ user.avatar.url }}?t={{ user.last_login.timestamp }}" alt="Profile" class="w-100 h-100 object-fit-cover">
@@ -39,14 +38,13 @@
                         <img src="https://ui-avatars.com/api/?name={{ user.first_name }}+{{ user.last_name }}" alt="Default">
                     {% endif %}
                 </div>
-            </div>
-            <label for="id_avatar" class="btn form-control border-0 w-0 rounded-pill"> 
-                <i class="bi bi-camera me-2"></i> Change profile picture
-            </label>
-            <input type="file" name="avatar" id="id_avatar" class="d-none">
+                <label for="id_avatar" class="btn form-control border-0 rounded-pill w-auto"> 
+                    <i class="bi bi-camera me-2"></i> Change profile picture
+                </label>
+                <input type="file" name="avatar" id="id_avatar" class="d-none">
         </div>
 
-        <div class="profile-fields px-md-5">
+        <div class="px-md-5">
             <div class="row align-items-center mb-4">
                 <div class="col-md-3 text-md-end">
                     <label class="fw-bold fs-5 text-dark pe-2">First name:</label>

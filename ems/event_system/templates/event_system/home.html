@@ -22,7 +22,7 @@
   </p>
 </div>
 
-<div class="container-xxl w-50 rounded-4 text-center py-5 mb-5">
+<div class="container-xxl w-50 rounded-4 text-center py-5 mb-5 welcome">
   {% if not user.is_authenticated %}
   <h2 class="text-dark mb-4 display-3 fw-bold">Join The Party!</h2>
   <a
@@ -39,7 +39,7 @@
   </a>
   {% else %}
   <h2 class="text-dark mb-4 fw-bold">
-    Welcome, {{ user.first_name }} {{ user.last_name }}!
+    Welcome, <a href="{% url 'userauth:edit-profile'%}" class="link-primary link-offset-1 link-underline-primary"> {{ user.first_name }} {{ user.last_name }}</a>!
   </h2>
   <p class="mb-4">Go to your Dashboard to manage your events.</p>
   <a
