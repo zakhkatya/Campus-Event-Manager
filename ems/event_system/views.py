@@ -1,9 +1,9 @@
+from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth import get_user_model
 from .models import Event, Registration, Notification, Feedback
@@ -241,9 +241,9 @@ def manage_status(request, event_id, status):
     return redirect('event_system:dashboard')
 
 class EventDetailView(LoginRequiredMixin, View):
-
     def get(self, request, event_id):
         event = get_object_or_404(Event, id=event_id)
+        now = timezone.now() 
 
         registration = Registration.objects.filter(
             user=request.user,
@@ -258,6 +258,7 @@ class EventDetailView(LoginRequiredMixin, View):
                 "is_registered": bool(registration),
                 "registration": registration,
                 "title": event.title,
+                "now": now,
             }
         )
 
@@ -307,13 +308,29 @@ class ReceivedFeedbacksView(UserPassesTestMixin, ListView):
     model = Feedback
     template_name = 'event_system/received_feedbacks.html'
     context_object_name = 'received_feedbacks'
+    paginate_by = 10 
 
     def test_func(self):
         return self.request.user.role in ['admin', 'organizer']
 
     def get_queryset(self):
-        return Feedback.objects.all().select_related('event', 'user').order_by("-created_at")
-    
+        user = self.request.user
+        view_filter = self.request.GET.get('filter')
+        
+        if user.role == 'admin':
+            if view_filter == 'my_events':
+                queryset = Feedback.objects.filter(event__organizer=user)
+            else:
+                queryset = Feedback.objects.all()
+        else:
+            queryset = Feedback.objects.filter(event__organizer=user)
+        
+        return queryset.select_related('event', 'user').order_by("event__title", "-created_at")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['current_filter'] = self.request.GET.get('filter', 'all')
+        return context
 @login_required
 def submit_feedback(request, event_id):
     if request.method == 'POST':
@@ -349,3 +366,17 @@ def edit_profile_view(request):
         form = ProfileUpdateForm(instance=request.user)
     
     return render(request, "userauth/edit_profile.html", {"form": form})
+
+
+class PastEventsView(View):
+    def get(self, request, *args, **kwargs):
+        now = timezone.now()
+        past_events = Event.objects.filter(
+            date_end__lt=now, 
+            approved=True
+        ).order_by("-date_end")
+        
+        return render(request, 'event_system/past_events.html', {
+            "title": "Past Events",
+            "events": past_events,
+        })
