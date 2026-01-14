@@ -35,6 +35,8 @@ $info: #b6a1ed;
 $secondary: #ad99e1;
 $text-color: #212529;
 
+@import "../node_modules/bootstrap/scss/bootstrap";
+
 html {
     scroll-behavior: smooth;
 }
@@ -635,5 +637,18 @@ label {
 .qr-code-img {
     max-width: 200px;
 }
-
+.accordion-button:after {
+        margin-left: 0; 
+    }
+    .accordion-button:not(.collapsed) {
+        background-color: #fff !important;
+        color: inherit !important;
+        box-shadow: none !important;
+    }
+    .hover-light:hover {
+        background-color: #fcfaff;
+    }
+    .transition-02 {
+        transition: 0.2s ease;
+    }
 
