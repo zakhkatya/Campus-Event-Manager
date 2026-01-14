@@ -6,48 +6,48 @@
   
   <!-- Admin Dashboard data-->
   {% if request.user.role == 'admin' %}
-  <div class="container-xxl p-4 mb-4 rounded-4 container-dashboard">
-    <div class="row align-items-center text-dark text-center text-md-start">
-      <div class="col d-flex align-items-center justify-content-center justify-content-md-start">
-        <i class="bi bi-calendar3 fs-1 me-3 link-primary"></i>
-        <div>
-          <h4 class="fw-bold mb-0">Events</h4>
-          <div class="fs-xs">
-            <span class="text-muted">> This week:</span> <strong>{{ stats.events_this_week }}</strong> <br>
-            <span class="text-muted">> Total:</span> <strong>{{ stats.events_total }}</strong>
-          </div>
-        </div>
+<div class="container-xxl p-4 mb-4 rounded-4 container-dashboard">
+  <div class="row align-items-center">
+    
+    <div class="col-md-4 d-flex align-items-start justify-content-start mb-3 mb-md-0">
+      <div class="d-flex align-items-center me-3"> <i class="bi bi-calendar3 fs-2 me-2 text-dark"></i>
+        <h4 class="fw-bold mb-0 text-dark">Events</h4>
       </div>
-
-      <div class="col-4 d-flex align-items-center justify-content-center justify-content-md-start ps-md-5">
-        <i class="bi bi-people fs-1 me-3 link-primary"></i>
-        <div>
-          <h4 class="fw-bold mb-0">Students</h4>
-          <div class="fs-xs">
-            <span class="text-muted">> Registered:</span> <strong>{{ stats.students_registered }}</strong> <br>
-            <span class="text-muted">> Total:</span> <strong>{{ stats.students_total }}</strong>
-          </div>
-        </div>
-      </div>
-
-      <div class="col d-flex align-items-center justify-content-center justify-content-md-start ps-md-5">
-        <i class="bi bi-person-badge fs-1 me-3 link-primary"></i>
-        <div>
-          <h4 class="fw-bold mb-0">Organizers</h4>
-          <div class="fs-xs">
-            <span class="text-muted">> Active:</span> <strong>{{ stats.organizers_active }}</strong> <br>
-            <span class="text-muted">> Total:</span> <strong>{{ stats.organizers_total }}</strong>
-          </div>
-        </div>
+      <div class="fs-xs pt-1"> <span class="text-muted">> This week:</span> <strong class="text-dark">{{ stats.events_this_week }}</strong> <br>
+        <span class="text-muted">> Total:</span> <strong class="text-dark">{{ stats.events_total }}</strong>
       </div>
     </div>
+
+    <div class="col-md-4 d-flex align-items-start justify-content-start mb-3 mb-md-0">
+      <div class="d-flex align-items-center me-3">
+        <i class="bi bi-people fs-2 me-2 text-dark"></i>
+        <h4 class="fw-bold mb-0 text-dark">Students</h4>
+      </div>
+      <div class="fs-xs pt-1">
+        <span class="text-muted">> Registered for events:</span> <strong class="text-dark">{{ stats.students_registered }}</strong> <br>
+        <span class="text-muted">> Total:</span> <strong class="text-dark">{{ stats.students_total }}</strong>
+      </div>
+    </div>
+
+    <div class="col-md-4 d-flex align-items-start justify-content-start">
+      <div class="d-flex align-items-center me-3">
+        <i class="bi bi-person-badge fs-2 me-2 text-dark"></i>
+        <h4 class="fw-bold mb-0 text-dark">Organizers</h4>
+      </div>
+      <div class="fs-xs pt-1">
+        <span class="text-muted">> Registered for events:</span> <strong class="text-dark">{{ stats.organizers_active }}</strong> <br>
+        <span class="text-muted">> Total:</span> <strong class="text-dark">{{ stats.organizers_total }}</strong>
+      </div>
+    </div>
+    
   </div>
-  {% endif %}
+</div>
+{% endif %}
 
   <div class="container-xxl rounded-4 container-dashboard p-2">
     <h2 class="p-4 pb-2 fw-bold text-dark">
     <a href="{% url 'event_system:my-events' %}" class="text-dark link-secondary link-underline link-underline-secondary link-offset-1 link-underline-opacity-0 link-underline-opacity-100-hover">
-        My events <i class="bi bi-caret-right-fill fs-5"></i>
+        My Events <i class="bi bi-caret-right-fill fs-5"></i>
     </a>
     </h2>
     <div class="container align-items-start">
