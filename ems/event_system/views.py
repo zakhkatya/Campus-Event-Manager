@@ -62,7 +62,10 @@ class DashboardView(UserPassesTestMixin, View):
         # Determine tab title based on role
         tab_title = "Admin Dashboard" if request.user.role == 'admin' else "Organizer Dashboard" if request.user.role == 'organizer' else "Student Dashboard"
 
-        my_events = Registration.objects.filter(user=request.user).select_related('event').order_by("event__date_start")[:3]
+        my_events = Registration.objects.filter(
+            user=request.user, 
+            event__date_end__gte=now 
+        ).select_related('event').order_by("event__date_start")[:3]
         
         notifications = Notification.objects.filter(user=request.user).order_by("-created_at")[:8]
 
@@ -82,12 +85,12 @@ class DashboardView(UserPassesTestMixin, View):
    
 class MyEventsView(View):
     def get(self, request, *args, **kwargs):
-
+        now = timezone.now()
         category = request.GET.get("category")
 
         my_events = (
             Registration.objects
-            .filter(user=request.user)
+            .filter(user=request.user, event__date_end__gte=now) 
             .select_related('event')
             .order_by("event__date_start")
         )
@@ -317,15 +320,14 @@ class ReceivedFeedbacksView(UserPassesTestMixin, ListView):
         user = self.request.user
         view_filter = self.request.GET.get('filter')
         
+        queryset = Feedback.objects.select_related('event', 'user', 'event__organizer')
+        
         if user.role == 'admin':
             if view_filter == 'my_events':
-                queryset = Feedback.objects.filter(event__organizer=user)
-            else:
-                queryset = Feedback.objects.all()
+                queryset = queryset.filter(event__organizer=user)
         else:
-            queryset = Feedback.objects.filter(event__organizer=user)
-        
-        return queryset.select_related('event', 'user').order_by("event__title", "-created_at")
+            queryset = queryset.filter(event__organizer=user)
+        return queryset.order_by("event__title", "-created_at")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
