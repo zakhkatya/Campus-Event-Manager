@@ -3,7 +3,6 @@
 <div class="container-xxl rounded-4 p-4 mt-4 shadow-sm bg-light">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <h2 class="fw-bold mb-0 text-dark">Received Feedback</h2>
-        
         {% if request.user.role == 'admin' %}
         <div class="btn-group shadow-sm rounded-3 overflow-hidden">
             <a href="?filter=all" class="btn btn-primary {% if current_filter == 'all' %}active{% endif %}">All System</a>
@@ -12,44 +11,82 @@
         {% endif %}
     </div>
 
-    <div class="feedback-groups">
-        {% for feedback in received_feedbacks %}
-            {% ifchanged feedback.event %}
-                {% if not forloop.first %} 
-                    </div> </div> 
-                {% endif %}
-                
-                <div class="event-feedback-group mb-5">
-                    <h4 class="mb-3 text-dark border-bottom pb-2 fw-bold fs-5 d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-bookmark-star me-2 text-primary"></i> {{ feedback.event.title }}</span>
-                        <span class="badge bg-white text-primary border border-primary fw-normal fs-xxs">
-                            Organized by: {{ feedback.event.organizer.first_name }}
-                        </span>
-                    </h4>
-                    <div class="dashboard-events-scroll p-2">
-            {% endifchanged %}
+    <div class="accordion border-0 accordion-feedback" id="feedbackAccordion">
+        {% for event in events_with_feedbacks %}
+            <div class="accordion-item mb-3 border-0 rounded-4 shadow-sm overflow-hidden">
+                <div class="accordion-header" id="header{{ forloop.counter }}">
+                    <button class="accordion-button collapsed p-3 bg-white" type="button" 
+                            data-bs-toggle="collapse" 
+                            data-bs-target="#collapse{{ forloop.counter }}" 
+                            aria-expanded="false">
+                        
+                        <div class="d-flex align-items-center w-100">
+                            <div class="flex-shrink-0 me-3 d-none d-sm-block">
+                                {% if event.banner %}
+                                    <img src="{{ event.banner.url }}" class="rounded-3 event-thumbnail-box">
+                                {% else %}
+                                    <div class="rounded-3 bg-light transition-02 event-thumbnail-box">
+                                        <i class="bi bi-image text-muted opacity-50 fs-2"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
 
-            <div class="card mb-2 border-0 shadow-sm rounded-3">
-                <div class="card-body p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <div class="d-flex align-items-center">
-                            <i class="bi bi-person-circle fs-5 me-2 text-secondary"></i>
-                            <span class="fw-bold text-dark fs-xs">{{ feedback.user.get_full_name }}</span>
-                            <span class="mx-2 text-muted fs-xxs">•</span>
-                            <small class="text-muted fs-xxs">{{ feedback.created_at|date:"d M, H:i" }}</small>
+                            <div class="me-auto">
+                                <h5 class="fw-bold mb-1 text-dark">{{ event.title }}</h5>
+                                <div class="d-flex flex-wrap gap-2 align-items-center">
+                                    <small class="text-muted">
+                                        <i class="bi bi-clock me-1"></i>{{ event.date_start|date:"H:i" }} - {{ event.date_end|date:"H:i" }}
+                                    </small>
+                                    <span class="badge bg-primary opacity-75 fw-normal py-1 px-2 fs-xxs">
+                                        {{ event.category }}
+                                    </span>
+                                    <small class="text-muted d-none d-md-inline">
+                                        • {{ event.date_start|date:"d M Y" }}
+                                    </small>
+                                </div>
+                            </div>
+
+                            <div class="text-end me-3">
+                                <div class="d-flex align-items-center justify-content-end mb-1">
+                                    <span class="fw-bold text-dark me-1">{{ event.avg_rating|floatformat:1 }}</span>
+                                    <i class="bi bi-star-fill text-warning fs-xs"></i>
+                                </div>
+                                <span class="badge bg-light text-muted border fw-normal fs-xxs">
+                                    {{ event.total_comments }} Feedback
+                                </span>
+                            </div>
                         </div>
-                        <span class="badge bg-secondary fs-xxs">{{ feedback.rating }}/5</span>
+                    </button>
+                </div>
+
+                <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" data-bs-parent="#feedbackAccordion">
+                    <div class="accordion-body bg-white border-top p-0">
+                        {% for feedback in event.feedback_set.all %}
+                            <div class="p-3 feedback-detail-row">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-person-circle fs-5 me-2 text-secondary"></i>
+                                        <div>
+                                            <span class="fw-bold text-dark fs-xs">{{ feedback.user.get_full_name }}</span>
+                                            <small class="text-muted ms-2 fs-xxs">{{ feedback.created_at|date:"d M, H:i" }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="text-warning">
+                                        {% for i in "12345"|make_list %}
+                                            <i class="bi bi-star{% if forloop.counter <= feedback.rating %}-fill{% endif %} fs-xxs"></i>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <p class="mb-0 text-muted fs-xs fst-italic ps-4 ms-2 comment-text">
+                                    "{{ feedback.comment }}"
+                                </p>
+                            </div>
+                        {% endfor %}
                     </div>
-                    <p class="mb-0 text-muted fs-xs italic">"{{ feedback.comment }}"</p>
                 </div>
             </div>
-
-            {% if forloop.last %} 
-                </div> </div> 
-            {% endif %}
-            
         {% empty %}
-            <div class="text-center py-5 rounded-4 shadow-sm border border-light">
+            <div class="text-center py-5 bg-white rounded-4 border">
                 <i class="bi bi-chat-left-dots fs-1 text-muted opacity-25"></i>
                 <p class="text-muted mt-3">No feedbacks found.</p>
             </div>
@@ -58,37 +95,21 @@
 
     {% if is_paginated %}
     <nav aria-label="Page navigation" class="mt-5 mb-4">
-        <ul class="d-flex flex-row justify-content-center align-items-center border-0 p-0 m-0 list-unstyled gap-2">
-    {% if page_obj.has_previous %}
-        <li>
-            <a class="btn btn-sm btn-outline-secondary rounded-3 px-3 shadow-sm" href="?page=1{% if current_filter %}&filter={{ current_filter }}{% endif %}">First</a>
-        </li>
-        <li>
-            <a class="btn btn-sm btn-outline-secondary rounded-3 px-3 shadow-sm" href="?page={{ page_obj.previous_page_number }}{% if current_filter %}&filter={{ current_filter }}{% endif %}">&laquo;</a>
-        </li>
-    {% endif %}
-
-    {% for num in page_obj.paginator.page_range %}
-        {% if page_obj.number == num %}
-            <li>
-                <span class="btn btn-sm btn-primary rounded-3 px-3 shadow-sm active border-0">{{ num }}</span>
+        <ul class="pagination justify-content-center gap-2 border-0">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="btn btn-sm btn-outline-secondary rounded-3 px-3 shadow-sm" href="?page={{ page_obj.previous_page_number }}{% if current_filter %}&filter={{ current_filter }}{% endif %}">&laquo; Previous</a>
+                </li>
+            {% endif %}
+            <li class="page-item">
+                <span class="btn btn-sm btn-primary rounded-3 px-3 shadow-sm active border-0">{{ page_obj.number }} / {{ paginator.num_pages }}</span>
             </li>
-        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-            <li>
-                <a class="btn btn-sm btn-light rounded-3 px-3 shadow-sm text-dark border-0" href="?page={{ num }}{% if current_filter %}&filter={{ current_filter }}{% endif %}">{{ num }}</a>
-            </li>
-        {% endif %}
-    {% endfor %}
-
-    {% if page_obj.has_next %}
-        <li>
-            <a class="btn btn-sm btn-outline-secondary rounded-3 px-3 shadow-sm" href="?page={{ page_obj.next_page_number }}{% if current_filter %}&filter={{ current_filter }}{% endif %}">&raquo;</a>
-        </li>
-        <li>
-            <a class="btn btn-sm btn-outline-secondary rounded-3 px-3 shadow-sm" href="?page={{ page_obj.paginator.num_pages }}{% if current_filter %}&filter={{ current_filter }}{% endif %}">Last</a>
-        </li>
-    {% endif %}
-</ul>
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="btn btn-sm btn-outline-secondary rounded-3 px-3 shadow-sm" href="?page={{ page_obj.next_page_number }}{% if current_filter %}&filter={{ current_filter }}{% endif %}">Next &raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
     </nav>
     {% endif %}
 </div>
