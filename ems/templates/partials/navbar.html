@@ -22,7 +22,7 @@
                     </li>
                     <li class="mb-2">
                         <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:my-feedbacks' %}">
-                            <i class="bi bi-chat-left fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> My Feedbacks
+                            <i class="bi bi-chat-left fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> My Feedback
                         </a>
                     </li>
                     {% if user.role == 'admin' %}
@@ -46,7 +46,7 @@
                     <li class="mb-0">
                         <a class="dropdown-item bg-transparent p-0 ps-1 d-inline-flex" href="{% url 'event_system:received-feedbacks' %}">
                             <i class="bi bi-layers fs-5 btn-secondary rounded-3 ms-0 p-2 pt-1 me-1 pb-0"></i> 
-                            <div class="lh-sm ms-1"> Received <p class="pb-0 mb-0"> Feedbacks </p> </div>
+                            <div class="lh-sm ms-1"> Received <p class="pb-0 mb-0"> Feedback </p> </div>
                         </a>
                     </li>
                     {% endif %}
