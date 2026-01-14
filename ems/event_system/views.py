@@ -14,6 +14,7 @@ import qrcode
 from io import BytesIO
 from django.http import HttpResponse
 from userauth.forms import ProfileUpdateForm
+from django.db.models import Count, Avg
 
 # Get the User model
 User = get_user_model()
@@ -308,10 +309,10 @@ class MyFeedbacksView(LoginRequiredMixin, ListView):
         return Feedback.objects.filter(user=self.request.user).select_related('event').order_by("-created_at")
 
 class ReceivedFeedbacksView(UserPassesTestMixin, ListView):
-    model = Feedback
+    model = Event
     template_name = 'event_system/received_feedbacks.html'
-    context_object_name = 'received_feedbacks'
-    paginate_by = 10 
+    context_object_name = 'events_with_feedbacks'
+    paginate_by = 10
 
     def test_func(self):
         return self.request.user.role in ['admin', 'organizer']
@@ -319,15 +320,19 @@ class ReceivedFeedbacksView(UserPassesTestMixin, ListView):
     def get_queryset(self):
         user = self.request.user
         view_filter = self.request.GET.get('filter')
-        
-        queryset = Feedback.objects.select_related('event', 'user', 'event__organizer')
+    
+        queryset = Event.objects.filter(feedback__isnull=False).annotate(
+            total_comments=Count('feedback'),
+            avg_rating=Avg('feedback__rating')
+        ).prefetch_related('feedback_set', 'feedback_set__user').distinct()
         
         if user.role == 'admin':
             if view_filter == 'my_events':
-                queryset = queryset.filter(event__organizer=user)
+                queryset = queryset.filter(organizer=user)
         else:
-            queryset = queryset.filter(event__organizer=user)
-        return queryset.order_by("event__title", "-created_at")
+            queryset = queryset.filter(organizer=user)
+            
+        return queryset.order_by("-date_start")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
