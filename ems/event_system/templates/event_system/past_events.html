@@ -1,60 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container-xxl rounded-4 p-5 mt-4 shadow-sm bg-light">
-    <h2 class="fw-bold mb-4 text-dark"> 
-        <i class="bi bi-clock-history me-2"></i> Past Events
-    </h2>
+<div class="container-xxl rounded-4 p-4 mt-4 shadow-sm bg-light">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <h2 class="fw-bold mb-0 text-dark">Past Events</h2>
+    </div>
     
     <div class="row g-4">
         {% for event in events %}
-            <div class="col-md-6 col-lg-4">
-                <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
-                    
-                    <div class="p-3 d-flex align-items-center bg-white border-bottom border-light-subtle">
-                        <div class="me-2">
-                            {% if event.organizer.avatar %}
-                                <img src="{{ event.organizer.avatar.url }}" class="navbar-avatar-img" alt="Organizer">
-                            {% else %}
-                                <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center text-white action-btn-circle fs-xxs">
-                                    {{ event.organizer.first_name|first }}
-                                </div>
-                            {% endif %}
-                        </div>
-                        <div class="lh-1">
-                            <h6 class="mb-1 fw-bold fs-xxs text-dark">{{ event.organizer.get_full_name }}</h6>
-                            <p class="text-muted mb-0 fs-xxs">Organizer</p>
-                        </div>
-                    </div>
-
-                    <div class="placeholder-card-image">
-                        {% if event.image %}
-                            <img src="{{ event.image.url }}" class="w-100 h-100 object-fit-cover" alt="{{ event.title }}">
-                        {% else %}
-                            <div class="d-flex align-items-center justify-content-center h-100 opacity-50">
-                                <i class="bi bi-image text-muted fs-1"></i>
-                            </div>
-                        {% endif %}
-                    </div>
-
-                    <div class="card-body bg-white p-3">
-                        <div class="d-flex justify-content-between align-items-end">
-                            <div>
-                                <h6 class="fw-bold text-dark mb-1">{{ event.title }}</h6>
-                                <p class="text-muted fs-xxs mb-2">
-                                    <i class="bi bi-clock me-1"></i> {{ event.date_start|date:"H:i" }} - {{ event.date_end|date:"H:i" }}
-                                </p>
-                                <span class="badge bg-secondary text-primary fs-xxs px-2 py-1">
-                                    {{ event.category }}
-                                </span>
-                            </div>
-
-                            <a href="{% url 'event_system:event_detail' event.id %}" class="btn btn-secondary btn-sm rounded-pill fs-xxs px-3 shadow-sm">
-                                <i class="bi bi-arrow-left me-1"></i> About
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% include "event_system/components/event_card.html" with event=event %}
         {% empty %}
             <div class="col-12 text-center py-5">
                 <p class="text-muted fs-5 italic">No past events found.</p>
