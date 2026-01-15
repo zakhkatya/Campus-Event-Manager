@@ -4,38 +4,55 @@ from django.utils import timezone
 from datetime import timedelta
 import random
 
-from event_system.models import Event, Registration, Feedback
-
+from event_system.models import Event, Registration, Feedback, Category
 
 User = get_user_model()
 
 # =========================
 # CONFIGURATION
 # =========================
-ORGANIZER_COUNT = 10
-STUDENT_COUNT = 100
-EVENT_COUNT = 300
+ORGANIZER_COUNT = 5
+STUDENT_COUNT = 50
+EVENT_COUNT = 120
 
-REGISTRATIONS_PER_EVENT = (10, 30)  # min / max
-FEEDBACK_RATE = 0.4  # 40% of registered users leave feedback
+REGISTRATIONS_PER_EVENT = (5, 40)
+FEEDBACK_RATE = 0.5
 
 NAMES = [
-    "Alice", "Bob", "Charlie", "David", "Eva", "Frank", "Grace", "Hannah",
-    "Ian", "Jack", "Kathy", "Liam", "Mona", "Nina", "Oscar", "Paul", "Quincy",
-    "Rachel", "Sam", "Tina", "Uma", "Vince", "Wendy", "Xander", "Yara", "Zane"
+    "Alice", "Bob", "Charlie", "David", "Eva",
+    "Frank", "Grace", "Hannah", "Ian", "Jack",
 ]
 
 SURNAMES = [
-    "Anderson", "Brown", "Clark", "Davis", "Evans", "Garcia", "Harris",
-    "Johnson", "King", "Lee", "Martinez", "Nelson", "O'Connor", "Perez",
-    "Roberts", "Smith", "Taylor", "Walker", "Young", "Zimmerman"
+    "Anderson", "Brown", "Clark", "Davis",
+    "Evans", "Garcia", "Harris", "Johnson",
+]
+
+BANNERS = [
+    "banners/placeholder1.jpg",
+    "banners/placeholder2.jpg",
+    "banners/placeholder3.jpg",
+]
+
+avatar = "avatars/placeholder.svg"
+
+DEFAULT_CATEGORIES = [
+    "Workshop", "Seminar", "Conference", "Meetup", "Webinar"
 ]
 
 class Command(BaseCommand):
-    help = "Seed database with a large interconnected dataset"
+    help = "Seed database with realistic demo data"
 
     def handle(self, *args, **options):
-        self.stdout.write("Seeding BIG dummy dataset...")
+        self.stdout.write("🌱 Seeding database...")
+
+        # -------------------------
+        # CATEGORIES
+        # -------------------------
+        categories = []
+        for name in DEFAULT_CATEGORIES:
+            cat, _ = Category.objects.get_or_create(name=name)
+            categories.append(cat)
 
         # -------------------------
         # ADMIN
@@ -44,18 +61,17 @@ class Command(BaseCommand):
             email="admin@example.com",
             defaults={
                 "username": "admin",
-                "is_staff": True, 
+                "is_staff": True,
                 "is_superuser": True,
                 "role": "admin",
-                "avatar": "/avatars/placeholder.svg",
                 "first_name": "Admin",
                 "last_name": "User",
+                "avatar": avatar,
             },
         )
         if created:
             admin.set_password("admin123")
             admin.save()
-            self.stdout.write("Admin created.")
 
         # -------------------------
         # ORGANIZERS
@@ -67,9 +83,9 @@ class Command(BaseCommand):
                 defaults={
                     "username": f"organizer{i}",
                     "role": "organizer",
-                    "avatar": "/avatars/placeholder.svg",
                     "first_name": random.choice(NAMES),
                     "last_name": random.choice(SURNAMES),
+                    "avatar": avatar,
                 }
             )
             if created:
@@ -87,9 +103,9 @@ class Command(BaseCommand):
                 defaults={
                     "username": f"student{i}",
                     "role": "student",
-                    "avatar": "/avatars/placeholder.svg",
                     "first_name": random.choice(NAMES),
                     "last_name": random.choice(SURNAMES),
+                    "avatar": avatar,
                 }
             )
             if created:
@@ -98,32 +114,40 @@ class Command(BaseCommand):
             students.append(user)
 
         # -------------------------
-        # EVENTS
+        # EVENTS (past / current / future)
         # -------------------------
-        categories = ["Workshop", "Lecture", "Party", "Sports", "Conference", "Meetup"]
-
-        banners = [
-            "/banners/placeholder1.jpg",
-            "/banners/placeholder2.jpg",
-            "/banners/placeholder3.jpg",
-        ]
-
         events = []
+
         for i in range(1, EVENT_COUNT + 1):
             organizer = random.choice(organizers)
-            date_start=timezone.now() + timedelta(days=random.randint(1, 180), hours=random.randint(8, 18))
+            category = random.choice(categories)
+            banner = random.choice(BANNERS)
+
+            time_type = random.choice(["past", "current", "future"])
+
+            if time_type == "past":
+                start = timezone.now() - timedelta(days=random.randint(10, 120))
+            elif time_type == "current":
+                start = timezone.now() - timedelta(hours=1)
+            else:
+                start = timezone.now() + timedelta(days=random.randint(5, 90))
+
+            end = start + timedelta(hours=random.randint(1, 6))
+
+            approved = random.choice([True, False])
 
             event = Event.objects.create(
-                title=f"Event #{i}",
+                title=f"{category.name} #{i}",
                 description="Automatically generated test event.",
-                date_start=date_start,
-                date_end=date_start + timedelta(hours=random.randint(1, 8)),
-                location=f"Building {random.randint(1, 20)}",
-                category=random.choice(categories),
-                is_private=random.choice([True, False]),
-                approved=random.choice([True, False]),
+                date_start=start,
+                date_end=end,
+                location=f"Room {random.randint(1, 50)}",
+                category=category,
                 organizer=organizer,
-                banner=random.choice(banners),
+                banner=banner,
+                is_private=random.choice([True, False]),
+                approved=approved,
+                approved_at=timezone.now() if approved else None,
             )
             events.append(event)
 
@@ -131,41 +155,48 @@ class Command(BaseCommand):
         # REGISTRATIONS
         # -------------------------
         registrations = []
+
         for event in events:
-            reg_count = random.randint(REGISTRATIONS_PER_EVENT[0], REGISTRATIONS_PER_EVENT[1])
-            selected_students = random.sample(students, k=min(reg_count, len(students)))
+            if event.is_private:
+                continue
+
+            count = random.randint(*REGISTRATIONS_PER_EVENT)
+            selected_students = random.sample(students, min(count, len(students)))
 
             for student in selected_students:
-                registration, _ = Registration.objects.get_or_create(
+                reg, _ = Registration.objects.get_or_create(
                     user=student,
                     event=event,
                 )
-                registrations.append(registration)
+                registrations.append(reg)
 
         # -------------------------
-        # FEEDBACK
+        # FEEDBACK (only past events)
         # -------------------------
         feedback_count = 0
-        for registration in registrations:
-            if random.random() < FEEDBACK_RATE:
+        for reg in registrations:
+            if reg.event.date_end < timezone.now() and random.random() < FEEDBACK_RATE:
                 Feedback.objects.get_or_create(
-                    user=registration.user,
-                    event=registration.event,
+                    user=reg.user,
+                    event=reg.event,
                     rating=random.randint(1, 5),
                     comment=random.choice([
-                        "Great event!", "Very useful.", "Could be better.", 
-                        "Loved it!", "Not bad."
-                    ]),
+                        "Great event!",
+                        "Very useful.",
+                        "Could be better.",
+                        "Loved it!",
+                        "Not bad.",
+                    ])
                 )
                 feedback_count += 1
 
         # -------------------------
         # SUMMARY
         # -------------------------
-        self.stdout.write(self.style.SUCCESS("BIG dataset created successfully"))
-        self.stdout.write(f"Admins: 1")
-        self.stdout.write(f"Organizers: {ORGANIZER_COUNT}")
-        self.stdout.write(f"Students: {STUDENT_COUNT}")
-        self.stdout.write(f"Events: {EVENT_COUNT}")
+        self.stdout.write(self.style.SUCCESS("✅ Database seeded successfully"))
+        self.stdout.write(f"Categories: {len(categories)}")
+        self.stdout.write(f"Organizers: {len(organizers)}")
+        self.stdout.write(f"Students: {len(students)}")
+        self.stdout.write(f"Events: {len(events)}")
         self.stdout.write(f"Registrations: {len(registrations)}")
         self.stdout.write(f"Feedback entries: {feedback_count}")

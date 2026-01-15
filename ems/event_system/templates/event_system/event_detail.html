@@ -14,7 +14,7 @@
 
       <div class="d-flex gap-2 fw-semibold align-items-center">
         {% if user.is_staff %}
-        <a href="#" class="btn btn-primary btn-lg">
+        <a href="{% url 'event_system:event_edit' event.id %}" class="btn btn-primary btn-lg">
             <i class="bi bi-pencil me-1"></i> Edit
         </a>
         {% endif %} 
@@ -67,7 +67,11 @@
       <h5 class="card-title mb-1">Event Organization</h5>
       <p class="mb-1 text-muted">
         <i class="bi bi-calendar-event"></i>
+        {% if event.date_start.date == event.date_end.date %}
         {{ event.date_start|date:"j.n.Y H:i" }} - {{ event.date_end|date:"H:i" }}
+        {% else %}
+        {{ event.date_start|date:"j.n.Y H:i" }} - {{ event.date_end|date:"j.n.Y H:i" }}
+        {% endif %}
       </p>
       <span class="badge mb-3"> {{ event.category }} </span>
 
