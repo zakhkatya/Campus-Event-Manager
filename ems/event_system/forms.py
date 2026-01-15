@@ -7,6 +7,7 @@ class EventForm(forms.ModelForm):
         fields = [
             "title",
             "location",
+            "is_private",
             "date_start",
             "date_end",
             "category",
@@ -22,6 +23,9 @@ class EventForm(forms.ModelForm):
                 "class": "form-control",
                 "placeholder": "Event location"
             }),
+            "is_private": forms.CheckboxInput(
+                attrs={"class": "form-check-input"}
+            ),
             "date_start": forms.DateTimeInput(
                 attrs={"class": "form-control", "type": "datetime-local"},
                 format="%Y-%m-%dT%H:%M"
