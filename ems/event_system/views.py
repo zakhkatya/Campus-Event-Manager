@@ -124,7 +124,38 @@ class MyEventsView(View):
             "selected_category": category_id,
             "selected_category_name": selected_category_name.name if category_id else None,
         })
+    
+# Events organized by the user
+class OrganizedEventsView(View):
+    def get(self, request, *args, **kwargs):
 
+        category_id = request.GET.get("category")
+
+        organized_events = (
+            Event.objects
+            .filter(organizer=request.user)
+            .order_by("-date_start")
+        )
+
+        if category_id:
+            organized_events = organized_events.filter(category_id=category_id)
+            selected_category_name = Category.objects.filter(id=category_id).first()
+
+        categories = (
+            Category.objects
+            .filter(events__organizer=request.user)
+            .distinct()
+        )
+
+        return render(request, 'event_system/events.html', {
+            "title": "Organized Events",
+            "events": organized_events,
+            "categories": categories,
+            "events_count": organized_events.count(),
+            "selected_category": category_id,
+            "selected_category_name": selected_category_name.name if category_id else None,
+        })
+    
 class UpcomingEventsView(View):
     def get(self, request, *args, **kwargs):
 
