@@ -16,6 +16,7 @@ from django.http import HttpResponse
 from userauth.forms import ProfileUpdateForm
 from django.db.models import Count, Avg
 from .forms import EventForm
+import os
 
 # Get the User model
 User = get_user_model()
@@ -255,7 +256,7 @@ def manage_status(request, event_id, status):
                 event.approved_at = timezone.now()
                 event.save()
 
-                messages.success(request, f"Confirmed! {event.title} is now live and visible to everyone.")
+                messages.success(request, f"Event: {event.title} is now live and visible to everyone.")
 
 
                 Notification.objects.create(
@@ -264,7 +265,7 @@ def manage_status(request, event_id, status):
                 )
                 other_users = User.objects.exclude(id=request.user.id)
                 new_notifs = [
-                    Notification(user=u, message=f"New event added: {event.title}") 
+                    Notification(user=u, message=f"Event has been approved: {event.title}") 
                     for u in other_users
                 ]
                 Notification.objects.bulk_create(new_notifs)
@@ -273,11 +274,11 @@ def manage_status(request, event_id, status):
               
                 event.delete()
 
-                messages.warning(request, f"Notice: {event.title} has been removed from the queue.")
+                messages.warning(request, f"Event: {event.title} has been removed permanently.")
 
                 Notification.objects.create(
                     user=request.user,
-                    message=f"{event.title} was rejected."
+                    message=f"Event: {event.title} was rejected."
                 )
         return redirect(request.META.get('HTTP_REFERER', 'event_system:dashboard'))
     
@@ -430,7 +431,6 @@ class PastEventsView(View):
     
 @user_passes_test(is_management)
 def event_create(request):
-    event = None
     form = EventForm(request.POST or None, request.FILES or None)
 
     if form.is_valid():
@@ -441,24 +441,40 @@ def event_create(request):
 
     return render(request, "event_system/event_form.html", {
         "form": form,
-        "event": event,
-        "categories": Category.objects.all(),
+        "event": None,
         "is_create": True,
     })
-
 
 @user_passes_test(is_management)
 def event_edit(request, pk):
     event = get_object_or_404(Event, pk=pk)
-    form = EventForm(request.POST or None, request.FILES or None, instance=event)
+    old_banner = event.banner
+
+    form = EventForm(
+        request.POST or None,
+        request.FILES or None,
+        instance=event
+    )
 
     if form.is_valid():
-        form.save()
+        event = form.save(commit=False)
+
+        # Image cleanup logic
+        if 'banner-clear' in request.POST:
+            if old_banner and os.path.isfile(old_banner.path):
+                os.remove(old_banner.path)
+            event.banner = None
+
+        # Replace old banner if a new one is uploaded
+        elif old_banner and old_banner != event.banner:
+            if os.path.isfile(old_banner.path):
+                os.remove(old_banner.path)
+
+        event.save()
         return redirect("event_system:event_detail", event.id)
 
     return render(request, "event_system/event_form.html", {
         "form": form,
         "event": event,
-        "categories": Category.objects.all(),
         "is_create": False,
     })
