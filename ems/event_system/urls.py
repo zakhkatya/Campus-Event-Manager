@@ -40,4 +40,7 @@ urlpatterns = [
     
     # Past Events
     path("past-events", views.PastEventsView.as_view(), name="past-events"),
+
+    # Ovents organized by the user
+    path("organized-events", views.OrganizedEventsView.as_view(), name="organized-events"),
 ]
