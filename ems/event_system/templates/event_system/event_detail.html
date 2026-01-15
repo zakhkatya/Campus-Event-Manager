@@ -67,7 +67,11 @@
       <h5 class="card-title mb-1">Event Organization</h5>
       <p class="mb-1 text-muted">
         <i class="bi bi-calendar-event"></i>
+        {% if event.date_start.date == event.date_end.date %}
         {{ event.date_start|date:"j.n.Y H:i" }} - {{ event.date_end|date:"H:i" }}
+        {% else %}
+        {{ event.date_start|date:"j.n.Y H:i" }} - {{ event.date_end|date:"j.n.Y H:i" }}
+        {% endif %}
       </p>
       <span class="badge mb-3"> {{ event.category }} </span>
 
