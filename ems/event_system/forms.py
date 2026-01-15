@@ -1,5 +1,5 @@
 from django import forms
-from .models import Feedback
+from .models import Feedback, Event
 
 class FeedbackForm(forms.ModelForm):
     RATING_CHOICES = [(i, str(i)) for i in range(1, 6)]
@@ -16,10 +16,11 @@ class FeedbackForm(forms.ModelForm):
                 "placeholder": "Enter the feedback...",
                 "rows": 4
             }),
-            "rating": forms.RadioSelect(choices=[(i, str(i)) for i in range(1, 6)], attrs={
-                "class": ""
-from .models import Event
-
+            "rating": forms.Select(choices=[(i, str(i)) for i in range(1, 6)], attrs={
+                "class": "btn btn-secondary w-auto h-auto p-1 dropdown fw-bolder"
+            }),
+        }
+            
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event

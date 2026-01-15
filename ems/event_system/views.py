@@ -15,7 +15,7 @@ from io import BytesIO
 from django.http import HttpResponse
 from userauth.forms import ProfileUpdateForm
 from django.db.models import Count, Avg
-from .forms import EventForm
+from .forms import EventForm, FeedbackForm
 import os
 
 # Get the User model
@@ -401,7 +401,7 @@ def submit_feedback(request, event_id):
         ]
         Notification.objects.bulk_create(feedback_notifs)
         
-        return redirect('event_system:submit_feedback')
+        return redirect('event_system:event_detail', event_id=event_id)
     return redirect('event_system:dashboard')
 
 
