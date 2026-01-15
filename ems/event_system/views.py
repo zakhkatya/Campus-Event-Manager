@@ -15,6 +15,7 @@ from io import BytesIO
 from django.http import HttpResponse
 from userauth.forms import ProfileUpdateForm
 from django.db.models import Count, Avg
+from .forms import FeedbackForm
 
 # Get the User model
 User = get_user_model()
@@ -248,6 +249,7 @@ class EventDetailView(LoginRequiredMixin, View):
     def get(self, request, event_id):
         event = get_object_or_404(Event, id=event_id)
         now = timezone.now() 
+        form = FeedbackForm()
 
         registration = Registration.objects.filter(
             user=request.user,
@@ -263,6 +265,7 @@ class EventDetailView(LoginRequiredMixin, View):
                 "registration": registration,
                 "title": event.title,
                 "now": now,
+                'form': form,
             }
         )
 
@@ -299,7 +302,7 @@ def registration_qr_view(request, registration_id):
         buffer.getvalue(),
         content_type="image/png"
     )
-    
+
 class MyFeedbacksView(LoginRequiredMixin, ListView):
     model = Feedback
     template_name = 'event_system/my_feedback.html'
@@ -358,7 +361,7 @@ def submit_feedback(request, event_id):
         ]
         Notification.objects.bulk_create(feedback_notifs)
         
-        return redirect('event_system:my-feedbacks')
+        return redirect('event_system:submit_feedback')
     return redirect('event_system:dashboard')
 
 

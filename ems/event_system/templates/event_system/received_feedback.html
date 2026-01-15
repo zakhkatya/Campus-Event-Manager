@@ -11,11 +11,11 @@
         {% endif %}
     </div>
 
-    <div class="accordion border-0 accordion-feedback" id="feedbackAccordion">
+    <div class="accordion border-0" id="feedbackAccordion">
         {% for event in events_with_feedbacks %}
             <div class="accordion-item mb-3 border-0 rounded-4 overflow-hidden">
                 <div class="accordion-header" id="header{{ forloop.counter }}">
-                    <button class="accordion-button collapsed p-3 bg-white" type="button" 
+                    <button class="accordion-button collapsed p-3" type="button" 
                             data-bs-toggle="collapse" 
                             data-bs-target="#collapse{{ forloop.counter }}" 
                             aria-expanded="false">
@@ -50,7 +50,7 @@
                                     <span class="fw-bold text-dark me-1">{{ event.avg_rating|floatformat:1 }}</span>
                                     <i class="bi bi-star-fill text-warning fs-xs"></i>
                                 </div>
-                                <span class="badge text-muted border-0 bg-light fs-xxs">
+                                <span class="badge text-muted border-0 bg-transparent fs-xxs">
                                     {{ event.total_comments }} Feedback
                                 </span>
                             </div>
@@ -59,9 +59,9 @@
                 </div>
 
                 <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" data-bs-parent="#feedbackAccordion">
-                    <div class="accordion-body bg-white border-top p-0">
+                    <div class="accordion-body p-0">
                         {% for feedback in event.feedback_set.all %}
-                            <div class="p-3 feedback-detail-row">
+                            <div class="p-3 border-top accordion-item">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <div class="d-flex align-items-center">
                                         {% if feedback.user.avatar %}
@@ -86,7 +86,7 @@
                                         {% endfor %}
                                     </div>
                                 </div>
-                                <p class="mb-0 text-muted fs-xs fst-italic ps-4 ms-2 comment-text">
+                                <p class="mb-0 text-muted fs-xs ps-4 ms-2">
                                     "{{ feedback.comment }}"
                                 </p>
                             </div>

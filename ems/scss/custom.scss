@@ -118,7 +118,8 @@ body {
 .card-footer,
 .dropdown-menu,
 .btn-light,
-.feedback-text {
+.accordion-item,
+.accordion-button {
     background-color: $card-body-bg;
 }
 
@@ -637,44 +638,6 @@ label {
 
 .qr-code-img {
     max-width: 200px;
-}
-
-.accordion-feedback {
-    .accordion-item {
-        background-color: transparent;
-    }
-
-    .accordion-button {
-        transition: 0.2s ease;
-        
-        &::after {
-            margin-left: 0;
-        }
-        
-        &:not(.collapsed) {
-            background-color: #fff !important;
-            color: inherit !important;
-            box-shadow: none !important;
-        }
-        
-        &:focus {
-            box-shadow: none !important;
-            border-color: rgba(0,0,0,.125);
-        }
-    }
-
-    .feedback-detail-row {
-        transition: background-color 0.2s ease;
-        border-bottom: 1px solid rgba(0,0,0,0.05);
-        
-        &:hover {
-            background-color: rgba($primary, 0.03); 
-        }
-
-        .comment-text {
-            border-left: 3px solid rgba($primary, 0.2);
-        }
-    }
 }
 
 .event-thumbnail-box {
