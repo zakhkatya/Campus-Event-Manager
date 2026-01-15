@@ -1,9 +1,9 @@
+from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth import get_user_model
 from .models import Event, Registration, Notification, Feedback
@@ -14,6 +14,7 @@ import qrcode
 from io import BytesIO
 from django.http import HttpResponse
 from userauth.forms import ProfileUpdateForm
+from django.db.models import Count, Avg
 
 # Get the User model
 User = get_user_model()
@@ -62,7 +63,10 @@ class DashboardView(UserPassesTestMixin, View):
         # Determine tab title based on role
         tab_title = "Admin Dashboard" if request.user.role == 'admin' else "Organizer Dashboard" if request.user.role == 'organizer' else "Student Dashboard"
 
-        my_events = Registration.objects.filter(user=request.user).select_related('event').order_by("event__date_start")[:3]
+        my_events = Registration.objects.filter(
+            user=request.user, 
+            event__date_end__gte=now 
+        ).select_related('event').order_by("event__date_start")[:3]
         
         notifications = Notification.objects.filter(user=request.user).order_by("-created_at")[:8]
 
@@ -82,12 +86,12 @@ class DashboardView(UserPassesTestMixin, View):
    
 class MyEventsView(View):
     def get(self, request, *args, **kwargs):
-
+        now = timezone.now()
         category = request.GET.get("category")
 
         my_events = (
             Registration.objects
-            .filter(user=request.user)
+            .filter(user=request.user, event__date_end__gte=now) 
             .select_related('event')
             .order_by("event__date_start")
         )
@@ -241,9 +245,9 @@ def manage_status(request, event_id, status):
     return redirect('event_system:dashboard')
 
 class EventDetailView(LoginRequiredMixin, View):
-
     def get(self, request, event_id):
         event = get_object_or_404(Event, id=event_id)
+        now = timezone.now() 
 
         registration = Registration.objects.filter(
             user=request.user,
@@ -258,6 +262,7 @@ class EventDetailView(LoginRequiredMixin, View):
                 "is_registered": bool(registration),
                 "registration": registration,
                 "title": event.title,
+                "now": now,
             }
         )
 
@@ -304,16 +309,35 @@ class MyFeedbacksView(LoginRequiredMixin, ListView):
         return Feedback.objects.filter(user=self.request.user).select_related('event').order_by("-created_at")
 
 class ReceivedFeedbacksView(UserPassesTestMixin, ListView):
-    model = Feedback
+    model = Event
     template_name = 'event_system/received_feedbacks.html'
-    context_object_name = 'received_feedbacks'
+    context_object_name = 'events_with_feedbacks'
+    paginate_by = 10
 
     def test_func(self):
         return self.request.user.role in ['admin', 'organizer']
 
     def get_queryset(self):
-        return Feedback.objects.all().select_related('event', 'user').order_by("-created_at")
+        user = self.request.user
+        view_filter = self.request.GET.get('filter')
     
+        queryset = Event.objects.filter(feedback__isnull=False).annotate(
+            total_comments=Count('feedback'),
+            avg_rating=Avg('feedback__rating')
+        ).prefetch_related('feedback_set', 'feedback_set__user').distinct()
+        
+        if user.role == 'admin':
+            if view_filter == 'my_events':
+                queryset = queryset.filter(organizer=user)
+        else:
+            queryset = queryset.filter(organizer=user)
+            
+        return queryset.order_by("-date_start")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['current_filter'] = self.request.GET.get('filter', 'all')
+        return context
 @login_required
 def submit_feedback(request, event_id):
     if request.method == 'POST':
@@ -349,3 +373,17 @@ def edit_profile_view(request):
         form = ProfileUpdateForm(instance=request.user)
     
     return render(request, "userauth/edit_profile.html", {"form": form})
+
+
+class PastEventsView(View):
+    def get(self, request, *args, **kwargs):
+        now = timezone.now()
+        past_events = Event.objects.filter(
+            date_end__lt=now, 
+            approved=True
+        ).order_by("-date_end")
+        
+        return render(request, 'event_system/past_events.html', {
+            "title": "Past Events",
+            "events": past_events,
+        })

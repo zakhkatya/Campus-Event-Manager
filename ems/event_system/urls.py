@@ -19,4 +19,5 @@ urlpatterns = [
     path("my-feedbacks", views.MyFeedbacksView.as_view(), name="my-feedbacks"), 
     path("received-feedbacks", views.ReceivedFeedbacksView.as_view(), name="received-feedbacks"),
     path("registrations/<int:registration_id>/qr/", registration_qr_view, name="registration_qr"),
+    path("past-events", views.PastEventsView.as_view(), name="past-events"),
 ]

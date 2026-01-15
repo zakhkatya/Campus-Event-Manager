@@ -1,78 +1,116 @@
 {% extends "base.html" %}
-{% block body_class %}no-scroll-page{% endblock %}
 {% block content %}
-<div class="container-xxl rounded-4 p-4 mt-4 navbar-spacing">
-    <h2 class="fw-bold mb-4 ps-2 text-dark">Received Feedback</h2>
-    
-    <div class="dashboard-events-scroll p-2 pt-0">
-        {% for fb in received_feedbacks %}
-        <div class="col mb-3">
-            <div class="card rounded-4 border-0 p-3">
-                <div class="row align-items-center">
-                    <div class="col-1 text-center pe-0">
-                        <div class="rounded-4 placeholder-card-image feedback-card-img d-flex align-items-center justify-content-center">
-                            {% if fb.event.banner %}
-                                <img
-                                    src="{{ fb.event.banner.url }}"
-                                    class="img-fluid w-100 h-100 object-fit-cover"
-                                    alt="{{ fb.event.title }}"
-                                />
-                            {% else %}
-                                <i class="bi bi-image fs-3 text-muted overflow-visible"></i>
-                            {% endif %}
-                        </div>
-                    </div>
+<div class="container-xxl rounded-4 p-4 mt-4 shadow-sm bg-light">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <h2 class="fw-bold mb-0 text-dark">Received Feedback</h2>
+        {% if request.user.role == 'admin' %}
+        <div class="btn-group shadow-sm rounded-3 overflow-hidden">
+            <a href="?filter=all" class="btn btn-primary {% if current_filter == 'all' %}active{% endif %}">All System</a>
+            <a href="?filter=my_events" class="btn btn-primary {% if current_filter == 'my_events' %}active{% endif %}">My Events</a>
+        </div>
+        {% endif %}
+    </div>
 
-                    <div class="col-8 approve-events-info ps-0">
-                        <h5 class="fw-bold fs-6 mb-1">{{ fb.event.title }}</h5>
-                        <div class="fs-xs text-muted mb-2">
-                            <i class="bi bi-calendar-event"></i> {{ fb.event.date_start|date:"j.n.Y H:i" }} - {{ fb.event.date_end|date:"H:i" }} <br>
-                            <span class="badge mt-1">{{ fb.event.category }}</span>
-                        </div>
-                    </div>
+    <div class="accordion border-0 accordion-feedback" id="feedbackAccordion">
+        {% for event in events_with_feedbacks %}
+            <div class="accordion-item mb-3 border-0 rounded-4 shadow-sm overflow-hidden">
+                <div class="accordion-header" id="header{{ forloop.counter }}">
+                    <button class="accordion-button collapsed p-3 bg-white" type="button" 
+                            data-bs-toggle="collapse" 
+                            data-bs-target="#collapse{{ forloop.counter }}" 
+                            aria-expanded="false">
+                        
+                        <div class="d-flex align-items-center w-100">
+                            <div class="flex-shrink-0 me-3 d-none d-sm-block">
+                                {% if event.banner %}
+                                    <img src="{{ event.banner.url }}" class="rounded-3 event-thumbnail-box">
+                                {% else %}
+                                    <div class="rounded-3 bg-light transition-02 event-thumbnail-box">
+                                        <i class="bi bi-image text-muted opacity-50 fs-2"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
 
-                    <div class="col text-end d-flex justify-content-end align-items-center gap-2">
-                        <a href="{% url 'event_system:event_detail' fb.event.id %}" class="btn btn-primary rounded-pill d-flex align-items-center gap-2">
-                            <i class="bi bi-arrow-return-left"></i>
-                            <span class="d-none d-sm-inline">About</span>
-                        </a>
-                    </div>
+                            <div class="me-auto">
+                                <h5 class="fw-bold mb-1 text-dark">{{ event.title }}</h5>
+                                <div class="d-flex flex-wrap gap-2 align-items-center">
+                                    <small class="text-muted">
+                                        <i class="bi bi-clock me-1"></i>{{ event.date_start|date:"H:i" }} - {{ event.date_end|date:"H:i" }}
+                                    </small>
+                                    <span class="badge bg-primary opacity-75 fw-normal py-1 px-2 fs-xxs">
+                                        {{ event.category }}
+                                    </span>
+                                    <small class="text-muted d-none d-md-inline">
+                                        • {{ event.date_start|date:"d M Y" }}
+                                    </small>
+                                </div>
+                            </div>
+
+                            <div class="text-end me-3">
+                                <div class="d-flex align-items-center justify-content-end mb-1">
+                                    <span class="fw-bold text-dark me-1">{{ event.avg_rating|floatformat:1 }}</span>
+                                    <i class="bi bi-star-fill text-warning fs-xs"></i>
+                                </div>
+                                <span class="badge bg-light text-muted border fw-normal fs-xxs">
+                                    {{ event.total_comments }} Feedback
+                                </span>
+                            </div>
+                        </div>
+                    </button>
                 </div>
-                <hr class="w-100 border-2 color-muted my-2 mx-0 p-0"> 
-                <div class="row cols-2">
-                    <div class="col">
-                        <div class="row cols-2 w-auto">
-                            <div class="col-1 ps-3 pt-2 me-1">
-                                <img
-                                    src="{{ fb.user.avatar.url }}"
-                                    alt="{{ fb.user.first_name }} {{ fb.user.last_name }}"
-                                    class="rounded-circle me-2"
-                                    width="35"
-                                    height="35"
-                                />
+
+                <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" data-bs-parent="#feedbackAccordion">
+                    <div class="accordion-body bg-white border-top p-0">
+                        {% for feedback in event.feedback_set.all %}
+                            <div class="p-3 feedback-detail-row">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-person-circle fs-5 me-2 text-secondary"></i>
+                                        <div>
+                                            <span class="fw-bold text-dark fs-xs">{{ feedback.user.get_full_name }}</span>
+                                            <small class="text-muted ms-2 fs-xxs">{{ feedback.created_at|date:"d M, H:i" }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="text-warning">
+                                        {% for i in "12345"|make_list %}
+                                            <i class="bi bi-star{% if forloop.counter <= feedback.rating %}-fill{% endif %} fs-xxs"></i>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <p class="mb-0 text-muted fs-xs fst-italic ps-4 ms-2 comment-text">
+                                    "{{ feedback.comment }}"
+                                </p>
                             </div>
-                            <div class="col ps-0 ms-1 fb-user">
-                                <span class="text-muted fs-xs fw-bolder">{{ fb.user.first_name }}&nbsp;{{ fb.user.last_name }}</span>
-                                <p class="text-muted fs-xs mb-0 text-capitalize">{{ fb.user.role }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col d-flex align-items-top justify-content-end ">
-                        <span class="text-muted fs-xxs opacity-75 text-end">{{ fb.created_at|timesince }} ago</span>
-                    </div>
-                    <div class="mt-2">
-                        <div class="rounded-4 bg-white w-100 h-auto p-2 feedback-text">
-                            <p class="text-muted fs-xs"> {{fb.comment}} </p>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
-        </div>
         {% empty %}
-        <div class="text-center py-5">
-            <p class="text-center text-muted">No feedback has been received yet.</p>
-        </div>
+            <div class="text-center py-5 bg-white rounded-4 border">
+                <i class="bi bi-chat-left-dots fs-1 text-muted opacity-25"></i>
+                <p class="text-muted mt-3">No feedbacks found.</p>
+            </div>
         {% endfor %}
     </div>
+
+    {% if is_paginated %}
+    <nav aria-label="Page navigation" class="mt-5 mb-4">
+        <ul class="pagination justify-content-center gap-2 border-0">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="btn btn-sm btn-outline-secondary rounded-3 px-3 shadow-sm" href="?page={{ page_obj.previous_page_number }}{% if current_filter %}&filter={{ current_filter }}{% endif %}">&laquo; Previous</a>
+                </li>
+            {% endif %}
+            <li class="page-item">
+                <span class="btn btn-sm btn-primary rounded-3 px-3 shadow-sm active border-0">{{ page_obj.number }} / {{ paginator.num_pages }}</span>
+            </li>
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="btn btn-sm btn-outline-secondary rounded-3 px-3 shadow-sm" href="?page={{ page_obj.next_page_number }}{% if current_filter %}&filter={{ current_filter }}{% endif %}">Next &raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
 </div>
 {% endblock %}
