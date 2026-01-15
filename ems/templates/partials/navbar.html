@@ -29,12 +29,12 @@
                     {% endif %}
                     {% if user.role == 'admin' or user.role == 'organizer' %}
                     <li class="mb-2">
-                        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:add_event' %}">
+                        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:event_create' %}">
                             <i class="bi bi-plus fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Create Event
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a class="dropdown-item bg-transparent p-0 ps-1" href="#">
+                        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:organized-events' %}">
                             <i class="bi bi-wrench fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Manage Events
                         </a>
                     </li>

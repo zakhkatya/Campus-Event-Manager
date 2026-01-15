@@ -19,7 +19,7 @@
       
         <div class="badge p-2 rounded-pill mt-1">
           {% if selected_category %}
-            {{ selected_category }}
+            {{ selected_category_name }}
           {% else %}
             All
           {% endif %}
@@ -40,9 +40,9 @@
           <li class="dropdown-item badge p-2 rounded-pill mb-2 text-white text-center">
             <a
               class="text-decoration-none text-white {% if category == selected_category %}active{% endif %}"
-              href="?category={{ category }}"
+              href="?category={{ category.id }}"
             >
-              {{ category }}
+              {{ category.name }}
             </a>
           </li>
         {% endfor %}
