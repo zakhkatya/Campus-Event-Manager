@@ -55,7 +55,7 @@
         {% for registration in my_events %} 
           {% include "event_system/components/event_card.html" with event=registration.event %} 
         {% empty %}
-          <p class="text-muted text-center py-5">No events yet.</p>
+          <p class="text-muted text-center py-5">No events found.</p>
         {% endfor %}
       </div>
     </div>

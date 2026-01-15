@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container-xxl rounded-4 p-4 mt-4 shadow-sm bg-light">
+<div class="container-xxl rounded-4 p-4 mt-4 navbar-spacing">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <h2 class="fw-bold mb-0 text-dark">Received Feedback</h2>
         {% if request.user.role == 'admin' %}
-        <div class="btn-group shadow-sm rounded-3 overflow-hidden">
+        <div class="btn-group rounded-3 overflow-hidden">
             <a href="?filter=all" class="btn btn-primary {% if current_filter == 'all' %}active{% endif %}">All System</a>
             <a href="?filter=my_events" class="btn btn-primary {% if current_filter == 'my_events' %}active{% endif %}">My Events</a>
         </div>
@@ -13,7 +13,7 @@
 
     <div class="accordion border-0 accordion-feedback" id="feedbackAccordion">
         {% for event in events_with_feedbacks %}
-            <div class="accordion-item mb-3 border-0 rounded-4 shadow-sm overflow-hidden">
+            <div class="accordion-item mb-3 border-0 rounded-4 overflow-hidden">
                 <div class="accordion-header" id="header{{ forloop.counter }}">
                     <button class="accordion-button collapsed p-3 bg-white" type="button" 
                             data-bs-toggle="collapse" 
@@ -32,17 +32,16 @@
                             </div>
 
                             <div class="me-auto">
-                                <h5 class="fw-bold mb-1 text-dark">{{ event.title }}</h5>
+                                <a href="{% url 'event_system:event_detail' event.id %}"
+                                class="text-dark fw-bolder link-secondary link-underline link-underline-secondary link-offset-1 link-underline-opacity-0 link-underline-opacity-100-hover">
+                                    {{ event.title }}</a>
                                 <div class="d-flex flex-wrap gap-2 align-items-center">
                                     <small class="text-muted">
-                                        <i class="bi bi-clock me-1"></i>{{ event.date_start|date:"H:i" }} - {{ event.date_end|date:"H:i" }}
+                                        <i class="bi bi-calendar-event"></i> {{ event.date_start|date:"j M Y H:i" }} - {{ event.date_end|date:"H:i" }}
                                     </small>
-                                    <span class="badge bg-primary opacity-75 fw-normal py-1 px-2 fs-xxs">
+                                    <span class="badge opacity-75 fw-normal py-1 px-2 fs-xxs">
                                         {{ event.category }}
                                     </span>
-                                    <small class="text-muted d-none d-md-inline">
-                                        • {{ event.date_start|date:"d M Y" }}
-                                    </small>
                                 </div>
                             </div>
 
@@ -51,7 +50,7 @@
                                     <span class="fw-bold text-dark me-1">{{ event.avg_rating|floatformat:1 }}</span>
                                     <i class="bi bi-star-fill text-warning fs-xs"></i>
                                 </div>
-                                <span class="badge bg-light text-muted border fw-normal fs-xxs">
+                                <span class="badge text-muted border-0 bg-light fs-xxs">
                                     {{ event.total_comments }} Feedback
                                 </span>
                             </div>
@@ -65,8 +64,18 @@
                             <div class="p-3 feedback-detail-row">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <div class="d-flex align-items-center">
-                                        <i class="bi bi-person-circle fs-5 me-2 text-secondary"></i>
-                                        <div>
+                                        {% if feedback.user.avatar %}
+                                                <img
+                                                src="{{ feedback.user.avatar.url }}"
+                                                alt="{{ feedback.user.first_name }} {{ feedback.user.last_name }}"
+                                                class="rounded-circle"
+                                                width="20"
+                                                height="20"
+                                                />
+                                            {% else %}
+                                                <i class="bi bi-person-circle fs-6 text-secondary"></i>
+                                            {% endif %}
+                                        <div class="ms-1">
                                             <span class="fw-bold text-dark fs-xs">{{ feedback.user.get_full_name }}</span>
                                             <small class="text-muted ms-2 fs-xxs">{{ feedback.created_at|date:"d M, H:i" }}</small>
                                         </div>
@@ -94,23 +103,23 @@
     </div>
 
     {% if is_paginated %}
-    <nav aria-label="Page navigation" class="mt-5 mb-4">
+    <div aria-label="Page navigation" class="mt-5 mb-4">
         <ul class="pagination justify-content-center gap-2 border-0">
             {% if page_obj.has_previous %}
                 <li class="page-item">
-                    <a class="btn btn-sm btn-outline-secondary rounded-3 px-3 shadow-sm" href="?page={{ page_obj.previous_page_number }}{% if current_filter %}&filter={{ current_filter }}{% endif %}">&laquo; Previous</a>
+                    <a class="btn btn-sm btn-outline-secondary rounded-3 px-3" href="?page={{ page_obj.previous_page_number }}{% if current_filter %}&filter={{ current_filter }}{% endif %}">&laquo; Previous</a>
                 </li>
             {% endif %}
             <li class="page-item">
-                <span class="btn btn-sm btn-primary rounded-3 px-3 shadow-sm active border-0">{{ page_obj.number }} / {{ paginator.num_pages }}</span>
+                <span class="btn btn-sm btn-primary rounded-3 px-3 active border-0">{{ page_obj.number }} / {{ paginator.num_pages }}</span>
             </li>
             {% if page_obj.has_next %}
                 <li class="page-item">
-                    <a class="btn btn-sm btn-outline-secondary rounded-3 px-3 shadow-sm" href="?page={{ page_obj.next_page_number }}{% if current_filter %}&filter={{ current_filter }}{% endif %}">Next &raquo;</a>
+                    <a class="btn btn-sm btn-outline-secondary rounded-3 px-3" href="?page={{ page_obj.next_page_number }}{% if current_filter %}&filter={{ current_filter }}{% endif %}">Next &raquo;</a>
                 </li>
             {% endif %}
         </ul>
-    </nav>
+    </div>
     {% endif %}
 </div>
 {% endblock %}

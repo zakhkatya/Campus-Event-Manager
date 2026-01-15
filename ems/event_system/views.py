@@ -302,7 +302,7 @@ def registration_qr_view(request, registration_id):
     
 class MyFeedbacksView(LoginRequiredMixin, ListView):
     model = Feedback
-    template_name = 'event_system/my_feedbacks.html'
+    template_name = 'event_system/my_feedback.html'
     context_object_name = 'feedbacks'
 
     def get_queryset(self):
@@ -310,7 +310,7 @@ class MyFeedbacksView(LoginRequiredMixin, ListView):
 
 class ReceivedFeedbacksView(UserPassesTestMixin, ListView):
     model = Event
-    template_name = 'event_system/received_feedbacks.html'
+    template_name = 'event_system/received_feedback.html'
     context_object_name = 'events_with_feedbacks'
     paginate_by = 10
 
@@ -383,7 +383,7 @@ class PastEventsView(View):
             approved=True
         ).order_by("-date_end")
         
-        return render(request, 'event_system/past_events.html', {
+        return render(request, 'event_system/events.html', {
             "title": "Past Events",
             "events": past_events,
         })
