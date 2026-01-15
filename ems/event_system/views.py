@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from datetime import timedelta
 from django.contrib.auth import get_user_model
-from .models import Event, Registration, Notification, Feedback
+from .models import Category, Event, Registration, Notification, Feedback
 from django.db import transaction
 from django.views.generic import ListView
 from django.contrib import messages
@@ -15,9 +15,13 @@ from io import BytesIO
 from django.http import HttpResponse
 from userauth.forms import ProfileUpdateForm
 from django.db.models import Count, Avg
+from .forms import EventForm
 
 # Get the User model
 User = get_user_model()
+
+# Actual timezone-aware now
+now = timezone.now()
 
 # Helper: Check if user is Admin
 def is_admin(user):
@@ -29,9 +33,10 @@ def is_management(user):
 
 class HomePageView(View):
     def get(self, request, *args, **kwargs):
+        
         events = (
             Event.objects
-            .filter(approved=True, is_private=False)
+            .filter(approved=True, is_private=False, date_end__gte=now)
             .order_by("date_start")[:6]
         )
         return render(request, 'event_system/home.html', {
@@ -63,18 +68,20 @@ class DashboardView(UserPassesTestMixin, View):
         # Determine tab title based on role
         tab_title = "Admin Dashboard" if request.user.role == 'admin' else "Organizer Dashboard" if request.user.role == 'organizer' else "Student Dashboard"
 
-        my_events = Registration.objects.filter(
-            user=request.user, 
-            event__date_end__gte=now 
-        ).select_related('event').order_by("event__date_start")[:3]
+        my_events = (
+            Registration.objects
+            .filter(user=request.user, event__date_end__gte=now) 
+            .select_related('event')
+            .order_by("event__date_start")
+        )
         
         notifications = Notification.objects.filter(user=request.user).order_by("-created_at")[:8]
 
-        upcoming_events = Event.objects.filter(
-            approved=True, 
-            is_private=False,
-            date_start__gte=now # Only future events
-        ).order_by("date_start")
+        upcoming_events = (
+            Event.objects
+            .filter(approved=True, is_private=False, date_end__gte=now)
+            .order_by("date_start")[:12]
+        )
 
         return render(request, "event_system/dashboard.html", {
             "title": tab_title,
@@ -86,60 +93,60 @@ class DashboardView(UserPassesTestMixin, View):
    
 class MyEventsView(View):
     def get(self, request, *args, **kwargs):
-        now = timezone.now()
-        category = request.GET.get("category")
+
+        category_id = request.GET.get("category")
 
         my_events = (
             Registration.objects
-            .filter(user=request.user, event__date_end__gte=now) 
-            .select_related('event')
+            .filter(
+                user=request.user,
+                event__date_end__gte=now
+            )
+            .select_related("event", "event__category")
             .order_by("event__date_start")
         )
 
-        if category:
-            my_events = my_events.filter(event__category=category)
+        if category_id:
+            my_events = my_events.filter(event__category_id=category_id)
+            selected_category_name = Category.objects.filter(id=category_id).first()
 
-        # Categories only from user's events
         categories = (
-            Event.objects
-            .filter(registrations__user=request.user)
-            .values_list('category', flat=True)
+            Category.objects
+            .filter(events__registrations__user=request.user)
             .distinct()
         )
-
-        # Count my events (po filtru)
-        my_events_count = my_events.count()
 
         return render(request, 'event_system/events.html', {
             "title": "My events",
             "categories": categories,
             "events": [e.event for e in my_events],
-            "events_count": my_events_count,
-            "selected_category": category,
+            "events_count": my_events.count(),
+            "selected_category": category_id,
+            "selected_category_name": selected_category_name.name if category_id else None,
         })
 
 class UpcomingEventsView(View):
     def get(self, request, *args, **kwargs):
 
-        category = request.GET.get("category")
+        category_id = request.GET.get("category")
 
         events = (
             Event.objects
-            .filter(approved=True, is_private=False)
+            .filter(
+                approved=True,
+                is_private=False,
+                date_end__gte=now
+            )
+            .order_by("date_start")
         )
 
-        if category:
-            events = events.filter(category=category)
-
-        events = events.order_by("date_start")
-
-        # Count upcoming events (po filtru)
-        events_count = events.count()
+        if category_id:
+            events = events.filter(category_id=category_id)
+            selected_category_name = Category.objects.filter(id=category_id).first()
 
         categories = (
-            Event.objects
-            .filter(approved=True, is_private=False)
-            .values_list('category', flat=True)
+            Category.objects
+            .filter(events__approved=True, events__is_private=False, events__date_end__gte=now)
             .distinct()
         )
 
@@ -147,8 +154,9 @@ class UpcomingEventsView(View):
             "title": "Upcoming events",
             "events": events,
             "categories": categories,
-            "events_count": events_count,
-            "selected_category": category,
+            "events_count": events.count(),
+            "selected_category": category_id,
+            "selected_category_name": selected_category_name.name if category_id else None,
         })
 
 class ApproveEventsListView(UserPassesTestMixin, View):
@@ -338,6 +346,7 @@ class ReceivedFeedbacksView(UserPassesTestMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['current_filter'] = self.request.GET.get('filter', 'all')
         return context
+
 @login_required
 def submit_feedback(request, event_id):
     if request.method == 'POST':
@@ -387,3 +396,38 @@ class PastEventsView(View):
             "title": "Past Events",
             "events": past_events,
         })
+    
+@user_passes_test(is_management)
+def event_create(request):
+    event = None
+    form = EventForm(request.POST or None, request.FILES or None)
+
+    if form.is_valid():
+        event = form.save(commit=False)
+        event.organizer = request.user
+        event.save()
+        return redirect("event_system:event_detail", event.id)
+
+    return render(request, "event_system/event_form.html", {
+        "form": form,
+        "event": event,
+        "categories": Category.objects.all(),
+        "is_create": True,
+    })
+
+
+@user_passes_test(is_management)
+def event_edit(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    form = EventForm(request.POST or None, request.FILES or None, instance=event)
+
+    if form.is_valid():
+        form.save()
+        return redirect("event_system:event_detail", event.id)
+
+    return render(request, "event_system/event_form.html", {
+        "form": form,
+        "event": event,
+        "categories": Category.objects.all(),
+        "is_create": False,
+    })
