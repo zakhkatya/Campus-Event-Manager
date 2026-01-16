@@ -544,6 +544,26 @@ label {
     .dropdown-menu.dropdown-menu-end {
         margin-right: -2vh !important;
     }
+    .gap-2{
+        .btn-lg,
+        .alert-secondary {
+            display: inline;
+            text-align: center;
+            font-size: 0 !important;
+            padding: auto;
+            margin-right: 2vh;
+            .bi {
+                font-size: 1rem;
+                align-self: center;
+            }
+            .fs-xs {
+                font-size: 0.5rem !important;
+            }
+            .btn-outline-secondary {
+                width: 1vh !important;
+            }
+        }
+    }   
 }
 
 @media (max-width: 765px) {
@@ -645,27 +665,29 @@ label {
     justify-content: center;
 }
 
-label {
-    float: right;
-    color:white;
-    .bi-star-fill {
-        transition: 0.2s;
-        cursor: pointer;
+.rating-stars {
+    label {
+        float: right;
+        color:white;
+        .bi-star-fill {
+            transition: 0.2s;
+            cursor: pointer;
+        }
     }
-}
 
-input:checked ~ label {
-    color: $warning !important;
-}
+    input:checked ~ label {
+        color: $warning !important;
+    }
 
-input:checked + label:hover, input:checked ~ label:hover,input:checked ~ label:hover ~ label,
-label:hover ~ input:checked ~ label, label:hover ~ label, label:hover {
-    color: gold !important;
-}
+    input:checked + label:hover, input:checked ~ label:hover,input:checked ~ label:hover ~ label,
+    label:hover ~ input:checked ~ label, label:hover ~ label, label:hover {
+        color: gold !important;
+    }
 
-.accordion-button {
-    &:not(.collapsed){
-        box-shadow: 0.0.0.0.25rem $secondary;
+    .accordion-button {
+        &:not(.collapsed){
+            box-shadow: 0.0.0.0.25rem $secondary;
+        }
     }
 }
 
