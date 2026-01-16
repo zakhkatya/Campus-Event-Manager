@@ -31,7 +31,7 @@
                             {% if event.banner %}
                                 <img
                                     src="{{ event.banner.url }}"
-                                    class="img-fluid w-100 h-100 object-fit-cover"
+                                    class="img-fluid w-100 h-100 object-fit-cover rounded-4"
                                     alt="{{ event.title }}"
                                 />
                             {% else %}
@@ -50,7 +50,7 @@
                             {% if event.organizer.avatar %}
                                 <img
                                     src="{{ event.organizer.avatar.url }}"
-                                    class="rounded-circle me-2"
+                                    class="rounded-circle me-2 "
                                     alt="{{ event.organizer.first_name }} {{ event.organizer.last_name }}"
                                     width="30"
                                     height="30"
