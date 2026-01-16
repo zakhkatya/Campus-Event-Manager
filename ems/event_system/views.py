@@ -295,6 +295,10 @@ class EventDetailView(LoginRequiredMixin, View):
             event=event
         ).first()
 
+        feedbacks = Feedback.objects.filter(
+            event=event
+        ).select_related("user").order_by("-created_at")
+
         return render(
             request,
             "event_system/event_detail.html",
@@ -305,6 +309,7 @@ class EventDetailView(LoginRequiredMixin, View):
                 "title": event.title,
                 "now": now,
                 'form': form,
+                'feedbacks' : feedbacks
             }
         )
 

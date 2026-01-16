@@ -14,7 +14,7 @@
 
       <div class="d-flex gap-2 fw-semibold align-items-center">
         {% if user.is_staff and event.date_start > now %}
-        <a href="#" class="btn btn-primary btn-lg">
+        <a href="{% url 'event_system:event_edit' event.id %}" class="btn btn-primary btn-lg">
             <i class="bi bi-pencil me-1"></i> Edit
         </a>
         {% endif %} 
@@ -104,15 +104,67 @@
   {% endif %}
   {% if event.date_end < now %}
     <div class="container-xxl rounded-4 p-4">
-      <h4> Leave Feedback </h4>
+      <h3> Leave Feedback </h3>
         <form method="post" action="{% url 'event_system:submit_feedback' event.id %}">
         {% csrf_token %}
           {{ form.comment }}
-          {{ form.rating }}
-          <div class="text-start mt-3 ">
+          <div class="mt-2 d-flex align-items-start">
+            <span class="fw-medium fs-5 me-2"> Rate this event: </span>
+            <span class="">
+              <input type="radio" name="rating" id="rating5" value="5" class="d-none"/> <label for="rating5" title="5"> <i class="bi bi-star-fill fs-5 me-1"></i> </label>
+              <input type="radio" name="rating" id="rating4" value="4" class="d-none"/> <label for="rating4" title="4"> <i class="bi bi-star-fill fs-5 me-1"></i> </label>
+              <input type="radio" name="rating" id="rating3" value="3" class="d-none"/> <label for="rating3" title="3"> <i class="bi bi-star-fill fs-5 me-1"></i> </label>
+              <input type="radio" name="rating" id="rating2" value="2" class="d-none"/> <label for="rating2" title="2"> <i class="bi bi-star-fill fs-5 me-1"></i> </label>
+              <input type="radio" name="rating" id="rating1" value="1" class="d-none"/> <label for="rating1" title="1"> <i class="bi bi-star-fill fs-5 me-1"></i> </label>
+            </span>
+            </div>
+            <div class="text-start mt-2">
             <button type="submit" class="btn btn-primary p-2 px-3 rounded-3 fs-s w-auto">Post <i class="bi bi-send-fill ms-1 fs-xs"> </i></button>
         </div>
         </form>
+    </div>
+
+    <div class="container-xxl rounded-4 p-4 my-4 pb-1">
+      <h4> All Reviews </h4> 
+      {% if feedbacks_count %}
+        <span class="fs-5 text-muted">{{ feedbacks_count }}</span>
+        {% endif %}
+      {% for feedback in feedbacks %}
+        <div class="p-3 accordion-item rounded-4 mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div class="d-flex align-items-center">
+                                        {% if feedback.user.avatar %}
+                                                <img
+                                                src="{{ feedback.user.avatar.url }}"
+                                                alt="{{ feedback.user.first_name }} {{ feedback.user.last_name }}"
+                                                class="rounded-circle"
+                                                width="20"
+                                                height="20"
+                                                />
+                                            {% else %}
+                                                <i class="bi bi-person-circle fs-6 text-secondary"></i>
+                                            {% endif %}
+                                        <div class="ms-1">
+                                            <span class="fw-bold text-dark fs-xs">{{ feedback.user.get_full_name }}</span>
+                                            <small class="text-muted ms-2 fs-xxs">{{ feedback.created_at|date:"d M, H:i" }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="text-warning">
+                                        {% for i in "12345"|make_list %}
+                                            <i class="bi bi-star{% if forloop.counter <= feedback.rating %}-fill{% endif %} fs-xxs"></i>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <hr class="w-100">
+                                <p class="mb-0 text-muted fs-xs ps-2 ms-2">
+                                    {{ feedback.comment }}
+                                </p>
+                            </div>
+      {% empty %}
+      <div class="d-flex justify-content-center align-items-center p-5">
+        <p class="text-muted">No reviews yet.</p>
+      </div>
+      {% endfor %}
     </div>
   {% endif %}
 </div>

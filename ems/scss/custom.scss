@@ -649,13 +649,20 @@ label {
     justify-content: center;
 }
 
-.object-fit-cover {
-    object-fit: cover;
+label {
+    float: right;
+    color:white;
+    .bi-star-fill {
+        transition: 0.2s;
+        cursor: pointer;
+    }
 }
 
-.transition-02 {
-    transition: 0.2s ease;
+input:checked ~ label {
+    color: $warning !important;
 }
 
-
-
+input:checked + label:hover, input:checked ~ label:hover,input:checked ~ label:hover ~ label,
+label:hover ~ input:checked ~ label, label:hover ~ label, label:hover {
+    color: gold !important;
+}
