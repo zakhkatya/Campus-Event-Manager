@@ -433,14 +433,27 @@ def edit_profile_view(request):
 class PastEventsView(View):
     def get(self, request, *args, **kwargs):
         now = timezone.now()
+        category_id = request.GET.get("category")
         past_events = Event.objects.filter(
             date_end__lt=now, 
             approved=True
         ).order_by("-date_end")
+
+        if category_id:
+            past_events = past_events.filter(category_id=category_id)
+            categories = Category.objects.filter(id=category_id).first()
+            selected_category_name = Category.objects.filter(id=category_id).first()
+
+        categories = (Category.objects.filter(events__date_end__lte=now).distinct()
+        )
         
         return render(request, 'event_system/events.html', {
             "title": "Past Events",
             "events": past_events,
+            "categories": categories,
+            "events_count": past_events.count(),
+            "selected_category": category_id,
+            "selected_category_name": selected_category_name.name if category_id else None,
         })
     
 @user_passes_test(is_management)

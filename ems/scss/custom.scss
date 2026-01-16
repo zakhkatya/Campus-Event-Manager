@@ -184,13 +184,19 @@ body {
     -webkit-text-stroke: 1px;
 }
 
-.dropdown-item.badge {
-    transition: 0.2s;
+.badge.text-white {
+    transition: 0.2s; 
 }
 
-.dropdown-item.badge:hover {
+.badge.text-white:hover {
     background-color: $primary;
 }
+.dropdown-item.categories:hover,
+.dropdown-item.categories:active,
+.dropdown-item.categories:focus {
+    background-color: transparent !important;
+}
+
 
 .link-primary,
 .bi-x-circle-fill,
