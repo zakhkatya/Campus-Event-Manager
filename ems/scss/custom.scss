@@ -1,3 +1,4 @@
+$form-switch-focus-color: white;
 @import "../node_modules/bootstrap/scss/functions";
 @import "../node_modules/bootstrap/scss/variables";
 @import "../node_modules/bootstrap/scss/variables-dark";
@@ -548,18 +549,6 @@ label {
     p.fs-5 {
         font-size: 0.8rem !important;
     }
-
-    nav {
-        background-color: rgba(173, 153, 225, 0.90) !important;
-        width: 100% !important;
-        height: 9vh !important;
-        padding-bottom: 2vh !important;
-        position: fixed !important;
-        top:0 !important;
-        z-index: 1020;
-        margin: 0 !important;
-        left: 0 !important;
-    }
     .container-xl,
     .container-fluid.bg-white{
         width: 100% !important;
@@ -581,12 +570,6 @@ label {
     .menu{
         margin-left: -1vh !important;
     }
-    .navbar-spacing {
-        margin-top: 12vh !important;
-    }
-    .navbar-spacing-dashboard {
-        padding-top: 12vh !important;
-    }  
     .filter{
         visibility: hidden;
         margin-left: 0%;
@@ -673,4 +656,33 @@ input:checked ~ label {
 input:checked + label:hover, input:checked ~ label:hover,input:checked ~ label:hover ~ label,
 label:hover ~ input:checked ~ label, label:hover ~ label, label:hover {
     color: gold !important;
+}
+
+.accordion-button {
+    &:not(.collapsed){
+        box-shadow: 0.0.0.0.25rem $secondary;
+    }
+}
+
+.form-check-input {
+    background-color: $secondary;
+}
+
+.form-check-input:checked {
+    background-color: $primary;
+    box-shadow: 0.0.0.0.25rem $secondary;
+    border:0;
+}
+
+.form-check-input:focus {
+    box-shadow: 0.0.0.0.25rem $secondary;
+    background-color: $primary !important;
+    border:0;
+}
+
+.form-check-input:checked + .form-check-label,
+.form-check-label,
+.form-check-label:hover {
+    color: $dark !important;
+    float: left;
 }
