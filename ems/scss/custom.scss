@@ -181,7 +181,8 @@ body {
 .bi-check2-circle,
 .bi-plus,
 .bi-wrench,
-.bi-layers {
+.bi-layers,
+.bi-chat-left-dots {
     -webkit-text-stroke: 1px;
 }
 
@@ -209,7 +210,7 @@ body {
 .bi-person:focus,
 .bi-x-lg,
 .bi-bell-fill,
-.bi-chat-left {
+.bi-chat-left-dots {
     color: $primary !important;
     transition: 0.2s;
 }
@@ -540,6 +541,9 @@ label {
     .fb-user {
         margin-left: 3.5vh !important;
     }
+    .dropdown-menu.dropdown-menu-end {
+        margin-right: -2vh !important;
+    }
 }
 
 @media (max-width: 765px) {
@@ -586,7 +590,7 @@ label {
         margin: 0 !important;
     }
     .user {
-        width: 7vh;
+        width: 8.5vh;
     }
     .bi-person-circle{
         font-size: 1.9rem !important;
@@ -608,6 +612,7 @@ label {
     .welcome {
         width: 95% !important;
     }
+
 }
 .alert-secondary {
     margin-top: 10px !important; 
