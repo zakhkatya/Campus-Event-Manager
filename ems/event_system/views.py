@@ -113,7 +113,10 @@ class MyEventsView(View):
 
         categories = (
             Category.objects
-            .filter(events__registrations__user=request.user)
+            .filter(
+                events__registrations__user=request.user,
+                events__date_end__gte=now
+                )
             .distinct()
         )
 
@@ -299,6 +302,8 @@ class EventDetailView(LoginRequiredMixin, View):
             event=event
         ).select_related("user").order_by("-created_at")
 
+        avg_rating = feedbacks.aggregate(Avg('rating'))['rating__avg'] or 0
+
         return render(
             request,
             "event_system/event_detail.html",
@@ -309,7 +314,9 @@ class EventDetailView(LoginRequiredMixin, View):
                 "title": event.title,
                 "now": now,
                 'form': form,
-                'feedbacks' : feedbacks
+                'feedbacks' : feedbacks,
+                "feedbacks_count" : feedbacks.count(),
+                "avg_rating" : avg_rating,
             }
         )
 
