@@ -119,8 +119,9 @@ body {
 .dropdown-menu,
 .btn-light,
 .accordion-item,
-.accordion-button {
-    background-color: $card-body-bg;
+.accordion-button,
+.bg-white {
+    background-color: $card-body-bg !important;
 }
 
 .card-footer {
@@ -200,7 +201,8 @@ body {
 .bi-person:active,
 .bi-person:focus,
 .bi-x-lg,
-.bi-bell-fill {
+.bi-bell-fill,
+.bi-chat-left {
     color: $primary !important;
     transition: 0.2s;
 }
