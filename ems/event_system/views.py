@@ -45,7 +45,7 @@ class HomePageView(View):
             "events": events,
         })
 
-class DashboardView(UserPassesTestMixin, View):
+class DashboardView(LoginRequiredMixin, UserPassesTestMixin, View):
     def test_func(self):
         return self.request.user.is_authenticated
 
@@ -92,7 +92,7 @@ class DashboardView(UserPassesTestMixin, View):
             "notifications_list": notifications, 
         })
    
-class MyEventsView(View):
+class MyEventsView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
 
         category_id = request.GET.get("category")
@@ -130,7 +130,7 @@ class MyEventsView(View):
         })
     
 # Events organized by the user
-class OrganizedEventsView(View):
+class OrganizedEventsView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
 
         category_id = request.GET.get("category")
@@ -160,7 +160,7 @@ class OrganizedEventsView(View):
             "selected_category_name": selected_category_name.name if category_id else None,
         })
     
-class UpcomingEventsView(View):
+class UpcomingEventsView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
 
         category_id = request.GET.get("category")
@@ -194,7 +194,7 @@ class UpcomingEventsView(View):
             "selected_category_name": selected_category_name.name if category_id else None,
         })
 
-class ApproveEventsListView(UserPassesTestMixin, View):
+class ApproveEventsListView(LoginRequiredMixin, UserPassesTestMixin, View):
     def test_func(self):
         return self.request.user.role == 'admin'
 
@@ -206,7 +206,7 @@ class ApproveEventsListView(UserPassesTestMixin, View):
             "pending_events": pending_events,
         })
 
-class NotificationsView(View):
+class NotificationsView(LoginRequiredMixin, View):
    def get(self, request):
         notifications = Notification.objects.filter(user=request.user).order_by("-created_at")
         
@@ -370,7 +370,7 @@ class MyFeedbacksView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Feedback.objects.filter(user=self.request.user).select_related('event').order_by("-created_at")
 
-class ReceivedFeedbacksView(UserPassesTestMixin, ListView):
+class ReceivedFeedbacksView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Event
     template_name = 'event_system/received_feedback.html'
     context_object_name = 'events_with_feedbacks'
@@ -436,7 +436,7 @@ def edit_profile_view(request):
     return render(request, "userauth/edit_profile.html", {"form": form})
 
 
-class PastEventsView(View):
+class PastEventsView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         now = timezone.now()
         category_id = request.GET.get("category")
@@ -481,6 +481,10 @@ def event_create(request):
 @user_passes_test(is_management)
 def event_edit(request, pk):
     event = get_object_or_404(Event, pk=pk)
+
+    # If not admin or organizer of the event, deny access
+    if not (event.organizer == request.user) and (request.user.role != 'admin'):
+        return redirect('event_system:dashboard')
 
     old_banner = event.banner
 
