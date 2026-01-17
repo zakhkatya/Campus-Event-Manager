@@ -182,7 +182,8 @@ body {
 .bi-plus,
 .bi-wrench,
 .bi-layers,
-.bi-chat-left-dots {
+.bi-chat-left-dots,
+.bi-shield-lock {
     -webkit-text-stroke: 1px;
 }
 
@@ -210,7 +211,10 @@ body {
 .bi-person:focus,
 .bi-x-lg,
 .bi-bell-fill,
-.bi-chat-left-dots {
+.bi-chat-left-dots,
+.bi-shield-lock:hover,
+.bi-shield-lock:active,
+.bi-shield-lock:focus {
     color: $primary !important;
     transition: 0.2s;
 }
@@ -228,7 +232,8 @@ body {
 .bi-person,
 .bi-a,
 .bi-x-lg:hover,
-.bi-x-lg:active {
+.bi-x-lg:active,
+.bi-shield-lock {
     color: $secondary !important;
 }
 
