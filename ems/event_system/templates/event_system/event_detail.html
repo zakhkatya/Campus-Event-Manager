@@ -91,7 +91,13 @@
         />
         {% else %}
         <i class="bi bi-person-circle"></i>
-        {% endif %} Organized by: <b>{{ event.organizer.first_name }} {{ event.organizer.last_name }}</b>
+        {% endif %} Organized by: <b>
+          {% if event.organizer == user %}
+            Me
+          {% else %}
+            {{ event.organizer.get_full_name|default:event.organizer.email }}
+          {% endif %}
+        </b>
       </p>
     </div>
   </div>
