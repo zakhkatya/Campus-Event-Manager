@@ -6,7 +6,7 @@ from .models import Event, Registration, Feedback
 
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ("email", "is_active", "is_staff")
+    list_display = ("email", "first_name", "last_name", "role", "last_login")
     fieldsets = (
         ("Overview", {"fields": ("username", "email", "first_name", "last_name")}),
         ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser")}),
