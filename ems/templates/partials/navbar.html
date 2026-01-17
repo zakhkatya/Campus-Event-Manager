@@ -84,6 +84,13 @@
                     </div>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end shadow-sm rounded-4 border-0 mt-2 text-end p-2 duser">
+                    {% if user.is_staff %}
+                    <li class="mb-2">
+                        <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'admin:index' %}">
+                          Admin Panel <i class="bi bi-shield-lock fs-5 btn-primary rounded-3 ms-1 p-2 py-1"></i>
+                      </a>
+                    </li>
+                    {% endif %}
                     <li class="mb-2">
                         <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'userauth:edit-profile' %}">
                           Edit profile <i class="bi bi-person fs-5 btn-primary rounded-3 ms-1 p-2 py-1"></i>
