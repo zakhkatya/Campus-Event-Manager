@@ -34,7 +34,7 @@ BANNERS = [
     "banners/placeholder3.jpg",
 ]
 
-avatar = "avatars/placeholder.svg"
+avatar = "avatars/placeholder.webp"
 
 DEFAULT_CATEGORIES = [
     "Workshop", "Seminar", "Conference", "Meetup", "Webinar"
