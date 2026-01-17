@@ -481,6 +481,7 @@ def event_create(request):
 @user_passes_test(is_management)
 def event_edit(request, pk):
     event = get_object_or_404(Event, pk=pk)
+
     old_banner = event.banner
 
     form = EventForm(
@@ -490,37 +491,45 @@ def event_edit(request, pk):
     )
 
     if form.is_valid():
-        event = form.save()
+        event = form.save(commit=False)
 
-        # Image cleanup logic
-        if 'banner-clear' in request.POST:
-            if old_banner and os.path.isfile(old_banner.path):
+        if "banner-clear" in request.POST:
+            if (
+                old_banner
+                and old_banner.name.startswith(f"banners/{event.id}/")
+                and os.path.isfile(old_banner.path)
+            ):
                 os.remove(old_banner.path)
+
             event.banner = None
 
-        # Replace old banner if a new one is uploaded
-        elif old_banner and old_banner != event.banner:
+        elif (
+            old_banner
+            and event.banner
+            and old_banner.name != event.banner.name
+            and old_banner.name.startswith(f"banners/{event.id}/")
+        ):
             if os.path.isfile(old_banner.path):
                 os.remove(old_banner.path)
 
         event.save()
 
+        # Notification to organizer about the update
         Notification.objects.create(
             user=event.organizer,
             message=f"Details for your event '{event.title}' have been successfully updated."
         )
 
-        registrations = event.registrations.all().select_related('user')
-        update_notifs = [
+        # Notifications to registered users about the update
+        registrations = event.registrations.select_related("user")
+        Notification.objects.bulk_create([
             Notification(
-                user=reg.user, 
+                user=reg.user,
                 message=f"Update: The details for '{event.title}' have changed. Please check the event page."
-            ) for reg in registrations
-        ]
-        
-        if update_notifs:
-            Notification.objects.bulk_create(update_notifs)
-        
+            )
+            for reg in registrations
+        ])
+
         return redirect("event_system:event_detail", event.id)
 
     return render(request, "event_system/event_form.html", {
