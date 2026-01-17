@@ -30,8 +30,8 @@ Powered by **Django** and **PostgreSQL**, the Campus Event Manager improves comm
 # Edit Event
 ![Edit Event](/docs/Edit_event.jpeg)
 
-# Recieved Feedback
-![Recieved Feedback](/docs/Recieved_feedback.jpeg)
+# Received Feedback
+![Received Feedback](/docs/Received_feedback.jpeg)
 
 # Dev Notes 📝
 
