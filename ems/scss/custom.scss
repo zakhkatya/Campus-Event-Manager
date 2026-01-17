@@ -713,3 +713,15 @@ label {
     color: $dark !important;
     float: left;
 }
+
+.btn-close {
+  background-image: none !important;
+  width: auto;
+  height: auto;
+  opacity: 1;
+}
+
+.btn-close:active,
+.btn-close:focus {
+    box-shadow: none !important;
+}
