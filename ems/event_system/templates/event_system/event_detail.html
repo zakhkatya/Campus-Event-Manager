@@ -13,7 +13,7 @@
       </div>
 
       <div class="d-flex gap-2 fw-semibold align-items-center d-inline justify-content-center">
-        {% if user.is_staff and event.date_start > now %}
+        {% if user.is_staff %}
         <a href="{% url 'event_system:event_edit' event.id %}" class="btn btn-primary btn-lg">
             <i class="bi bi-pencil me-1"></i> Edit
         </a>
@@ -96,8 +96,7 @@
     </div>
   </div>
 
-  {% if is_registered %}
-  {% if event.date_start < now and event.date_end > now %}
+  {% if is_registered and event.date_end > now%}
   <div class="container-xxl rounded-4 p-4 text-center" id="pass">
     <h4 class="mb-3">Your pass</h4>
     <p class="text-muted">
@@ -110,7 +109,6 @@
     />
     <p class="text-muted mt-2">Please show this QR-code to enter the event!</p>
   </div>
-  {% endif %}
   {% endif %}
   {% if is_registered and event.date_end < now %}
     <div class="container-xxl rounded-4 p-4">

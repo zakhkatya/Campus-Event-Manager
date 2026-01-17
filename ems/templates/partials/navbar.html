@@ -67,7 +67,7 @@
                     <div class="col-2 d-flex align-items-center justify-content-center pt-1 ms-2">
                     {% if user.avatar %}
                      <img id="navbar-profile-img" src="{{ user.avatar.url }}?t={{ user.last_login.timestamp }}" 
-                        alt="Profile" class="rounded-4 navbar-avatar-img">
+                        alt="Profile" class="rounded-circle object-fit-cover navbar-avatar-img">
                          {% else %}
                          <i class="bi bi-person-circle fs-2 text-muted"></i>
                         {% endif %}
