@@ -23,7 +23,6 @@ class CustomLoginView(LoginView):
         context["title"] = "User Login"
         return context
 
-
 class RegisterView(CreateView):
     template_name = "userauth/register.html"
     form_class = CustomRegistrationForm

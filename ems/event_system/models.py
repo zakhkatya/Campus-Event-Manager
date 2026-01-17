@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings 
 import uuid
+from django.core.validators import FileExtensionValidator
     
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -8,25 +9,42 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+def event_banner_path(instance, filename):
+    ext = filename.split(".")[-1].lower()
+    return f"banners/{instance.id}/banner.{ext}"
+
 class Event(models.Model):
-    title = models.CharField(max_length=200, null=False, blank=False)
-    description = models.TextField(null=False, blank=False)
-    date_start = models.DateTimeField(null=False, blank=False)
-    date_end = models.DateTimeField(null=False, blank=False)
-    location = models.CharField(max_length=255, null=False, blank=False)
-    
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    date_start = models.DateTimeField()
+    date_end = models.DateTimeField()
+    location = models.CharField(max_length=255)
+
     category = models.ForeignKey(
         Category,
         on_delete=models.PROTECT,
         related_name="events"
     )
-    
-    banner = models.ImageField(upload_to='banners/', null=True, blank=True)
-    organizer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='organized_events', default=None)
 
-    is_private = models.BooleanField(default=False)    
+    banner = models.ImageField(
+        upload_to=event_banner_path,
+        null=True,
+        blank=True,
+        validators=[
+            FileExtensionValidator(["jpg", "jpeg", "png", "webp"]),
+        ],
+    )
+
+    organizer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="organized_events",
+        default=None,
+    )
+
+    is_private = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
-    approved_at = models.DateTimeField(null=True, blank=True)      
+    approved_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.title
