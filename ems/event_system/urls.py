@@ -32,8 +32,9 @@ urlpatterns = [
     path('approve-events/', views.ApproveEventsListView.as_view(), name='approve-events-list'),
     
     # Feedback Views
-    path("my-feedbacks", views.MyFeedbacksView.as_view(), name="my-feedbacks"), 
-    path("received-feedbacks", views.ReceivedFeedbacksView.as_view(), name="received-feedbacks"),
+    path("my-feedback", views.MyFeedbacksView.as_view(), name="my-feedback"), 
+    path("received-feedback", views.ReceivedFeedbacksView.as_view(), name="received-feedback"),
+    path("submit_feedback/<int:event_id>", views.submit_feedback, name="submit_feedback"),
     
     # QR Code for Registrations
     path("registrations/<int:registration_id>/qr/", registration_qr_view, name="registration_qr"),

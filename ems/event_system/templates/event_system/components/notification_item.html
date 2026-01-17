@@ -9,15 +9,11 @@
             
             <div class="col ps-2">
                 <div class="d-flex justify-content-between align-items-start">
-                    <h6 class="fw-bold mb-1 text-dark fs-xs">
-                        Reminder 
-                    </h6>
-                    <span class="text-muted fs-xxs opacity-75">{{ notification.created_at|timesince }} ago</span>
+                    <p class="text-muted mb-0 fs-xs lh-sm fw-medium">
+                        {{ notification.message }}
+                    </p>
+                    <span class="text-muted fs-xxs opacity-75 justify-content-end">{{ notification.created_at|timesince }} ago</span>
                 </div>
-                
-                <p class="text-muted mb-0 fs-xs lh-sm">
-                    {{ notification.message }}
-                </p>
             </div>
         </div>
     </div>

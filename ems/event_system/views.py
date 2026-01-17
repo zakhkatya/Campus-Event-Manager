@@ -15,7 +15,7 @@ from io import BytesIO
 from django.http import HttpResponse
 from userauth.forms import ProfileUpdateForm
 from django.db.models import Count, Avg
-from .forms import EventForm
+from .forms import EventForm, FeedbackForm
 import os
 
 # Get the User model
@@ -113,7 +113,10 @@ class MyEventsView(View):
 
         categories = (
             Category.objects
-            .filter(events__registrations__user=request.user)
+            .filter(
+                events__registrations__user=request.user,
+                events__date_end__gte=now
+                )
             .distinct()
         )
 
@@ -288,11 +291,18 @@ class EventDetailView(LoginRequiredMixin, View):
     def get(self, request, event_id):
         event = get_object_or_404(Event, id=event_id)
         now = timezone.now() 
+        form = FeedbackForm()
 
         registration = Registration.objects.filter(
             user=request.user,
             event=event
         ).first()
+
+        feedbacks = Feedback.objects.filter(
+            event=event
+        ).select_related("user").order_by("-created_at")
+
+        avg_rating = feedbacks.aggregate(Avg('rating'))['rating__avg'] or 0
 
         return render(
             request,
@@ -303,6 +313,10 @@ class EventDetailView(LoginRequiredMixin, View):
                 "registration": registration,
                 "title": event.title,
                 "now": now,
+                'form': form,
+                'feedbacks' : feedbacks,
+                "feedbacks_count" : feedbacks.count(),
+                "avg_rating" : avg_rating,
             }
         )
 
@@ -339,10 +353,10 @@ def registration_qr_view(request, registration_id):
         buffer.getvalue(),
         content_type="image/png"
     )
-    
+
 class MyFeedbacksView(LoginRequiredMixin, ListView):
     model = Feedback
-    template_name = 'event_system/my_feedbacks.html'
+    template_name = 'event_system/my_feedback.html'
     context_object_name = 'feedbacks'
 
     def get_queryset(self):
@@ -350,7 +364,7 @@ class MyFeedbacksView(LoginRequiredMixin, ListView):
 
 class ReceivedFeedbacksView(UserPassesTestMixin, ListView):
     model = Event
-    template_name = 'event_system/received_feedbacks.html'
+    template_name = 'event_system/received_feedback.html'
     context_object_name = 'events_with_feedbacks'
     paginate_by = 10
 
@@ -399,7 +413,7 @@ def submit_feedback(request, event_id):
         ]
         Notification.objects.bulk_create(feedback_notifs)
         
-        return redirect('event_system:my-feedbacks')
+        return redirect('event_system:event_detail', event_id=event_id)
     return redirect('event_system:dashboard')
 
 
@@ -419,14 +433,27 @@ def edit_profile_view(request):
 class PastEventsView(View):
     def get(self, request, *args, **kwargs):
         now = timezone.now()
+        category_id = request.GET.get("category")
         past_events = Event.objects.filter(
             date_end__lt=now, 
             approved=True
         ).order_by("-date_end")
+
+        if category_id:
+            past_events = past_events.filter(category_id=category_id)
+            categories = Category.objects.filter(id=category_id).first()
+            selected_category_name = Category.objects.filter(id=category_id).first()
+
+        categories = (Category.objects.filter(events__date_end__lte=now).distinct()
+        )
         
-        return render(request, 'event_system/past_events.html', {
+        return render(request, 'event_system/events.html', {
             "title": "Past Events",
             "events": past_events,
+            "categories": categories,
+            "events_count": past_events.count(),
+            "selected_category": category_id,
+            "selected_category_name": selected_category_name.name if category_id else None,
         })
     
 @user_passes_test(is_management)

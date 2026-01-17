@@ -1,3 +1,4 @@
+$form-switch-focus-color: white;
 @import "../node_modules/bootstrap/scss/functions";
 @import "../node_modules/bootstrap/scss/variables";
 @import "../node_modules/bootstrap/scss/variables-dark";
@@ -59,8 +60,8 @@ body {
 }
 
 .btn-primary {
-    background-color: $primary;
-    border: 0;
+    background-color: $primary !important;
+    border: 0 !important;
     transition: 0.2s;
 }
 
@@ -70,7 +71,8 @@ body {
 }
 
 .btn-primary:active,
-.btn-primary:focus {
+.btn-primary:focus,
+.btn-primary.active {
     background-color: $secondary !important;
     box-shadow: 0.0.0.0.25rem $primary;
 }
@@ -117,8 +119,10 @@ body {
 .card-footer,
 .dropdown-menu,
 .btn-light,
-.feedback-text {
-    background-color: $card-body-bg;
+.accordion-item,
+.accordion-button,
+.bg-white {
+    background-color: $card-body-bg !important;
 }
 
 .card-footer {
@@ -177,17 +181,24 @@ body {
 .bi-check2-circle,
 .bi-plus,
 .bi-wrench,
-.bi-layers {
+.bi-layers,
+.bi-chat-left-dots {
     -webkit-text-stroke: 1px;
 }
 
-.dropdown-item.badge {
-    transition: 0.2s;
+.badge.text-white {
+    transition: 0.2s; 
 }
 
-.dropdown-item.badge:hover {
+.badge.text-white:hover {
     background-color: $primary;
 }
+.dropdown-item.categories:hover,
+.dropdown-item.categories:active,
+.dropdown-item.categories:focus {
+    background-color: transparent !important;
+}
+
 
 .link-primary,
 .bi-x-circle-fill,
@@ -198,7 +209,8 @@ body {
 .bi-person:active,
 .bi-person:focus,
 .bi-x-lg,
-.bi-bell-fill {
+.bi-bell-fill,
+.bi-chat-left-dots {
     color: $primary !important;
     transition: 0.2s;
 }
@@ -529,6 +541,29 @@ label {
     .fb-user {
         margin-left: 3.5vh !important;
     }
+    .dropdown-menu.dropdown-menu-end {
+        margin-right: -2vh !important;
+    }
+    .gap-2{
+        .btn-lg,
+        .alert-secondary {
+            display: inline;
+            text-align: center;
+            font-size: 0 !important;
+            padding: auto;
+            margin-right: 2vh;
+            .bi {
+                font-size: 1rem;
+                align-self: center;
+            }
+            .fs-xs {
+                font-size: 0.5rem !important;
+            }
+            .btn-outline-secondary {
+                width: 1vh !important;
+            }
+        }
+    }   
 }
 
 @media (max-width: 765px) {
@@ -537,18 +572,6 @@ label {
     }
     p.fs-5 {
         font-size: 0.8rem !important;
-    }
-
-    nav {
-        background-color: rgba(173, 153, 225, 0.90) !important;
-        width: 100% !important;
-        height: 9vh !important;
-        padding-bottom: 2vh !important;
-        position: fixed !important;
-        top:0 !important;
-        z-index: 1020;
-        margin: 0 !important;
-        left: 0 !important;
     }
     .container-xl,
     .container-fluid.bg-white{
@@ -571,12 +594,6 @@ label {
     .menu{
         margin-left: -1vh !important;
     }
-    .navbar-spacing {
-        margin-top: 12vh !important;
-    }
-    .navbar-spacing-dashboard {
-        padding-top: 12vh !important;
-    }  
     .filter{
         visibility: hidden;
         margin-left: 0%;
@@ -593,7 +610,7 @@ label {
         margin: 0 !important;
     }
     .user {
-        width: 7vh;
+        width: 8.5vh;
     }
     .bi-person-circle{
         font-size: 1.9rem !important;
@@ -615,6 +632,7 @@ label {
     .welcome {
         width: 95% !important;
     }
+
 }
 .alert-secondary {
     margin-top: 10px !important; 
@@ -638,44 +656,6 @@ label {
     max-width: 200px;
 }
 
-.accordion-feedback {
-    .accordion-item {
-        background-color: transparent;
-    }
-
-    .accordion-button {
-        transition: 0.2s ease;
-        
-        &::after {
-            margin-left: 0;
-        }
-        
-        &:not(.collapsed) {
-            background-color: #fff !important;
-            color: inherit !important;
-            box-shadow: none !important;
-        }
-        
-        &:focus {
-            box-shadow: none !important;
-            border-color: rgba(0,0,0,.125);
-        }
-    }
-
-    .feedback-detail-row {
-        transition: background-color 0.2s ease;
-        border-bottom: 1px solid rgba(0,0,0,0.05);
-        
-        &:hover {
-            background-color: rgba($primary, 0.03); 
-        }
-
-        .comment-text {
-            border-left: 3px solid rgba($primary, 0.2);
-        }
-    }
-}
-
 .event-thumbnail-box {
     width: 70px;
     height: 70px;
@@ -685,13 +665,51 @@ label {
     justify-content: center;
 }
 
-.object-fit-cover {
-    object-fit: cover;
+.rating-stars {
+    label {
+        float: right;
+        color:white;
+        .bi-star-fill {
+            transition: 0.2s;
+            cursor: pointer;
+        }
+    }
+
+    input:checked ~ label {
+        color: $warning !important;
+    }
+
+    input:checked + label:hover, input:checked ~ label:hover,input:checked ~ label:hover ~ label,
+    label:hover ~ input:checked ~ label, label:hover ~ label, label:hover {
+        color: gold !important;
+    }
+
+    .accordion-button {
+        &:not(.collapsed){
+            box-shadow: 0.0.0.0.25rem $secondary;
+        }
+    }
 }
 
-.transition-02 {
-    transition: 0.2s ease;
+.form-check-input {
+    background-color: $secondary;
 }
 
+.form-check-input:checked {
+    background-color: $primary;
+    box-shadow: 0.0.0.0.25rem $secondary;
+    border:0;
+}
 
+.form-check-input:focus {
+    box-shadow: 0.0.0.0.25rem $secondary;
+    background-color: $primary !important;
+    border:0;
+}
 
+.form-check-input:checked + .form-check-label,
+.form-check-label,
+.form-check-label:hover {
+    color: $dark !important;
+    float: left;
+}

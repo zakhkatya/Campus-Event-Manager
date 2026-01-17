@@ -1,6 +1,21 @@
 from django import forms
-from .models import Event
+from .models import Feedback, Event
 
+class FeedbackForm(forms.ModelForm):
+    class Meta:
+        model = Feedback
+        fields = [
+            "comment",
+            "rating",
+        ]
+        widgets = {
+            "comment": forms.Textarea(attrs={
+                "class": "form-control",
+                "placeholder": "Write your feedback...",
+                "rows": 4
+            })
+        }
+            
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
