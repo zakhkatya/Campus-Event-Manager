@@ -252,6 +252,7 @@ def manage_status(request, event_id, status):
     if request.method == 'POST':
         with transaction.atomic():
             event = get_object_or_404(Event, id=event_id)
+            organizer = event.organizer
             
             if status == 'approve':
                 event.is_private = False
@@ -259,32 +260,39 @@ def manage_status(request, event_id, status):
                 event.approved_at = timezone.now()
                 event.save()
 
-                messages.success(request, f"Event: {event.title} is now live and visible to everyone.")
-
-
+                messages.success(request, f"Event: {event.title} is now live.")
                 Notification.objects.create(
-                    user=request.user,
-                    message=f"{event.title} was approved."
+                    user=organizer,
+                    message=f"Your event '{event.title}' has been approved."
                 )
-                other_users = User.objects.exclude(id=request.user.id)
-                new_notifs = [
-                    Notification(user=u, message=f"Event has been approved: {event.title}") 
-                    for u in other_users
+                all_admins = User.objects.filter(role='admin')
+                admin_notifs = [
+                    Notification(
+                        user=admin, 
+                        message=f"Admin {request.user.get_full_name()} approved the event: {event.title}"
+                    ) for admin in all_admins
                 ]
-                Notification.objects.bulk_create(new_notifs)
+                Notification.objects.bulk_create(admin_notifs)
 
             elif status == 'reject':
-              
+                event_title = event.title
                 event.delete()
 
-                messages.warning(request, f"Event: {event.title} has been removed permanently.")
-
+                messages.warning(request, f"Event: {event_title} has been rejected.")
                 Notification.objects.create(
-                    user=request.user,
-                    message=f"Event: {event.title} was rejected."
+                    user=organizer,
+                    message=f"Your event proposal '{event_title}' was rejected."
                 )
+                all_admins = User.objects.filter(role='admin')
+                reject_notifs = [
+                    Notification(
+                        user=admin, 
+                        message=f"Admin {request.user.get_full_name()} rejected the event proposal: {event_title}"
+                    ) for admin in all_admins
+                ]
+                Notification.objects.bulk_create(reject_notifs)
+                
         return redirect(request.META.get('HTTP_REFERER', 'event_system:dashboard'))
-    
     return redirect('event_system:dashboard')
 
 class EventDetailView(LoginRequiredMixin, View):
@@ -406,12 +414,10 @@ def submit_feedback(request, event_id):
             comment=comment,
             rating=int(rating)
         )
-        staff_users = User.objects.filter(role__in=['admin', 'organizer'])
-        feedback_notifs = [
-            Notification(user=u, message=f"New feedback received for '{event.title}'") 
-            for u in staff_users
-        ]
-        Notification.objects.bulk_create(feedback_notifs)
+        Notification.objects.create(
+            user=event.organizer,
+            message=f"New feedback received for your event: '{event.title}'"
+        )
         
         return redirect('event_system:event_detail', event_id=event_id)
     return redirect('event_system:dashboard')
@@ -484,7 +490,7 @@ def event_edit(request, pk):
     )
 
     if form.is_valid():
-        event = form.save(commit=False)
+        event = form.save()
 
         # Image cleanup logic
         if 'banner-clear' in request.POST:
@@ -498,6 +504,23 @@ def event_edit(request, pk):
                 os.remove(old_banner.path)
 
         event.save()
+
+        Notification.objects.create(
+            user=event.organizer,
+            message=f"Details for your event '{event.title}' have been successfully updated."
+        )
+
+        registrations = event.registrations.all().select_related('user')
+        update_notifs = [
+            Notification(
+                user=reg.user, 
+                message=f"Update: The details for '{event.title}' have changed. Please check the event page."
+            ) for reg in registrations
+        ]
+        
+        if update_notifs:
+            Notification.objects.bulk_create(update_notifs)
+        
         return redirect("event_system:event_detail", event.id)
 
     return render(request, "event_system/event_form.html", {
