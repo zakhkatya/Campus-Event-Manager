@@ -66,8 +66,10 @@
                 <button class="row row-cols-2 user rounded-4 border-0 bg-transparent d-flex align-items-start justify-content-start" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
                     <div class="col-2 d-flex align-items-center justify-content-center pt-1 ms-2">
                     {% if user.avatar %}
+                    <div class="rounded-circle">
                      <img id="navbar-profile-img" src="{{ user.avatar.url }}" 
-                        alt="Profile" class="rounded-circle object-fit-cover navbar-avatar-img">
+                        alt="Profile" class="navbar-avatar-img rounded-circle">
+                    </div>
                          {% else %}
                          <i class="bi bi-person-circle fs-2 text-muted"></i>
                         {% endif %}
