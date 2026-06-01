@@ -84,14 +84,9 @@ WSGI_APPLICATION = 'ems.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config({
-        "ENGINE": os.getenv("POSTGRES_ENGINE", "django.db.backends.postgresql"), 
-        "NAME": os.getenv("POSTGRES_DB", "database"), 
-        "USER": os.getenv("POSTGRES_USER", "user"), 
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "password"), 
-        "HOST": os.getenv("POSTGRES_HOST", "db"), 
-        "PORT": os.getenv("POSTGRES_PORT", "5432"), 
-    })
+    'default': dj_database_url.config(
+        default='postgres://user:password@db:5432/database'
+    )
 }
 
 # Password validation
