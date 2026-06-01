@@ -221,7 +221,7 @@ __marimo__/
 # Custom ignores
 .venv/
 .env
-.env.db
+.env.*
 __pycache__/
 staticfiles/
 ems/media/

@@ -22,3 +22,6 @@ django-appconf==1.2.0
 django-compressor==4.6.0
 rcssmin==1.2.2
 rjsmin==1.2.5
+cloudinary==1.44.2 
+django-cloudinary-storage==0.3.0 
+six==1.17.0

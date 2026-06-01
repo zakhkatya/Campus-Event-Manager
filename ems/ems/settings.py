@@ -30,9 +30,15 @@ DEBUG = int(os.environ.get("DEBUG", 0))
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
 
 # Media files settings
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+}
 
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+MEDIA_URL = '/media/'
 # Application definition
 
 INSTALLED_APPS = [
@@ -43,10 +49,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sass_processor',
-    "django_bootstrap5",
-    "django_bootstrap_icons",
-    "event_system",
-    "userauth"
+    'django_bootstrap5',
+    'django_bootstrap_icons',
+    'event_system',
+    'userauth',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
