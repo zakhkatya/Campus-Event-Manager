@@ -38,8 +38,8 @@ CLOUDINARY_STORAGE = {
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+# MEDIA_URL = "/media/"
+# MEDIA_ROOT = BASE_DIR / "media"
 # Application definition
 
 INSTALLED_APPS = [
@@ -160,7 +160,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"), # Static files directory (images, js, etc.)
     os.path.join(BASE_DIR, 'media_def'), # Media files directory 
     SASS_PROCESSOR_ROOT,
-    os.path.join(BASE_DIR, 'media/avatars'),
 ] 
  
 STATICFILES_FINDERS = [ 
