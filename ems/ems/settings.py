@@ -170,7 +170,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'node_modules/bootstrap/dist'), 
     os.path.join(BASE_DIR, 'node_modules/bootstrap-icons/font'),
     os.path.join(BASE_DIR, "static"), # Static files directory (images, js, etc.)
-    os.path.join(BASE_DIR, 'media_def'), # Media files directory 
     SASS_PROCESSOR_ROOT,
 ] 
  
