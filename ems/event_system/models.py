@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings 
 import uuid
-from django.core.validators import FileExtensionValidator
+from cloudinary.models import CloudinaryField
     
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -9,9 +9,9 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-def event_banner_path(instance, filename):
-    ext = filename.split(".")[-1].lower()
-    return f"banners/{instance.id}/banner.{ext}"
+# def event_banner_path(instance, filename):
+#    ext = filename.split(".")[-1].lower()
+#    return f"banners/{instance.id}/banner.{ext}"
 
 class Event(models.Model):
     title = models.CharField(max_length=200)
@@ -26,14 +26,7 @@ class Event(models.Model):
         related_name="events"
     )
 
-    banner = models.ImageField(
-        upload_to=event_banner_path,
-        null=True,
-        blank=True,
-        validators=[
-            FileExtensionValidator(["jpg", "jpeg", "png", "webp"]),
-        ],
-    )
+    banner = CloudinaryField('image')
 
     organizer = models.ForeignKey(
         settings.AUTH_USER_MODEL,

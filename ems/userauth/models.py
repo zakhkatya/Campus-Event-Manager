@@ -1,7 +1,7 @@
 import os
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import FileExtensionValidator
+from cloudinary.models import CloudinaryField
 
 def user_avatar_path(instance, filename):
     ext = filename.split(".")[-1].lower()
@@ -18,12 +18,7 @@ class CustomUser(AbstractUser):
     username = models.CharField(max_length=150, unique=False, null=True, blank=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="student")
 
-    avatar = models.ImageField(
-        upload_to=user_avatar_path,
-        null=True,
-        blank=True,
-        validators=[FileExtensionValidator(["jpg", "jpeg", "png", "webp"])],
-    )
+    avatar = CloudinaryField('image')
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
