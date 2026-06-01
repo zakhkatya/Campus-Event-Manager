@@ -29,12 +29,12 @@ SURNAMES = [
 ]
 
 BANNERS = [
-    "placeholder1.jpg",
-    "placeholder2.jpg",
-    "placeholder3.jpg",
+    "placeholder1",
+    "placeholder2",
+    "placeholder3",
 ]
 
-avatar = "placeholder.webp"
+avatar = "placeholder"
 
 DEFAULT_CATEGORIES = [
     "Workshop", "Seminar", "Conference", "Meetup", "Webinar"

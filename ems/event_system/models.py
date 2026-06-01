@@ -26,7 +26,7 @@ class Event(models.Model):
         related_name="events"
     )
 
-    banner = CloudinaryField('image')
+    banner = CloudinaryField('image', blank=True, null=True)
 
     organizer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
