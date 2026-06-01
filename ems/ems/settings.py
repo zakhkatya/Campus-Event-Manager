@@ -149,12 +149,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # SASS Processor settings
 SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, "scss")
 
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
 
