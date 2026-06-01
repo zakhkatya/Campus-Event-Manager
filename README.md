@@ -1,6 +1,4 @@
-# Campus Event Manager 🎓
-
-Made with ❤️ by **Jakub Vorel** m322903 - **Kateryna Zakharchuk** m323384 - **Baris Efe Turkmen** m323031
+# Campus Event Manager
 
 The **Campus Event Manager** is a centralized web platform designed to make university events easier to discover, organize, and manage. It connects students, clubs, departments, and administrators in one simple and reliable system that handles everything from event creation to participation and feedback.
 
