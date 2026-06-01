@@ -138,14 +138,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-if not DEBUG:
-    # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-    # Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
-    # and renames the files with unique names for each version to support long-term caching
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 
@@ -166,12 +158,9 @@ STORAGES = {
     },
 }
 
-STATICFILES_DIRS = [ 
-    os.path.join(BASE_DIR, 'node_modules/bootstrap/dist'), 
-    os.path.join(BASE_DIR, 'node_modules/bootstrap-icons/font'),
-    os.path.join(BASE_DIR, "static"), # Static files directory (images, js, etc.)
-    SASS_PROCESSOR_ROOT,
-] 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
  
 STATICFILES_FINDERS = [ 
     "django.contrib.staticfiles.finders.FileSystemFinder", 
