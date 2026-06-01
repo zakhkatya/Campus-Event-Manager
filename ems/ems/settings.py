@@ -85,7 +85,8 @@ WSGI_APPLICATION = 'ems.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgres://user:password@db:5432/database'
+        env='DATABASE_URL',
+        conn_max_age=600,
     )
 }
 
