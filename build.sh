@@ -4,5 +4,6 @@ set -o errexit
 pip install -r docker/requirements.txt
 
 cd ems
+npm install
 python manage.py collectstatic --no-input
 python manage.py migrate
