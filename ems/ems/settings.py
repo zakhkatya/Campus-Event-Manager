@@ -43,30 +43,33 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # Application definition
 
 INSTALLED_APPS = [
+    'cloudinary_storage', 
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'cloudinary',
     'sass_processor',
     'django_bootstrap5',
     'django_bootstrap_icons',
+    
     'event_system',
     'userauth',
-    'cloudinary',
-    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'ems.urls'
@@ -153,6 +156,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # SASS Processor settings
 SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, "scss")
+
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 STATICFILES_DIRS = [ 
     os.path.join(BASE_DIR, 'node_modules/bootstrap/dist'), 
