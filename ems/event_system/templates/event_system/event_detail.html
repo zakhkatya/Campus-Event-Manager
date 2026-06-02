@@ -36,7 +36,7 @@
                 <a href="#pass" class="btn btn-secondary btn-lg">
                     <i class="bi bi-ticket-perforated me-1"></i> View Pass
                 </a>
-                {% if event.date_start < now %}
+                {% if event.date_start > now %}
                 <form method="post" class="d-inline">
                     {% csrf_token %}
                     <button class="btn btn-outline-secondary btn-lg border-2" name="unregister">
