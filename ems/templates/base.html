@@ -9,9 +9,11 @@
       {% load static %}
       <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}" />
     </head>
-    <body>
+    <body class="position-relative">
       {% include "partials/header.html" %}
-      <main>{% block content %} {% endblock %}</main>
+      <main>
+        {% block content %} {% endblock %}
+      </main>
       {% include "partials/footer.html" %}
       <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     </body>

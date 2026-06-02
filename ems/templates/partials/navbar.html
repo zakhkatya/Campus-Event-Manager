@@ -11,6 +11,11 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-start shadow-sm rounded-4 border-0 mt-2 text-start m-0 p-2">
                     <li class="mb-2">
+                         <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:dashboard' %}">
+                             <i class="bi bi-house-fill fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Dashboard
+                         </a>
+                    </li>
+                    <li class="mb-2">
                          <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:past-events' %}">
                              <i class="bi bi-calendar fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Past Events
                          </a>
@@ -62,9 +67,9 @@
         <!-- User -->
         <div class="position-absolute top-0 end-0">
             {% if user.is_authenticated %}
-            <div class="dropdown my-4 me-4 p-0">
-                <button class="row row-cols-2 user rounded-4 border-0 bg-transparent d-flex align-items-start justify-content-start" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
-                    <div class="col-2 d-flex align-items-center justify-content-center pt-1 ms-2">
+            <div class="dropdown my-4 me-4 p-1">
+                <button class="border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                    <div>
                     {% if user.avatar %}
                     <div class="rounded-circle">
                      <img id="navbar-profile-img" src="{{ user.avatar.url }}" 
@@ -73,16 +78,6 @@
                          {% else %}
                          <i class="bi bi-person-circle fs-2 text-muted"></i>
                         {% endif %}
-                    </div>
-                    <div class="col text-start pt-1 lh-sm ms-1 pe-0 user-info">
-                        <span class="text-muted fs-6 fw-bolder d-inline-block text-truncate">
-                            {% if user.first_name and user.last_name %}
-                                {{ user.first_name }}&nbsp;{{ user.last_name }}
-                            {% else %}
-                                {{ user.email }}
-                            {% endif %}
-                        </span>
-                        <p class="text-muted fs-6 mb-0 text-capitalize">{{ user.role }}</p>
                     </div>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end shadow-sm rounded-4 border-0 mt-2 text-end p-2 duser">
