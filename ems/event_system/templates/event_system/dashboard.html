@@ -52,7 +52,7 @@
     </h2>
     <div class="container align-items-start">
       <div class="row d-flex align-items-start">
-        {% for registration in my_events %} 
+        {% for registration in my_events|slice:":3" %} 
           {% include "event_system/components/event_card.html" with event=registration.event %} 
         {% empty %}
           <p class="text-muted text-center py-5 my-5">No events found.</p>

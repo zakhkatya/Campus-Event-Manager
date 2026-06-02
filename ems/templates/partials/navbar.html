@@ -11,6 +11,11 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-start shadow-sm rounded-4 border-0 mt-2 text-start m-0 p-2">
                     <li class="mb-2">
+                         <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:dashboard' %}">
+                             <i class="bi bi-house-fill fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Dashboard
+                         </a>
+                    </li>
+                    <li class="mb-2">
                          <a class="dropdown-item bg-transparent p-0 ps-1" href="{% url 'event_system:past-events' %}">
                              <i class="bi bi-calendar fs-5 btn-secondary rounded-3 ms-0 p-2 py-1 me-1"></i> Past Events
                          </a>
