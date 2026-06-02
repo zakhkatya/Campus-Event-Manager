@@ -92,23 +92,11 @@ WSGI_APPLICATION = 'ems.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-if not DEBUG:
-    DATABASES = {
-        'default': dj_database_url.config(
-            env='DATABASE_URL',
-            conn_max_age=600,
-        )
-    }
-
 DATABASES = {
-    'default': {
-        "ENGINE": os.getenv("POSTGRES_ENGINE", "django.db.backends.postgresql"), 
-        "NAME": os.getenv("POSTGRES_DB", "database"), 
-        "USER": os.getenv("POSTGRES_USER", "user"), 
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "password"), 
-        "HOST": os.getenv("POSTGRES_HOST", "db"), 
-        "PORT": os.getenv("POSTGRES_PORT", "5432"), 
-    }
+    'default': dj_database_url.config(
+        env='DATABASE_URL',
+        conn_max_age=600,
+    )
 }
 
 # Password validation
