@@ -581,9 +581,6 @@ label {
     .dropdown-menu-start.duser {
         margin-left: -13.5vh !important;
     }
-    .menu{
-        margin-left: -1vh !important;
-    }
     .filter{
         visibility: hidden;
         margin-left: 0%;
@@ -598,9 +595,6 @@ label {
         height: 0 !important;
         padding: 0 !important;
         margin: 0 !important;
-    }
-    .user {
-        width: 8.5vh;
     }
     .bi-person-circle{
         font-size: 1.9rem !important;
@@ -618,8 +612,14 @@ label {
     .welcome {
         width: 95% !important;
     }
-
+    .user-dropdown {
+        margin-left: -10vh !important;
+    }
+    .dropdown-menu{
+        margin-left: -10vh !important;
+    }
 }
+
 .alert-secondary {
     margin-top: 10px !important; 
     background-color: $secondary !important;

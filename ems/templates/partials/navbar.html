@@ -5,7 +5,7 @@
         
         <!-- Dropdown Menu -->
         {% if user.is_authenticated %}
-            <div class="dropdown mt-4 ms-4">
+            <div class="dropdown dropdown-menu mt-4 ms-4">
                 <button class="border-0 bg-transparent rounded-4 menu p-2 py-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
                     <i class="bi bi-list fs-1 m-0"></i>
                 </button>
@@ -67,7 +67,7 @@
         <!-- User -->
         <div class="position-absolute top-0 end-0">
             {% if user.is_authenticated %}
-            <div class="dropdown my-4 me-4 p-1">
+            <div class="dropdown user-dropdown my-4 me-4 p-1">
                 <button class="border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
                     <div>
                     {% if user.avatar %}
