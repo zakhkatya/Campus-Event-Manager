@@ -95,9 +95,8 @@
                 </div>
             </div>
         {% empty %}
-            <div class="text-center py-5 bg-white rounded-4 border">
-                <i class="bi bi-chat-left-dots fs-1 text-muted opacity-25"></i>
-                <p class="text-muted mt-3">No feedbacks found.</p>
+            <div class="text-center py-5">
+                <p class="text-muted m-5">No feedbacks found.</p>
             </div>
         {% endfor %}
     </div>
@@ -107,7 +106,7 @@
         <ul class="pagination justify-content-center gap-2 border-0">
             {% if page_obj.has_previous %}
                 <li class="page-item">
-                    <a class="btn btn-sm btn-outline-secondary rounded-3 px-3" href="?page={{ page_obj.previous_page_number }}{% if current_filter %}&filter={{ current_filter }}{% endif %}">&laquo; Previous</a>
+                    <a class="btn btn-sm btn-outline-secondary rounded-3 px-3" href="?page={{ page_obj.previous_page_number }}{% if current_filter %}&filter={{ current_filter }}{% endif %}">&laquo; Back</a>
                 </li>
             {% endif %}
             <li class="page-item">
