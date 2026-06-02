@@ -258,12 +258,6 @@ body {
     text-decoration-color: $primary !important;
 }
 
-.user {
-    width: 25vh;
-    height: 50px;
-}
-
-.user,
 .menu {
     transition: 0.2s;
     outline: none;
@@ -285,10 +279,6 @@ body {
 
 .duser {
     margin-left: 15% !important;
-}
-
-.user-info {
-    width: 15vh;
 }
 
 .text-truncate {
@@ -421,8 +411,6 @@ label {
 }
 
 .navbar-avatar-img {
-    width: 40px !important;
-    height: 40px !important;
     object-fit: cover !important;
     overflow: hidden;
 }
@@ -507,9 +495,6 @@ label {
     }
     .user {
         width: 23vh;
-    }
-    .approve-events-info {
-        margin-left: 5% !important;
     }
     .fb-user {
         margin-left: 2vh !important;
@@ -628,10 +613,6 @@ label {
         visibility: hidden;
         font-size: 0% !important;
     }
-    .approve-events-info {
-        margin-left: 25% !important;
-    }
-
     .welcome {
         width: 95% !important;
     }
