@@ -43,33 +43,30 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # Application definition
 
 INSTALLED_APPS = [
-    'cloudinary_storage', 
-    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'cloudinary',
     'sass_processor',
     'django_bootstrap5',
     'django_bootstrap_icons',
-    
     'event_system',
     'userauth',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'ems.urls'
@@ -138,6 +135,14 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+if not DEBUG:
+    # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+    # Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
+    # and renames the files with unique names for each version to support long-term caching
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 
@@ -149,17 +154,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # SASS Processor settings
 SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, "scss")
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
-
-STORAGES = {
-    "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
-    },
-}
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
+STATICFILES_DIRS = [ 
+    os.path.join(BASE_DIR, 'node_modules/bootstrap/dist'), 
+    os.path.join(BASE_DIR, 'node_modules/bootstrap-icons/font'),
+    os.path.join(BASE_DIR, "static"), # Static files directory (images, js, etc.)
+    SASS_PROCESSOR_ROOT,
+] 
  
 STATICFILES_FINDERS = [ 
     "django.contrib.staticfiles.finders.FileSystemFinder", 
@@ -172,4 +172,3 @@ LOGIN_REDIRECT_URL = "event_system:dashboard"
 LOGOUT_REDIRECT_URL = "event_system:home"
 
 AUTH_USER_MODEL = "userauth.CustomUser"
-   
