@@ -36,8 +36,6 @@ $info: #b6a1ed;
 $secondary: #ad99e1;
 $text-color: #212529;
 
-@import "../node_modules/bootstrap/scss/bootstrap";
-
 html {
     scroll-behavior: smooth;
 }
@@ -184,7 +182,7 @@ body {
 .bi-layers,
 .bi-chat-left-dots,
 .bi-shield-lock {
-    -webkit-text-stroke: 1px;
+    -webkit-text-stroke: 1px !important;
 }
 
 .badge.text-white {
