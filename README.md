@@ -1,4 +1,7 @@
-# Campus Event Manager 🎓
+# Campus Event Manager
+PUBLISHED FOR EDUCATIONAL PURPOSES ONLY!
+Check website on Render: https://ems-zlb0.onrender.com/
+---
 
 Made with ❤️ by **Jakub Vorel** m322903 - **Kateryna Zakharchuk** m323384 - **Baris Efe Turkmen** m323031
 
@@ -8,7 +11,13 @@ Students can browse upcoming campus events, register with a single click, receiv
 
 Powered by **Django** and **PostgreSQL**, the Campus Event Manager improves communication, reduces organizational effort, and encourages greater student engagement by bringing all campus activities into one accessible platform.
 
-## Setup
+# Branches
+
+| main | render | render-fix |
+| -------- | -------- | -------- |
+| Local development  | Deploy on Render | Fixing issues before deploying  |
+
+## Local Setup from main branch
 
 1. git clone
 2. docker compose up -d
