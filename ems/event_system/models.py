@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings 
 import uuid
 from cloudinary.models import CloudinaryField
+from django.utils import timezone
     
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -45,7 +46,7 @@ class Event(models.Model):
 class Registration(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='registrations')
-    registered_at = models.DateTimeField(auto_now_add=True)
+    registered_at = models.DateTimeField(default=timezone.now)
 
     uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
 
@@ -60,7 +61,7 @@ class Feedback(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     rating = models.IntegerField()
     comment = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.user.username} rated {self.event.title}"
@@ -69,7 +70,7 @@ class Feedback(models.Model):
 class Notification(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     message = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
     is_read = models.BooleanField(default=False)
 
     def __str__(self):
