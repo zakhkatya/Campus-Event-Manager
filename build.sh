@@ -4,7 +4,11 @@ set -o errexit
 pip install -r docker/requirements.txt
 
 cd ems
-npm install
+
+npm ci
+
+find . -name "*.js" -exec sed -i 's|//# sourceMappingURL=.*||g' {} \;
+
 python manage.py compilescss
 python manage.py collectstatic --no-input
 python manage.py migrate

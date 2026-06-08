@@ -92,23 +92,11 @@ WSGI_APPLICATION = 'ems.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-if not DEBUG:
-    DATABASES = {
-        'default': dj_database_url.config(
-            env='DATABASE_URL',
-            conn_max_age=600,
-        )
-    }
-
 DATABASES = {
-    'default': {
-        "ENGINE": os.getenv("POSTGRES_ENGINE", "django.db.backends.postgresql"), 
-        "NAME": os.getenv("POSTGRES_DB", "database"), 
-        "USER": os.getenv("POSTGRES_USER", "user"), 
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "password"), 
-        "HOST": os.getenv("POSTGRES_HOST", "db"), 
-        "PORT": os.getenv("POSTGRES_PORT", "5432"), 
-    }
+    'default': dj_database_url.config(
+        env='DATABASE_URL',
+        conn_max_age=600,
+    )
 }
 
 # Password validation
@@ -169,7 +157,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'node_modules/bootstrap/dist'), 
     os.path.join(BASE_DIR, 'node_modules/bootstrap-icons/font'),
     os.path.join(BASE_DIR, "static"), # Static files directory (images, js, etc.)
-    os.path.join(BASE_DIR, 'media_def'), # Media files directory 
     SASS_PROCESSOR_ROOT,
 ] 
  
@@ -184,4 +171,3 @@ LOGIN_REDIRECT_URL = "event_system:dashboard"
 LOGOUT_REDIRECT_URL = "event_system:home"
 
 AUTH_USER_MODEL = "userauth.CustomUser"
-   
