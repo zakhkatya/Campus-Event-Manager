@@ -26,16 +26,18 @@
                 <i class="bi bi-clock-history me-2"></i>
                 <span class="fs-xs fw-bold">This event has ended. Registration is closed.</span>
             </div>
-        {% else %}
+        {% endif %}
+
         {% if user.is_superuser or user == event.organizer %}
         <a href="{% url 'event_system:event_edit' event.id %}" class="btn btn-primary btn-lg">
             <i class="bi bi-pencil me-1"></i> Edit
         </a>
         {% endif %} 
-            {% if is_registered %}
+            {% if is_registered and event.date_end > now %}
                 <a href="#pass" class="btn btn-secondary btn-lg">
                     <i class="bi bi-ticket-perforated me-1"></i> View Pass
                 </a>
+                {% endif %}
                 {% if event.date_start > now %}
                 <form method="post" class="d-inline">
                     {% csrf_token %}
@@ -44,7 +46,6 @@
                     </button>
                 </form>
                 {% endif %}
-            {% endif %}
             {% if not is_registered %}
                 <form method="post">
                     {% csrf_token %}
@@ -53,7 +54,6 @@
                     </button>
                 </form>
             {% endif %}
-        {% endif %}
       </div> 
     </div> 
 
